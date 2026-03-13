@@ -1,4 +1,4 @@
-const CACHE_NAME = "fortis-v5";
+const CACHE_NAME = "fortis-v6";
 const urlsToCache = [
   "/",
   "/index.html",
@@ -6,6 +6,7 @@ const urlsToCache = [
   "/script.js",
   "/manifest.json",
   "/fortis_anima_favicon.svg",
+  "/icon-180.png",
   "/favicon.ico",
   "/icon-192.png",
   "/icon-512.png",
