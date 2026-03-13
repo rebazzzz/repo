@@ -28,26 +28,19 @@
     </div>
     <div class="score-row">
       <div class="score-card h">
-        <div class="slabel skeleton skeleton-text"></div>
-        <div class="sval skeleton skeleton-text" style="height: 30px;"></div>
-        <div class="sdelta skeleton skeleton-text" style="height: 10px;"></div>
+        <div class="slabel">Honos</div>
+        <div class="sval" id="honosScore">0</div>
+        <div class="sdelta" id="honosDelta">+0 today</div>
       </div>
       <div class="net-sc">
-        <div class="netlabel skeleton skeleton-text" style="height: 8px;"></div>
-        <div class="netval zer skeleton skeleton-text" style="height: 20px;"></div>
+        <div class="netlabel">Net</div>
+        <div class="netval zer" id="netScore">0</div>
       </div>
       <div class="score-card d">
-        <div class="slabel skeleton skeleton-text"></div>
-        <div class="sval skeleton skeleton-text" style="height: 30px;"></div>
-        <div class="sdelta skeleton skeleton-text" style="height: 10px;"></div>
+        <div class="slabel">Dedecus</div>
+        <div class="sval" id="dedecusScore">0</div>
+        <div class="sdelta" id="dedecusDelta">-0 today</div>
       </div>
-    </div>
-    <div class="bbar-wrap">
-      <div class="bbar">
-        <div class="bbar-h skeleton" style="width:50%; height: 3px;"></div>
-        <div class="bbar-d skeleton" style="width:50%; height: 3px;"></div>
-      </div>
-      <div class="bbar-labels"><span>Honor</span><span>Shame</span></div>
     </div>
     <div class="goals-progress" id="goals-progress"></div>
     <div class="tab-bar">
@@ -113,7 +106,7 @@
     </div>
     <div class="panel" id="panel-tasks">
       <div class="day-strip" id="day-strip"></div>
-<div class="task-filters">
+      <div class="task-filters">
         <button class="tf-btn active" onclick="setFilter('all',this)">All</button>
         <button class="tf-btn" onclick="setFilter('todo',this)">To Do</button>
         <button class="tf-btn" onclick="setFilter('done',this)">Done</button>
@@ -266,14 +259,19 @@
   </div>
   <div class="toast" id="toast"></div>
   <div class="offline-indicator" id="offlineIndicator">Offline</div>
-<div class="sync-status" id="syncStatus">Syncing...</div>
+  <div class="sync-status" id="syncStatus">Syncing...</div>
 
-    <div class="queue-controls">
-      <span class="queue-badge" id="queueBadge" style="display: none;">0</span>
-      <button class="retry-sync-btn" onclick="retrySync()" id="retrySyncBtn" style="display: none;">🔄 Retry Sync</button>
-      <button class="test-btn" onclick="testQueue()" style="font-size: 11px; padding: 4px 8px;">Test Queue</button>
-      <button class="test-btn" onclick="testSyncFailure()" style="font-size: 11px; padding: 4px 8px;">Test Fail</button>
-    </div>
+  <div class="queue-controls">
+    <span class="queue-badge" id="queueBadge" style="display: none;">0</span>
+    <button class="retry-sync-btn" onclick="retrySync()" id="retrySyncBtn" style="display: none;"><svg
+        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 4 23 10 17 10" />
+        <polyline points="1 20 1 14 7 14" />
+        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
+      </svg> Retry Sync</button>
+    <button class="test-btn" onclick="testQueue()" style="font-size: 11px; padding: 4px 8px;">Test Queue</button>
+    <button class="test-btn" onclick="testSyncFailure()" style="font-size: 11px; padding: 4px 8px;">Test Fail</button>
+  </div>
 
   <script src="script.js"></script>
   <script>

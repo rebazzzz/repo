@@ -346,379 +346,280 @@ const DD = [
 ];
 const DT = [
   {
-    id: "t_d1",
-    day: "Daily",
-    time: "05:00",
-    n: "Fajr + Quran (15 min) + Dhikr",
-    honorPts: 25,
-    shamePts: 20,
+    id: "t_m1",
+    day: "Monday",
+    time: "06:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
     loc: "",
   },
   {
-    id: "t_d2",
-    day: "Daily",
+    id: "t_m2",
+    day: "Monday",
+    time: "08:30",
+    n: "Operis",
+    honorPts: 16,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_m3",
+    day: "Monday",
+    time: "12:00",
+    n: "Lunch",
+    honorPts: 0,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_m4",
+    day: "Monday",
+    time: "13:00",
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 10,
+    loc: "",
+  },
+  {
+    id: "t_m5",
+    day: "Monday",
+    time: "19:00",
+    n: "Wrestling — Nylöse SportCenter",
+    honorPts: 12,
+    shamePts: 10,
+    loc: "Nylöse SportCenter",
+  },
+  {
+    id: "t_m6",
+    day: "Monday",
+    time: "21:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
+    loc: "",
+  },
+  {
+    id: "t_m7",
+    day: "Monday",
     time: "22:00",
+    n: "Chess",
+    honorPts: 6,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_m8",
+    day: "Monday",
+    time: "23:00",
     n: "Sleep",
     honorPts: 8,
     shamePts: 10,
     loc: "",
   },
   {
-    id: "t_d3",
-    day: "Daily",
-    time: "21:15",
-    n: "Stop work / screens off",
-    honorPts: 8,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_d4",
-    day: "Daily",
-    time: "--",
-    n: "Drink 2L water",
-    honorPts: 6,
-    shamePts: 4,
-    loc: "",
-  },
-  {
-    id: "t_d5",
-    day: "Daily",
-    time: "--",
-    n: "Take supplements",
-    honorPts: 5,
-    shamePts: 4,
-    loc: "",
-  },
-  {
-    id: "t_d6",
-    day: "Daily",
-    time: "--",
-    n: "Eat clean (no junk)",
-    honorPts: 6,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_m1",
-    day: "Monday",
-    time: "05:30",
-    n: "Commute language study (bus)",
-    honorPts: 8,
-    shamePts: 0,
-    loc: "Bus to Gamlestaden",
-  },
-  {
-    id: "t_m2",
-    day: "Monday",
-    time: "06:00",
-    n: "Gym - Nordic Wellness (2h)",
-    honorPts: 12,
-    shamePts: 8,
-    loc: "Nordic Wellness, Gamlestads Torg",
-  },
-  {
-    id: "t_m3",
-    day: "Monday",
-    time: "08:30",
-    n: "Deep Work Block 1 (2h)",
-    honorPts: 16,
-    shamePts: 8,
-    loc: "Hjällbo",
-  },
-  {
-    id: "t_m4",
-    day: "Monday",
-    time: "10:30",
-    n: "Language Study (1h)",
-    honorPts: 10,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_m5",
-    day: "Monday",
-    time: "11:30",
-    n: "Deep Work Block 2 (1.5h)",
-    honorPts: 12,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_m6",
-    day: "Monday",
-    time: "13:00",
-    n: "Lunch + rest",
-    honorPts: 0,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_m7",
-    day: "Monday",
-    time: "14:00",
-    n: "Deep Work Block 3 (2h)",
-    honorPts: 16,
-    shamePts: 6,
-    loc: "Hjällbo",
-  },
-  {
-    id: "t_m8",
-    day: "Monday",
-    time: "16:00",
-    n: "Chess (1h)",
-    honorPts: 6,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_m9",
-    day: "Monday",
-    time: "17:30",
-    n: "Commute to Hjällbo + prep",
-    honorPts: 5,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_m10",
-    day: "Monday",
-    time: "19:00",
-    n: "Wrestling - Nylöse SportCenter (2h)",
-    honorPts: 12,
-    shamePts: 10,
-    loc: "Nylöse SportCenter, Hjällbo",
-  },
-  {
     id: "t_t1",
     day: "Tuesday",
-    time: "05:30",
-    n: "Commute language study (bus)",
-    honorPts: 8,
-    shamePts: 0,
-    loc: "Bus to Gamlestaden",
+    time: "06:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
+    loc: "",
   },
   {
     id: "t_t2",
     day: "Tuesday",
-    time: "06:00",
-    n: "Gym - Nordic Wellness (2h)",
-    honorPts: 12,
+    time: "08:30",
+    n: "Operis",
+    honorPts: 16,
     shamePts: 8,
-    loc: "Nordic Wellness, Gamlestads Torg",
+    loc: "",
   },
   {
     id: "t_t3",
     day: "Tuesday",
-    time: "08:30",
-    n: "Deep Work Block 1 (2h)",
-    honorPts: 16,
-    shamePts: 8,
+    time: "12:00",
+    n: "Lunch",
+    honorPts: 0,
+    shamePts: 0,
     loc: "",
   },
   {
     id: "t_t4",
     day: "Tuesday",
-    time: "10:30",
-    n: "Language Study (1h)",
-    honorPts: 10,
-    shamePts: 6,
+    time: "13:00",
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 10,
     loc: "",
   },
   {
     id: "t_t5",
     day: "Tuesday",
-    time: "11:30",
-    n: "Deep Work Block 2 (1.5h)",
+    time: "19:00",
+    n: "Boxing — RBK Boxning Klubb",
     honorPts: 12,
-    shamePts: 6,
-    loc: "",
+    shamePts: 10,
+    loc: "RBK Boxning Klubb",
   },
   {
     id: "t_t6",
     day: "Tuesday",
-    time: "13:00",
-    n: "Lunch + rest",
-    honorPts: 0,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_t7",
-    day: "Tuesday",
-    time: "14:00",
-    n: "Deep Work Block 3 (2h)",
-    honorPts: 16,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_t8",
-    day: "Tuesday",
-    time: "16:30",
-    n: "Chess (1h)",
-    honorPts: 6,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_t9",
-    day: "Tuesday",
-    time: "19:00",
-    n: "Boxing - RBK Boxningsklubb (2h)",
-    honorPts: 12,
-    shamePts: 10,
-    loc: "RBK Boxningsklubb",
-  },
-  {
-    id: "t_w1",
-    day: "Wednesday",
-    time: "05:30",
-    n: "Commute language study (bus)",
-    honorPts: 8,
-    shamePts: 0,
-    loc: "Bus to Gamlestaden",
-  },
-  {
-    id: "t_w2",
-    day: "Wednesday",
-    time: "06:00",
-    n: "Gym - Nordic Wellness (2h)",
-    honorPts: 12,
-    shamePts: 8,
-    loc: "Nordic Wellness, Gamlestads Torg",
-  },
-  {
-    id: "t_w3",
-    day: "Wednesday",
-    time: "08:30",
-    n: "Deep Work Block 1 (2h)",
-    honorPts: 16,
-    shamePts: 8,
-    loc: "Hjällbo",
-  },
-  {
-    id: "t_w4",
-    day: "Wednesday",
-    time: "10:30",
-    n: "Language Study (1h)",
+    time: "21:00",
+    n: "Language study",
     honorPts: 10,
     shamePts: 6,
     loc: "",
   },
   {
-    id: "t_w5",
-    day: "Wednesday",
-    time: "11:30",
-    n: "Deep Work Block 2 (1.5h)",
-    honorPts: 12,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_w6",
-    day: "Wednesday",
-    time: "13:00",
-    n: "Lunch + rest",
-    honorPts: 0,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_w7",
-    day: "Wednesday",
-    time: "14:00",
-    n: "Deep Work Block 3 (2h)",
-    honorPts: 16,
-    shamePts: 6,
-    loc: "Hjällbo",
-  },
-  {
-    id: "t_w8",
-    day: "Wednesday",
-    time: "16:00",
-    n: "Chess (1h)",
+    id: "t_t7",
+    day: "Tuesday",
+    time: "22:00",
+    n: "Chess",
     honorPts: 6,
     shamePts: 0,
     loc: "",
   },
   {
-    id: "t_w9",
+    id: "t_t8",
+    day: "Tuesday",
+    time: "23:00",
+    n: "Sleep",
+    honorPts: 8,
+    shamePts: 10,
+    loc: "",
+  },
+  {
+    id: "t_w1",
     day: "Wednesday",
-    time: "17:30",
-    n: "Commute to Hjällbo + prep",
-    honorPts: 5,
+    time: "06:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_w2",
+    day: "Wednesday",
+    time: "08:30",
+    n: "Operis",
+    honorPts: 16,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_w3",
+    day: "Wednesday",
+    time: "12:00",
+    n: "Lunch",
+    honorPts: 0,
     shamePts: 0,
     loc: "",
   },
   {
-    id: "t_w10",
+    id: "t_w4",
+    day: "Wednesday",
+    time: "13:00",
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 10,
+    loc: "",
+  },
+  {
+    id: "t_w5",
     day: "Wednesday",
     time: "19:00",
-    n: "Wrestling - Nylöse SportCenter (2h)",
+    n: "Wrestling — Nylöse SportCenter",
     honorPts: 12,
     shamePts: 10,
-    loc: "Nylöse SportCenter, Hjällbo",
+    loc: "Nylöse SportCenter",
+  },
+  {
+    id: "t_w6",
+    day: "Wednesday",
+    time: "21:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
+    loc: "",
+  },
+  {
+    id: "t_w7",
+    day: "Wednesday",
+    time: "22:00",
+    n: "Chess",
+    honorPts: 6,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_w8",
+    day: "Wednesday",
+    time: "23:00",
+    n: "Sleep",
+    honorPts: 8,
+    shamePts: 10,
+    loc: "",
   },
   {
     id: "t_th1",
     day: "Thursday",
-    time: "05:00",
-    n: "Slow morning - Quran extended",
-    honorPts: 15,
+    time: "06:00",
+    n: "Gym / Rest",
+    honorPts: 12,
     shamePts: 8,
     loc: "",
   },
   {
     id: "t_th2",
     day: "Thursday",
-    time: "06:30",
-    n: "Deep Work Block 1 (2.5h)",
-    honorPts: 20,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_th3",
-    day: "Thursday",
-    time: "09:00",
-    n: "Language Study (1h)",
-    honorPts: 10,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_th4",
-    day: "Thursday",
-    time: "10:00",
-    n: "Deep Work Block 2 (2h)",
+    time: "08:30",
+    n: "Operis",
     honorPts: 16,
     shamePts: 8,
     loc: "",
   },
   {
-    id: "t_th5",
+    id: "t_th3",
     day: "Thursday",
     time: "12:00",
-    n: "Lunch + rest (gym recovery)",
+    n: "Lunch",
     honorPts: 0,
     shamePts: 0,
     loc: "",
   },
   {
-    id: "t_th6",
+    id: "t_th4",
     day: "Thursday",
     time: "13:00",
-    n: "Deep Work Block 3 (2h)",
-    honorPts: 16,
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 10,
+    loc: "",
+  },
+  {
+    id: "t_th5",
+    day: "Thursday",
+    time: "19:00",
+    n: "Boxing — RBK Boxning Klubb",
+    honorPts: 12,
+    shamePts: 10,
+    loc: "RBK Boxning Klubb",
+  },
+  {
+    id: "t_th6",
+    day: "Thursday",
+    time: "21:00",
+    n: "Language study",
+    honorPts: 10,
     shamePts: 6,
     loc: "",
   },
   {
     id: "t_th7",
     day: "Thursday",
-    time: "15:00",
-    n: "Chess (1h)",
+    time: "22:00",
+    n: "Chess",
     honorPts: 6,
     shamePts: 0,
     loc: "",
@@ -726,71 +627,71 @@ const DT = [
   {
     id: "t_th8",
     day: "Thursday",
-    time: "19:00",
-    n: "Boxing - RBK Boxningsklubb (2h)",
-    honorPts: 12,
+    time: "23:00",
+    n: "Sleep",
+    honorPts: 8,
     shamePts: 10,
-    loc: "RBK Boxningsklubb",
+    loc: "",
   },
   {
     id: "t_f1",
     day: "Friday",
-    time: "05:00",
-    n: "Fajr extended + Quran Jumuah prep",
-    honorPts: 20,
-    shamePts: 15,
+    time: "06:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
     loc: "",
   },
   {
     id: "t_f2",
     day: "Friday",
-    time: "07:00",
-    n: "Deep Work Block 1 (2.5h)",
-    honorPts: 20,
-    shamePts: 10,
+    time: "08:30",
+    n: "Operis",
+    honorPts: 16,
+    shamePts: 8,
     loc: "",
   },
   {
     id: "t_f3",
     day: "Friday",
-    time: "09:30",
-    n: "Language Study (1h)",
-    honorPts: 10,
-    shamePts: 6,
+    time: "12:00",
+    n: "Lunch",
+    honorPts: 0,
+    shamePts: 0,
     loc: "",
   },
   {
     id: "t_f4",
     day: "Friday",
-    time: "10:30",
-    n: "Deep Work Block 2 (2h)",
-    honorPts: 16,
+    time: "13:00",
+    n: "Operis",
+    honorPts: 20,
     shamePts: 8,
     loc: "",
   },
   {
     id: "t_f5",
     day: "Friday",
-    time: "13:00",
-    n: "Jumuah prayer",
-    honorPts: 20,
-    shamePts: 30,
-    loc: "Mosque",
+    time: "18:00",
+    n: "Wresfit",
+    honorPts: 12,
+    shamePts: 8,
+    loc: "",
   },
   {
     id: "t_f6",
     day: "Friday",
-    time: "14:30",
-    n: "Deep Work Block 3 (2.5h)",
-    honorPts: 20,
-    shamePts: 8,
+    time: "20:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
     loc: "",
   },
   {
     id: "t_f7",
     day: "Friday",
-    time: "17:00",
-    n: "Chess (1h)",
+    time: "21:00",
+    n: "Chess",
     honorPts: 6,
     shamePts: 0,
     loc: "",
@@ -798,41 +699,32 @@ const DT = [
   {
     id: "t_f8",
     day: "Friday",
-    time: "18:00",
-    n: "Review week / plan Saturday",
+    time: "22:30",
+    n: "Sleep",
     honorPts: 8,
-    shamePts: 4,
+    shamePts: 10,
     loc: "",
   },
   {
     id: "t_s1",
     day: "Saturday",
-    time: "05:00",
-    n: "Quran + Language Study (2h)",
-    honorPts: 18,
-    shamePts: 10,
+    time: "08:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
     loc: "",
   },
   {
     id: "t_s2",
     day: "Saturday",
-    time: "07:30",
-    n: "Gym - Nordic Wellness (optional)",
-    honorPts: 12,
-    shamePts: 0,
-    loc: "Nordic Wellness, Gamlestads Torg",
-  },
-  {
-    id: "t_s3",
-    day: "Saturday",
-    time: "10:00",
-    n: "Deep Work / App Dev Marathon (3h)",
-    honorPts: 24,
+    time: "10:30",
+    n: "Operis",
+    honorPts: 16,
     shamePts: 8,
     loc: "",
   },
   {
-    id: "t_s4",
+    id: "t_s3",
     day: "Saturday",
     time: "13:00",
     n: "Lunch",
@@ -841,66 +733,84 @@ const DT = [
     loc: "",
   },
   {
-    id: "t_s5",
+    id: "t_s4",
     day: "Saturday",
     time: "14:00",
-    n: "Chess study (1.5h)",
-    honorPts: 8,
-    shamePts: 0,
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_s5",
+    day: "Saturday",
+    time: "19:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
     loc: "",
   },
   {
     id: "t_s6",
     day: "Saturday",
-    time: "16:00",
-    n: "Language Study (1h)",
-    honorPts: 10,
+    time: "20:00",
+    n: "Chess",
+    honorPts: 8,
     shamePts: 0,
     loc: "",
   },
   {
     id: "t_s7",
     day: "Saturday",
-    time: "20:00",
-    n: "Quran review + wind down",
-    honorPts: 10,
-    shamePts: 5,
+    time: "22:30",
+    n: "Sleep",
+    honorPts: 8,
+    shamePts: 10,
     loc: "",
   },
   {
     id: "t_su1",
     day: "Sunday",
-    time: "05:00",
-    n: "Fajr + extended Quran",
-    honorPts: 20,
-    shamePts: 15,
+    time: "10:00",
+    n: "Operis (optional)",
+    honorPts: 16,
+    shamePts: 0,
     loc: "",
   },
   {
     id: "t_su2",
     day: "Sunday",
-    time: "08:00",
-    n: "Family time / full rest",
-    honorPts: 5,
+    time: "14:00",
+    n: "Lunch",
+    honorPts: 0,
     shamePts: 0,
     loc: "",
   },
   {
     id: "t_su3",
     day: "Sunday",
-    time: "12:00",
-    n: "Light chess / reading",
-    honorPts: 5,
-    shamePts: 0,
+    time: "15:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
     loc: "",
   },
   {
     id: "t_su4",
     day: "Sunday",
-    time: "20:00",
-    n: "Plan upcoming week",
+    time: "16:00",
+    n: "Full rest / Chess",
+    honorPts: 5,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_su5",
+    day: "Sunday",
+    time: "23:00",
+    n: "Sleep",
     honorPts: 8,
-    shamePts: 4,
+    shamePts: 10,
     loc: "",
   },
 ];
@@ -936,61 +846,33 @@ let offlineQueue = [];
 let isOnline = navigator.onLine;
 let queueDB;
 let syncRetries = 0;
+let tTimer;
 const MAX_RETRIES = 3;
-
-async function validateNumber(val, min = 0, max = Infinity, name = "Value") {
-  const num = parseInt(val);
-  if (isNaN(num) || num < min || num > max) {
-    throw new Error(`${name} must be a number between ${min} and ${max}`);
-  }
-  return num;
-}
-
-async function validateInput(name, val, required = true) {
-  const trimmed = val ? val.trim() : "";
-  if (required && !trimmed) {
-    throw new Error(`${name} is required`);
-  }
-  return trimmed;
-}
 
 async function initDB() {
   return new Promise((resolve, reject) => {
-    try {
-      const request = indexedDB.open("fortisQueue", 3);
+    const request = indexedDB.open("fortisQueue", 3);
 
-      request.onerror = () => {
-        toast(
-          "Database error: " + request.error?.message || "Unknown error",
-          "neg",
-        );
-        reject(request.error);
-      };
-      request.onsuccess = () => {
-        queueDB = request.result;
-        resolve();
-      };
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      queueDB = request.result;
+      resolve();
+    };
 
-      request.onupgradeneeded = (e) => {
-        const db = e.target.result;
-        if (!db.objectStoreNames.contains("queue")) {
-          const queueStore = db.createObjectStore("queue", {
-            keyPath: "id",
-            autoIncrement: true,
-          });
-          queueStore.createIndex("synced", "synced", { unique: false });
-          queueStore.createIndex("timestamp", "timestamp", { unique: false });
-        }
-        if (!db.objectStoreNames.contains("stats")) {
-          const statsStore = db.createObjectStore("stats", { keyPath: "key" });
-          statsStore.createIndex("date", "date", { unique: false });
-          statsStore.createIndex("type", "type", { unique: false });
-        }
-      };
-    } catch (e) {
-      toast("Failed to initialize database: " + e.message, "neg");
-      reject(e);
-    }
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains("queue")) {
+        const queueStore = db.createObjectStore("queue", {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+        queueStore.createIndex("synced", "synced", { unique: false });
+        queueStore.createIndex("timestamp", "timestamp", { unique: false });
+      }
+      if (!db.objectStoreNames.contains("stats")) {
+        db.createObjectStore("stats", { keyPath: "key" });
+      }
+    };
   });
 }
 
@@ -1047,120 +929,8 @@ async function load() {
     save();
   }
   await updatePendingCount();
-  await loadStatsCache(); // Load cached stats
   isLoading = false;
   updateOnlineStatus();
-}
-
-async function computeStats() {
-  if (!queueDB) return;
-
-  try {
-    // Daily aggregates from log
-    const daily = {};
-    S.log.forEach((entry) => {
-      const date = entry.date;
-      if (!daily[date]) daily[date] = { honos: 0, dedecus: 0, count: 0 };
-      if (entry.pts > 0) daily[date].honos += entry.pts;
-      else daily[date].dedecus += Math.abs(entry.pts);
-      daily[date].count++;
-    });
-
-    // Calculate streaks (existing logic, cached)
-    calculateStreaks();
-
-    // Goals progress
-    const now = new Date();
-    const weekStart = new Date(now);
-    weekStart.setDate(now.getDate() - now.getDay());
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-
-    const weeklyHonos = Object.values(daily)
-      .filter((day) => new Date(day.date) >= weekStart)
-      .reduce((sum, day) => sum + day.honos, 0);
-    const weeklyDedecus = Object.values(daily)
-      .filter((day) => new Date(day.date) >= weekStart)
-      .reduce((sum, day) => sum + day.dedecus, 0);
-    const monthlyHonos = Object.values(daily)
-      .filter((day) => new Date(day.date) >= monthStart)
-      .reduce((sum, day) => sum + day.honos, 0);
-    const monthlyDedecus = Object.values(daily)
-      .filter((day) => new Date(day.date) >= monthStart)
-      .reduce((sum, day) => sum + day.dedecus, 0);
-
-    // Cache to statsDB
-    const tx = queueDB.transaction("stats", "readwrite");
-    const store = tx.objectStore("stats");
-
-    // Cache daily aggregates
-    Object.entries(daily).forEach(([date, data]) => {
-      store.put({
-        key: `daily_${date}`,
-        date,
-        type: "daily",
-        ...data,
-      });
-    });
-
-    // Cache goals
-    store.put({
-      key: "goals_weekly",
-      type: "goals",
-      period: "weekly",
-      honos: weeklyHonos,
-      dedecus: weeklyDedecus,
-    });
-    store.put({
-      key: "goals_monthly",
-      type: "goals",
-      period: "monthly",
-      honos: monthlyHonos,
-      dedecus: monthlyDedecus,
-    });
-
-    // Cache streaks
-    store.put({
-      key: "streaks",
-      type: "streaks",
-      data: S.streaks,
-    });
-
-    console.log("Stats cached");
-  } catch (e) {
-    console.error("Failed to compute/cache stats:", e);
-  }
-}
-
-async function loadStatsCache() {
-  if (!queueDB) return null;
-
-  try {
-    const tx = queueDB.transaction("stats", "readonly");
-    const store = tx.objectStore("stats");
-
-    const dailyReq = store.index("type").getAll("daily");
-    const goalsReq = store.get("goals_weekly");
-    const streaksReq = store.get("streaks");
-
-    const [daily, weeklyGoals, streaks] = await Promise.all([
-      dailyReq,
-      goalsReq,
-      streaksReq,
-    ]);
-
-    // Update S with cached data
-    S.cachedDaily = daily.map((d) => d.date);
-    S.cachedGoals = {
-      weekly: weeklyGoals,
-      monthly: await store.get("goals_monthly"),
-    };
-    S.cachedStreaks = streaks ? streaks.data : {};
-
-    return { daily, weeklyGoals, streaks };
-  } catch (e) {
-    console.error("Failed to load stats cache:", e);
-    return null;
-  }
 }
 
 async function queueAction(type, data) {
@@ -1173,7 +943,7 @@ async function queueAction(type, data) {
       type,
       data: JSON.stringify(data),
       timestamp: Date.now(),
-      synced: false,
+      synced: 0,
       retryCount: 0,
     };
     const request = store.add(item);
@@ -1193,7 +963,7 @@ async function getPendingCount() {
   return new Promise((resolve) => {
     const tx = queueDB.transaction("queue", "readonly");
     const store = tx.objectStore("queue");
-    const request = store.index("synced").count(false);
+    const request = store.index("synced").count(IDBKeyRange.only(0));
 
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => resolve(0);
@@ -1225,7 +995,7 @@ async function processQueue() {
     const tx = queueDB.transaction("queue", "readwrite");
     const store = tx.objectStore("queue");
     const index = store.index("synced");
-    const request = index.getAll(false);
+    const request = index.getAll(0);
 
     request.onsuccess = async () => {
       const pending = request.result;
@@ -1260,7 +1030,7 @@ async function processQueue() {
           const updateTx = queueDB.transaction("queue", "readwrite");
           const updateStore = updateTx.objectStore("queue");
           await new Promise((res, rej) => {
-            const upReq = updateStore.put({ ...item, synced: true });
+            const upReq = updateStore.put({ ...item, synced: 1 });
             upReq.onsuccess = res;
             upReq.onerror = rej;
           });
@@ -1462,19 +1232,30 @@ function scheduleMidnightCheck() {
   }, ms);
 }
 function renderScores() {
-  document.getElementById("honosScore").textContent = S.ht;
-  document.getElementById("dedecusScore").textContent = S.dt;
-  document.getElementById("honosDelta").textContent = "+" + S.hd + " today";
-  document.getElementById("dedecusDelta").textContent = "-" + S.dd + " today";
+  const honosEl = document.getElementById("honosScore");
+  if (honosEl) honosEl.textContent = S.ht;
+  const dedecusEl = document.getElementById("dedecusScore");
+  if (dedecusEl) dedecusEl.textContent = S.dt;
+  const honosDeltaEl = document.getElementById("honosDelta");
+  if (honosDeltaEl) honosDeltaEl.textContent = "+" + S.hd + " today";
+  const dedecusDeltaEl = document.getElementById("dedecusDelta");
+  if (dedecusDeltaEl) dedecusDeltaEl.textContent = "-" + S.dd + " today";
   const net = S.ht - S.dt;
   const el = document.getElementById("netScore");
-  el.textContent = net > 0 ? "+" + net : net;
-  el.className = "netval " + (net > 0 ? "pos" : net < 0 ? "neg" : "zer");
-  const tot = S.ht + S.dt;
-  document.getElementById("hbar").style.width =
-    (tot > 0 ? Math.round((S.ht / tot) * 100) : 50) + "%";
-  document.getElementById("dbar").style.width =
-    (tot > 0 ? Math.round((S.dt / tot) * 100) : 50) + "%";
+  if (el) {
+    el.textContent = net > 0 ? "+" + net : net;
+    el.className = "netval " + (net > 0 ? "pos" : net < 0 ? "neg" : "zer");
+  }
+  const hbar = document.getElementById("hbar");
+  if (hbar) {
+    const tot = S.ht + S.dt;
+    hbar.style.width = (tot > 0 ? Math.round((S.ht / tot) * 100) : 50) + "%";
+  }
+  const dbar = document.getElementById("dbar");
+  if (dbar) {
+    const tot = S.ht + S.dt;
+    dbar.style.width = (tot > 0 ? Math.round((S.dt / tot) * 100) : 50) + "%";
+  }
 
   // Render goals progress
   renderGoalsProgress();
@@ -1655,39 +1436,33 @@ function deedHTML(d) {
   );
 }
 async function adj(id, delta) {
-  try {
-    const deed = S.deeds.find((d) => d.id === id);
-    if (!deed) return;
-    const prev = S.counts[id] || 0,
-      next = Math.max(0, prev + delta),
-      diff = next - prev;
-    if (!diff) return;
-    S.counts[id] = next;
-    if (deed.t === "honos") {
-      S.ht = Math.max(0, S.ht + deed.p * diff);
-      S.hd = Math.max(0, S.hd + deed.p * diff);
-      if (diff > 0) {
-        addLog(deed.n, deed.p, "honos", deed.c, id);
-        toast("+" + deed.p + " Honor: " + deed.n, "pos");
-      }
-    } else {
-      S.dt = Math.max(0, S.dt + deed.p * diff);
-      S.dd = Math.max(0, S.dd + deed.p * diff);
-      if (diff > 0) {
-        addLog(deed.n, -deed.p, "dedecus", deed.c, id);
-        toast("-" + deed.p + " Shame: " + deed.n, "neg");
-      }
+  const deed = S.deeds.find((d) => d.id === id);
+  if (!deed) return;
+  const prev = S.counts[id] || 0,
+    next = Math.max(0, prev + delta),
+    diff = next - prev;
+  if (!diff) return;
+  S.counts[id] = next;
+  if (deed.t === "honos") {
+    S.ht = Math.max(0, S.ht + deed.p * diff);
+    S.hd = Math.max(0, S.hd + deed.p * diff);
+    if (diff > 0) {
+      addLog(deed.n, deed.p, "honos", deed.c, id);
+      toast("+" + deed.p + " Honor: " + deed.n, "pos");
     }
-    await save();
-    await computeStats(); // Cache updated stats
-
-    if (!isOnline) {
-      await queueAction("deed", { id, delta: diff });
+  } else {
+    S.dt = Math.max(0, S.dt + deed.p * diff);
+    S.dd = Math.max(0, S.dd + deed.p * diff);
+    if (diff > 0) {
+      addLog(deed.n, -deed.p, "dedecus", deed.c, id);
+      toast("-" + deed.p + " Shame: " + deed.n, "neg");
     }
-    render();
-  } catch (e) {
-    toast("Error updating deed: " + e.message, "neg");
   }
+  await save();
+  if (!isOnline) {
+    await queueAction("deed", { id, delta: diff });
+  }
+  render();
   // Add animation to the updated deed
   setTimeout(() => {
     const deedElement = document.querySelector(
