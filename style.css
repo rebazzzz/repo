@@ -1097,14 +1097,28 @@ body::before {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
 }
 
 .goal-label {
   font-size: 11px;
   color: var(--text-dim);
-  margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+.goal-item .finput {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 420px) {
+  .goals-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .cfg-name {
