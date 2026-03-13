@@ -1,4 +1,4 @@
-const CACHE_NAME = "fortis-v6";
+const CACHE_NAME = "fortis-v7";
 const urlsToCache = [
   "/",
   "/index.html",
