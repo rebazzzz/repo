@@ -646,8 +646,8 @@ body::before {
 }
 
 .tchk {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 6px;
   border: 1px solid var(--border);
   flex-shrink: 0;
@@ -661,8 +661,8 @@ body::before {
 }
 
 .tchk svg {
-  width: 11px;
-  height: 11px;
+  width: 9px;
+  height: 9px;
 }
 
 .tchk.done {
@@ -802,6 +802,7 @@ body::before {
   border-left: 2px solid var(--gold-dim);
   line-height: 1.6;
 }
+
 
 .log-cat-label {
   font-family: "Cinzel", serif;
@@ -954,6 +955,33 @@ body::before {
   border-radius: var(--radius);
   padding: 14px;
   margin-bottom: 10px;
+}
+
+.stats-wrap {
+  padding-bottom: 8px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.stats-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+@media (min-width: 520px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stats-card:first-child {
+    grid-column: 1 / -1;
+  }
 }
 
 .calc-guide h3 {
@@ -1239,12 +1267,82 @@ body::before {
   transition: var(--tr);
 }
 
+.suggestion-item.compact {
+  padding: 8px 10px;
+  font-size: 11px;
+  margin-bottom: 6px;
+  color: var(--text-mid);
+}
+
 .suggestion-item:hover {
   border-color: var(--gold-dim);
   background: var(--gold-glow);
 }
 
+.config-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 10px;
+}
 
+.panel#panel-config {
+  display: none;
+  gap: 10px;
+}
+
+.panel.active#panel-config {
+  display: grid;
+}
+
+#panel-config .config-section {
+  margin-bottom: 0;
+}
+
+#panel-config .config-span {
+  grid-column: 1 / -1;
+}
+
+.cfg-group {
+  margin-bottom: 12px;
+}
+
+.cfg-group-title {
+  font-family: "Cinzel", serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  margin: 6px 2px 8px;
+}
+
+.cfg-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+.cfg-unit {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-left: 4px;
+}
+
+#cfg-list .acc-body {
+  padding-top: 8px;
+}
+
+@media (min-width: 520px) {
+  #panel-config {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 
 /* Skeleton Loading */
 .skeleton {
@@ -1377,21 +1475,41 @@ body::before {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin: 20px 0 10px 0;
+  margin: 0 0 8px 0;
 }
 
 #progressRings {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
+  display: block;
 }
 
-.progress-ring-container {
+.progress-list {
+  display: grid;
+  gap: 8px;
+}
+
+.progress-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 5px;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+}
+
+.progress-pct {
+  font-family: "Cinzel", serif;
+  font-size: 13px;
+  color: var(--gold);
+  min-width: 44px;
+}
+
+.progress-label {
+  color: var(--text-mid);
+  text-align: right;
+  flex: 1;
 }
 
 .heatmap-container h4 {
@@ -1400,14 +1518,21 @@ body::before {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin: 20px 0 10px 0;
+  margin: 0 0 8px 0;
 }
 
 #activityHeatmap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
+  gap: 6px;
+  justify-content: center;
+}
+
+.heatmap-week {
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  gap: 3px;
 }
 
 .insights-container h4 {
@@ -1448,6 +1573,13 @@ body::before {
   border-radius: 2px;
   background: var(--surface2);
   transition: background-color 0.2s ease;
+}
+
+@media (max-width: 420px) {
+  .heatmap-day {
+    width: 10px;
+    height: 10px;
+  }
 }
 
 .heatmap-day.active {

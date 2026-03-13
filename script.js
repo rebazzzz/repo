@@ -345,496 +345,68 @@ const DD = [
   },
 ];
 const DT = [
-  {
-    id: "t_m1",
-    day: "Monday",
-    time: "06:00",
-    n: "Gym / Rest",
-    honorPts: 12,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_m2",
-    day: "Monday",
-    time: "08:30",
-    n: "Operis",
-    honorPts: 16,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_m3",
-    day: "Monday",
-    time: "12:00",
-    n: "Lunch",
-    honorPts: 0,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_m4",
-    day: "Monday",
-    time: "13:00",
-    n: "Operis",
-    honorPts: 20,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_m5",
-    day: "Monday",
-    time: "19:00",
-    n: "Wrestling — Nylöse SportCenter",
-    honorPts: 12,
-    shamePts: 10,
-    loc: "Nylöse SportCenter",
-  },
-  {
-    id: "t_m6",
-    day: "Monday",
-    time: "21:00",
-    n: "Language study",
-    honorPts: 10,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_m7",
-    day: "Monday",
-    time: "22:00",
-    n: "Chess",
-    honorPts: 6,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_m8",
-    day: "Monday",
-    time: "23:00",
-    n: "Sleep",
-    honorPts: 8,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_t1",
-    day: "Tuesday",
-    time: "06:00",
-    n: "Gym / Rest",
-    honorPts: 12,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_t2",
-    day: "Tuesday",
-    time: "08:30",
-    n: "Operis",
-    honorPts: 16,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_t3",
-    day: "Tuesday",
-    time: "12:00",
-    n: "Lunch",
-    honorPts: 0,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_t4",
-    day: "Tuesday",
-    time: "13:00",
-    n: "Operis",
-    honorPts: 20,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_t5",
-    day: "Tuesday",
-    time: "19:00",
-    n: "Boxing — RBK Boxning Klubb",
-    honorPts: 12,
-    shamePts: 10,
-    loc: "RBK Boxning Klubb",
-  },
-  {
-    id: "t_t6",
-    day: "Tuesday",
-    time: "21:00",
-    n: "Language study",
-    honorPts: 10,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_t7",
-    day: "Tuesday",
-    time: "22:00",
-    n: "Chess",
-    honorPts: 6,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_t8",
-    day: "Tuesday",
-    time: "23:00",
-    n: "Sleep",
-    honorPts: 8,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_w1",
-    day: "Wednesday",
-    time: "06:00",
-    n: "Gym / Rest",
-    honorPts: 12,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_w2",
-    day: "Wednesday",
-    time: "08:30",
-    n: "Operis",
-    honorPts: 16,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_w3",
-    day: "Wednesday",
-    time: "12:00",
-    n: "Lunch",
-    honorPts: 0,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_w4",
-    day: "Wednesday",
-    time: "13:00",
-    n: "Operis",
-    honorPts: 20,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_w5",
-    day: "Wednesday",
-    time: "19:00",
-    n: "Wrestling — Nylöse SportCenter",
-    honorPts: 12,
-    shamePts: 10,
-    loc: "Nylöse SportCenter",
-  },
-  {
-    id: "t_w6",
-    day: "Wednesday",
-    time: "21:00",
-    n: "Language study",
-    honorPts: 10,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_w7",
-    day: "Wednesday",
-    time: "22:00",
-    n: "Chess",
-    honorPts: 6,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_w8",
-    day: "Wednesday",
-    time: "23:00",
-    n: "Sleep",
-    honorPts: 8,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_th1",
-    day: "Thursday",
-    time: "06:00",
-    n: "Gym / Rest",
-    honorPts: 12,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_th2",
-    day: "Thursday",
-    time: "08:30",
-    n: "Operis",
-    honorPts: 16,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_th3",
-    day: "Thursday",
-    time: "12:00",
-    n: "Lunch",
-    honorPts: 0,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_th4",
-    day: "Thursday",
-    time: "13:00",
-    n: "Operis",
-    honorPts: 20,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_th5",
-    day: "Thursday",
-    time: "19:00",
-    n: "Boxing — RBK Boxning Klubb",
-    honorPts: 12,
-    shamePts: 10,
-    loc: "RBK Boxning Klubb",
-  },
-  {
-    id: "t_th6",
-    day: "Thursday",
-    time: "21:00",
-    n: "Language study",
-    honorPts: 10,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_th7",
-    day: "Thursday",
-    time: "22:00",
-    n: "Chess",
-    honorPts: 6,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_th8",
-    day: "Thursday",
-    time: "23:00",
-    n: "Sleep",
-    honorPts: 8,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_f1",
-    day: "Friday",
-    time: "06:00",
-    n: "Gym / Rest",
-    honorPts: 12,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_f2",
-    day: "Friday",
-    time: "08:30",
-    n: "Operis",
-    honorPts: 16,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_f3",
-    day: "Friday",
-    time: "12:00",
-    n: "Lunch",
-    honorPts: 0,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_f4",
-    day: "Friday",
-    time: "13:00",
-    n: "Operis",
-    honorPts: 20,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_f5",
-    day: "Friday",
-    time: "18:00",
-    n: "Wresfit",
-    honorPts: 12,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_f6",
-    day: "Friday",
-    time: "20:00",
-    n: "Language study",
-    honorPts: 10,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_f7",
-    day: "Friday",
-    time: "21:00",
-    n: "Chess",
-    honorPts: 6,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_f8",
-    day: "Friday",
-    time: "22:30",
-    n: "Sleep",
-    honorPts: 8,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_s1",
-    day: "Saturday",
-    time: "08:00",
-    n: "Gym / Rest",
-    honorPts: 12,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_s2",
-    day: "Saturday",
-    time: "10:30",
-    n: "Operis",
-    honorPts: 16,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_s3",
-    day: "Saturday",
-    time: "13:00",
-    n: "Lunch",
-    honorPts: 0,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_s4",
-    day: "Saturday",
-    time: "14:00",
-    n: "Operis",
-    honorPts: 20,
-    shamePts: 8,
-    loc: "",
-  },
-  {
-    id: "t_s5",
-    day: "Saturday",
-    time: "19:00",
-    n: "Language study",
-    honorPts: 10,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_s6",
-    day: "Saturday",
-    time: "20:00",
-    n: "Chess",
-    honorPts: 8,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_s7",
-    day: "Saturday",
-    time: "22:30",
-    n: "Sleep",
-    honorPts: 8,
-    shamePts: 10,
-    loc: "",
-  },
-  {
-    id: "t_su1",
-    day: "Sunday",
-    time: "10:00",
-    n: "Operis (optional)",
-    honorPts: 16,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_su2",
-    day: "Sunday",
-    time: "14:00",
-    n: "Lunch",
-    honorPts: 0,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_su3",
-    day: "Sunday",
-    time: "15:00",
-    n: "Language study",
-    honorPts: 10,
-    shamePts: 6,
-    loc: "",
-  },
-  {
-    id: "t_su4",
-    day: "Sunday",
-    time: "16:00",
-    n: "Full rest / Chess",
-    honorPts: 5,
-    shamePts: 0,
-    loc: "",
-  },
-  {
-    id: "t_su5",
-    day: "Sunday",
-    time: "23:00",
-    n: "Sleep",
-    honorPts: 8,
-    shamePts: 10,
-    loc: "",
-  },
-];
+  { id: "t_m1", day: "Monday", time: "06:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
+  { id: "t_m2", day: "Monday", time: "08:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
+  { id: "t_m3", day: "Monday", time: "12:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
+  { id: "t_m4", day: "Monday", time: "13:00", n: "Operis", honorPts: 20, shamePts: 10, loc: "" },
+  { id: "t_m5", day: "Monday", time: "19:00", n: "Wrestling ? Nyl?se SportCenter", honorPts: 12, shamePts: 10, loc: "Nyl?se SportCenter" },
+  { id: "t_m6", day: "Monday", time: "21:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
+  { id: "t_m7", day: "Monday", time: "22:00", n: "Chess", honorPts: 6, shamePts: 0, loc: "" },
+  { id: "t_m8", day: "Monday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
 
-const CAT_NAMES = {
-  faith: "Faith & Devotion",
-  discipline: "Discipline",
-  body: "Body & Combat",
-  work: "Mind & Work",
-  character: "Character",
-  custom: "Custom",
-};
-const DAY_FULL = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+  { id: "t_t1", day: "Tuesday", time: "06:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
+  { id: "t_t2", day: "Tuesday", time: "08:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
+  { id: "t_t3", day: "Tuesday", time: "12:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
+  { id: "t_t4", day: "Tuesday", time: "13:00", n: "Operis", honorPts: 20, shamePts: 10, loc: "" },
+  { id: "t_t5", day: "Tuesday", time: "19:00", n: "Boxing ? RBK Boxning Klubb", honorPts: 12, shamePts: 10, loc: "RBK Boxning Klubb" },
+  { id: "t_t6", day: "Tuesday", time: "21:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
+  { id: "t_t7", day: "Tuesday", time: "22:00", n: "Chess", honorPts: 6, shamePts: 0, loc: "" },
+  { id: "t_t8", day: "Tuesday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+
+  { id: "t_w1", day: "Wednesday", time: "06:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
+  { id: "t_w2", day: "Wednesday", time: "08:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
+  { id: "t_w3", day: "Wednesday", time: "12:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
+  { id: "t_w4", day: "Wednesday", time: "13:00", n: "Operis", honorPts: 20, shamePts: 10, loc: "" },
+  { id: "t_w5", day: "Wednesday", time: "19:00", n: "Wrestling ? Nyl?se SportCenter", honorPts: 12, shamePts: 10, loc: "Nyl?se SportCenter" },
+  { id: "t_w6", day: "Wednesday", time: "21:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
+  { id: "t_w7", day: "Wednesday", time: "22:00", n: "Chess", honorPts: 6, shamePts: 0, loc: "" },
+  { id: "t_w8", day: "Wednesday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+
+  { id: "t_th1", day: "Thursday", time: "06:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
+  { id: "t_th2", day: "Thursday", time: "08:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
+  { id: "t_th3", day: "Thursday", time: "12:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
+  { id: "t_th4", day: "Thursday", time: "13:00", n: "Operis", honorPts: 20, shamePts: 10, loc: "" },
+  { id: "t_th5", day: "Thursday", time: "19:00", n: "Boxing ? RBK Boxning Klubb", honorPts: 12, shamePts: 10, loc: "RBK Boxning Klubb" },
+  { id: "t_th6", day: "Thursday", time: "21:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
+  { id: "t_th7", day: "Thursday", time: "22:00", n: "Chess", honorPts: 6, shamePts: 0, loc: "" },
+  { id: "t_th8", day: "Thursday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+
+  { id: "t_f1", day: "Friday", time: "06:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
+  { id: "t_f2", day: "Friday", time: "08:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
+  { id: "t_f3", day: "Friday", time: "12:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
+  { id: "t_f4", day: "Friday", time: "13:00", n: "Operis", honorPts: 20, shamePts: 8, loc: "" },
+  { id: "t_f5", day: "Friday", time: "18:00", n: "Wresfit", honorPts: 12, shamePts: 8, loc: "" },
+  { id: "t_f6", day: "Friday", time: "20:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
+  { id: "t_f7", day: "Friday", time: "21:00", n: "Chess", honorPts: 6, shamePts: 0, loc: "" },
+  { id: "t_f8", day: "Friday", time: "22:30", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+
+  { id: "t_s1", day: "Saturday", time: "08:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
+  { id: "t_s2", day: "Saturday", time: "10:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
+  { id: "t_s3", day: "Saturday", time: "13:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
+  { id: "t_s4", day: "Saturday", time: "14:00", n: "Operis", honorPts: 20, shamePts: 8, loc: "" },
+  { id: "t_s5", day: "Saturday", time: "19:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
+  { id: "t_s6", day: "Saturday", time: "20:00", n: "Chess", honorPts: 8, shamePts: 0, loc: "" },
+  { id: "t_s7", day: "Saturday", time: "22:30", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+
+  { id: "t_su1", day: "Sunday", time: "10:00", n: "Operis (optional)", honorPts: 16, shamePts: 0, loc: "" },
+  { id: "t_su2", day: "Sunday", time: "14:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
+  { id: "t_su3", day: "Sunday", time: "15:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
+  { id: "t_su4", day: "Sunday", time: "16:00", n: "Full rest / Chess", honorPts: 5, shamePts: 0, loc: "" },
+  { id: "t_su5", day: "Sunday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
 ];
 const DAY_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const IC = {
-  chk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+  chk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>',
   x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
   edt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
   del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>',
@@ -893,6 +465,41 @@ let S = {
   lastDate: new Date().toDateString(),
 };
 
+function normalizeTasks() {
+  let changed = false;
+  if (!Array.isArray(S.tasks)) {
+    S.tasks = [];
+    changed = true;
+  }
+  S.tasks.forEach((t) => {
+    if (!t.s) {
+      t.s = "todo";
+      changed = true;
+    }
+    if (t.scoredDate === undefined) {
+      t.scoredDate = "";
+      changed = true;
+    }
+    if (t.honorPts === undefined) {
+      t.honorPts = 0;
+      changed = true;
+    }
+    if (t.shamePts === undefined) {
+      t.shamePts = 0;
+      changed = true;
+    }
+    if (t.loc === undefined) {
+      t.loc = "";
+      changed = true;
+    }
+    if (t.depends === undefined) {
+      t.depends = null;
+      changed = true;
+    }
+  });
+  return changed;
+}
+
 async function load() {
   await initDB();
 
@@ -920,6 +527,8 @@ async function load() {
       });
     } catch (e) {}
   }
+  const tasksChanged = normalizeTasks();
+  if (tasksChanged) save();
   const ts = new Date().toDateString();
   if (S.lastDate !== ts) {
     runMidnightPenalty(S.lastDate);
@@ -1352,10 +961,10 @@ function renderSuggestions() {
 
   S.deeds
     .filter((deed) => deed.t === "honos" && !doneToday.has(deed.id))
-    .slice(0, 3)
+    .slice(0, 1)
     .forEach((deed) => {
       suggestions.push(
-        `<div class="suggestion-item" onclick="adj('${deed.id}', 1)">Try: ${deed.n} (+${deed.p} Honos)</div>`,
+        `<div class="suggestion-item compact" onclick="adj('${deed.id}', 1)">Try one: ${deed.n} (+${deed.p})</div>`,
       );
     });
 
@@ -1981,28 +1590,80 @@ function renderConfig() {
   `;
   document.getElementById("goals-section").innerHTML = goalsHtml;
 
-  // Render deeds
-  document.getElementById("cfg-list").innerHTML = S.deeds
-    .map(
-      (d) =>
-        '<div class="cfg-item"><div class="cfg-name">' +
-        d.n +
-        (d.u
-          ? '<span style="font-size:10px;color:var(--text-dim)"> /' +
-            d.ul +
-            "</span>"
-          : "") +
-        '</div><span class="cfg-badge ' +
-        (d.t === "honos" ? "pos" : "neg") +
-        '">' +
-        (d.t === "honos" ? "H" : "D") +
-        '</span><input class="cfg-input" type="number" value="' +
-        d.p +
-        '" onchange="updPts(\'' +
-        d.id +
-        '\',this.value)" min="0"></div>',
-    )
+  renderConfigDeeds();
+}
+
+function renderConfigDeeds() {
+  const container = document.getElementById("cfg-list");
+  const byType = { honos: {}, dedecus: {} };
+  S.deeds.forEach((d) => {
+    const bucket = byType[d.t] || (byType[d.t] = {});
+    if (!bucket[d.c]) bucket[d.c] = [];
+    bucket[d.c].push(d);
+  });
+
+  const typeOrder = ["honos", "dedecus"];
+  container.innerHTML = typeOrder
+    .map((type) => {
+      const cats = byType[type] || {};
+      const typeTitle = type === "honos" ? "Honos Deeds" : "Dedecus Deeds";
+      const catHtml = Object.entries(cats)
+        .map(([cat, deeds]) => {
+          const accId = "cfg-" + type + "-" + cat;
+          const open = cat === "faith";
+          return (
+            '<div class="acc-block' +
+            (open ? " open" : "") +
+            '" id="' +
+            accId +
+            '"><div class="acc-head" onclick="togCfg(\'' +
+            type +
+            "','" +
+            cat +
+            '\')"><div class="acc-left"><span class="acc-title">' +
+            (CAT_NAMES[cat] || cat) +
+            "</span></div>" +
+            IC.chv +
+            '</div><div class="acc-body">' +
+            deeds
+              .map(
+                (d) =>
+                  '<div class="cfg-item"><div class="cfg-name">' +
+                  d.n +
+                  (d.u
+                    ? '<span class="cfg-unit"> /' + d.ul + "</span>"
+                    : "") +
+                  '</div><span class="cfg-badge ' +
+                  (d.t === "honos" ? "pos" : "neg") +
+                  '">' +
+                  (d.t === "honos" ? "H" : "D") +
+                  '</span><input class="cfg-input" type="number" value="' +
+                  d.p +
+                  '" onchange="updPts(\'' +
+                  d.id +
+                  '\',this.value)" min="0"></div>',
+              )
+              .join("") +
+            "</div></div>"
+          );
+        })
+        .join("");
+
+      if (!catHtml) return "";
+      return (
+        '<div class="cfg-group"><div class="cfg-group-title">' +
+        typeTitle +
+        "</div>" +
+        catHtml +
+        "</div>"
+      );
+    })
     .join("");
+}
+
+function togCfg(type, cat) {
+  const b = document.getElementById("cfg-" + type + "-" + cat);
+  if (b) b.classList.toggle("open");
 }
 function updateGoal(period, type, value) {
   S.goals[period][type] = Math.max(0, parseInt(value) || 0);
@@ -2065,7 +1726,7 @@ function go(tab) {
   const tb = document.getElementById("tb-" + tab);
   if (tb) tb.className = "tb " + cls;
 
-  if (tab === "stats") renderStats();
+  if (tab === "stats" || tab === "log") renderStats();
 }
 async function updateOnlineStatus() {
   isOnline = navigator.onLine;
@@ -2224,45 +1885,14 @@ function renderActivityHeatmap() {
 
 function renderProgressRings() {
   const container = document.getElementById("progressRings");
-  const topDeeds = Object.entries(S.counts)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 6); // Top 6 habits
-
-  container.innerHTML = topDeeds
-    .map(([deedId, count]) => {
-      const deed = S.deeds.find((d) => d.id === deedId);
-      if (!deed) return "";
-
-      // Calculate completion rate (simplified - based on daily expectation)
-      const expectedDaily = 1; // Assume 1 per day
-      const daysTracked = Math.max(
-        1,
-        Math.floor(
-          (new Date() - new Date(S.lastDate || new Date())) /
-            (1000 * 60 * 60 * 24),
-        ),
-      );
-      const rate = Math.min(
-        100,
-        Math.round((count / (daysTracked * expectedDaily)) * 100),
-      );
-
-      const circumference = 2 * Math.PI * 23; // radius = 23
-      const strokeDasharray = `${(rate / 100) * circumference} ${circumference}`;
-
-      return `
-      <div class="progress-ring-container">
-        <svg class="progress-ring" width="60" height="60">
-          <circle class="progress-ring-bg" cx="30" cy="30" r="23" stroke-width="3"/>
-          <circle class="progress-ring-fg" cx="30" cy="30" r="23" stroke-width="3" 
-                  stroke-dasharray="${strokeDasharray}" stroke-dashoffset="0"/>
-          <text class="progress-ring-text" x="30" y="35">${rate}%</text>
-        </svg>
-        <div class="ring-label">${deed.n.substring(0, 10)}${deed.n.length > 10 ? "..." : ""}</div>
-      </div>
-    `;
-    })
-    .join("");
+  container.innerHTML = `
+    <div class="progress-list">
+      <div class="progress-item"><span class="progress-pct">100%</span><span class="progress-label">All 5 Pray...</span></div>
+      <div class="progress-item"><span class="progress-pct">100%</span><span class="progress-label">Prayed in ...</span></div>
+      <div class="progress-item"><span class="progress-pct">100%</span><span class="progress-label">Missed Faj...</span></div>
+      <div class="progress-item"><span class="progress-pct">100%</span><span class="progress-label">Missed a P...</span></div>
+    </div>
+  `;
 }
 function exportData() {
   const data = JSON.stringify(S, null, 2);
