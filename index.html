@@ -12,6 +12,8 @@
   <title>Fortis Anima</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="fortis_anima_favicon.svg">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@300;400;500;600&display=swap"
@@ -272,7 +274,7 @@
           </svg>
         </div>
         <div class="acc-body">
-          <div class="config-section config-span">
+          <div class="config-section">
             <div id="cfg-list"></div>
           </div>
         </div>
@@ -285,7 +287,7 @@
           </svg>
         </div>
         <div class="acc-body">
-          <div class="config-section config-span">
+          <div class="config-section">
             <button class="fbtn" onclick="exportData()">Export Data</button>
             <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData()">
             <button class="fbtn" onclick="document.getElementById('importFile').click()">Import Data</button>

@@ -1290,19 +1290,18 @@ body::before {
 
 .panel#panel-config {
   display: none;
-  gap: 10px;
 }
 
 .panel.active#panel-config {
-  display: grid;
+  display: block;
+}
+
+#panel-config .acc-block {
+  margin-bottom: 8px;
 }
 
 #panel-config .config-section {
-  margin-bottom: 0;
-}
-
-#panel-config .config-span {
-  grid-column: 1 / -1;
+  margin: 8px 0 0;
 }
 
 .cfg-group {
@@ -1337,12 +1336,6 @@ body::before {
 
 #cfg-list .acc-body {
   padding-top: 8px;
-}
-
-@media (min-width: 520px) {
-  #panel-config {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 /* Skeleton Loading */
