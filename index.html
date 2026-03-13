@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Fortis Anima">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0d0d0f">
+  <title>Fortis Anima</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #0d0d0f;
+      --surface: #141417;
+      --surface2: #1c1c21;
+      --border: #2a2a32;
+      --gold: #C9A84C;
+      --gold-dim: #8a6f30;
+      --gold-glow: rgba(201, 168, 76, 0.12);
+      --crimson: #8B1A1A;
+      --crimson-b: #c0392b;
+      --crimson-glow: rgba(139, 26, 26, 0.18);
+      --text: #e8e3d8;
+      --text-dim: #5a5550;
+      --text-mid: #9a9490;
+      --radius: 10px;
+      --tr: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding-bottom: 80px;
+    }
+
+    .header {
+      padding: 48px 20px 18px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .heyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .htitle {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .hsub {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-top: 4px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 8px;
+      padding: 14px 14px 0;
+      align-items: center;
+    }
+
+    .score-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 14px 12px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .score-card.h {
+      border-color: var(--gold-dim);
+    }
+
+    .score-card.d {
+      border-color: var(--crimson);
+    }
+
+    .slabel {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .score-card.h .slabel {
+      color: var(--gold);
+    }
+
+    .score-card.d .slabel {
+      color: var(--crimson-b);
+    }
+
+    .sval {
+      font-family: 'Cinzel', serif;
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .score-card.h .sval {
+      color: var(--gold);
+    }
+
+    .score-card.d .sval {
+      color: var(--crimson-b);
+    }
+
+    .sdelta {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .net-sc {
+      text-align: center;
+    }
+
+    .netlabel {
+      font-size: 8px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .netval {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .netval.pos {
+      color: var(--gold);
+    }
+
+    .netval.neg {
+      color: var(--crimson-b);
+    }
+
+    .netval.zer {
+      color: var(--text-dim);
+    }
+
+    .bbar-wrap {
+      padding: 10px 14px 0;
+    }
+
+    .bbar {
+      height: 3px;
+      background: var(--surface2);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bbar-h {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+      border-radius: 2px;
+      transition: width .5s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .bbar-d {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--crimson), var(--crimson-b));
+      border-radius: 2px;
+      transition: width .5s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .bbar-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-size: 9px;
+      color: var(--text-dim);
+    }
+
+    .tab-bar {
+      display: flex;
+      padding: 12px 14px 0;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tab-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tb {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 13px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-dim);
+      font-family: 'Inter', sans-serif;
+      transition: var(--tr);
+      white-space: nowrap;
+    }
+
+    .tb svg {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+
+    .tb.on-h {
+      background: var(--gold-glow);
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    .tb.on-d {
+      background: var(--crimson-glow);
+      border-color: var(--crimson);
+      color: var(--crimson-b);
+    }
+
+    .tb.on-o {
+      background: var(--surface2);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .panel {
+      display: none;
+      padding: 10px 14px;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .acc-block {
+      margin-bottom: 5px;
+    }
+
+    .acc-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      user-select: none;
+      transition: var(--tr);
+    }
+
+    .acc-head:hover {
+      background: var(--surface2);
+    }
+
+    .acc-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .acc-title {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-mid);
+    }
+
+    .acc-count {
+      font-size: 10px;
+      color: var(--text-dim);
+      background: var(--surface2);
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    .acc-chev {
+      width: 13px;
+      height: 13px;
+      color: var(--text-dim);
+      transition: transform .2s;
+      flex-shrink: 0;
+    }
+
+    .acc-block.open .acc-chev {
+      transform: rotate(180deg);
+    }
+
+    .acc-body {
+      display: none;
+      padding-top: 4px;
+    }
+
+    .acc-block.open .acc-body {
+      display: block;
+    }
+
+    .deed {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 11px 13px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      transition: var(--tr);
+    }
+
+    .deed.hi:hover {
+      border-color: var(--gold-dim);
+    }
+
+    .deed.di:hover {
+      border-color: var(--crimson);
+    }
+
+    .deed-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .deed-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .deed-detail {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-top: 1px;
+    }
+
+    .deed-pts {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 600;
+      min-width: 38px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .deed-pts.pos {
+      color: var(--gold);
+    }
+
+    .deed-pts.neg {
+      color: var(--crimson-b);
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .sbtn {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text-mid);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--tr);
+    }
+
+    .sbtn:hover {
+      border-color: var(--text-mid);
+      color: var(--text);
+    }
+
+    .scount {
+      font-size: 13px;
+      font-weight: 600;
+      min-width: 18px;
+      text-align: center;
+      color: var(--text);
+    }
+
+    .day-strip {
+      display: flex;
+      gap: 6px;
+      padding: 10px 0 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .day-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .day-pill {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      transition: var(--tr);
+    }
+
+    .day-pill.today {
+      border-color: var(--gold-dim);
+      background: var(--gold-glow);
+    }
+
+    .day-pill.selected {
+      border-color: var(--gold);
+    }
+
+    .dp-name {
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .dp-num {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-mid);
+    }
+
+    .day-pill.today .dp-name,
+    .day-pill.today .dp-num {
+      color: var(--gold);
+    }
+
+    .day-pill.selected .dp-name,
+    .day-pill.selected .dp-num {
+      color: var(--gold);
+    }
+
+    .dp-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+    }
+
+    .dp-dot.has-missed {
+      background: var(--crimson-b);
+    }
+
+    .dp-dot.all-done {
+      background: var(--gold);
+    }
+
+    .dp-dot.has-todo {
+      background: var(--gold-dim);
+    }
+
+    .task-filters {
+      display: flex;
+      gap: 6px;
+      margin: 8px 0;
+    }
+
+    .tf-btn {
+      flex: 1;
+      padding: 7px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-dim);
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: var(--tr);
+    }
+
+    .tf-btn.active {
+      background: var(--surface2);
+      color: var(--text);
+      border-color: var(--text-mid);
+    }
+
+    .task-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 13px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: var(--tr);
+    }
+
+    .task-item.is-today {
+      border-left: 2px solid var(--gold-dim);
+    }
+
+    .task-item.is-missed {
+      border-left: 2px solid var(--crimson);
+      opacity: .75;
+    }
+
+    .task-item.is-done {
+      opacity: .6;
+    }
+
+    .tchk {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      margin-top: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--tr);
+      background: var(--surface2);
+    }
+
+    .tchk svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .tchk.done {
+      background: var(--gold-glow);
+      border-color: var(--gold-dim);
+    }
+
+    .tchk.missed {
+      background: var(--crimson-glow);
+      border-color: var(--crimson);
+    }
+
+    .tbody {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tname {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .tname.done {
+      color: var(--text-dim);
+      text-decoration: line-through;
+    }
+
+    .tname.missed {
+      color: var(--crimson-b);
+    }
+
+    .tmeta {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-top: 3px;
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tpts {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    .tpts.pos {
+      background: var(--gold-glow);
+      color: var(--gold);
+    }
+
+    .tpts.neg {
+      background: var(--crimson-glow);
+      color: var(--crimson-b);
+    }
+
+    .tloc {
+      font-size: 9px;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    .tactions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .ta-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--tr);
+    }
+
+    .ta-btn svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .ta-btn:hover {
+      border-color: var(--text-mid);
+      color: var(--text);
+    }
+
+    .ta-btn.del:hover {
+      border-color: var(--crimson);
+      color: var(--crimson-b);
+    }
+
+    .edit-inline {
+      background: var(--surface2);
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      padding: 6px 10px;
+      outline: none;
+      width: 100%;
+    }
+
+    .task-add {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-top: 10px;
+    }
+
+    .task-add-title {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .pts-hint {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      background: var(--surface2);
+      border-radius: 6px;
+      border-left: 2px solid var(--gold-dim);
+      line-height: 1.6;
+    }
+
+    .log-cat-label {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 10px 2px 5px;
+    }
+
+    .log-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 9px 13px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .ldot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .ldot.pos {
+      background: var(--gold);
+    }
+
+    .ldot.neg {
+      background: var(--crimson-b);
+    }
+
+    .lname {
+      flex: 1;
+      font-size: 12px;
+      color: var(--text-mid);
+    }
+
+    .ltime {
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    .lpts {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .lpts.pos {
+      color: var(--gold);
+    }
+
+    .lpts.neg {
+      color: var(--crimson-b);
+    }
+
+    .ldel {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 0 2px;
+      transition: var(--tr);
+    }
+
+    .ldel:hover {
+      color: var(--crimson-b);
+    }
+
+    .week-report {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .week-report h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .reset-btn {
+      font-size: 10px;
+      color: var(--gold-dim);
+      cursor: pointer;
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+      padding: 3px 9px;
+      background: none;
+      font-family: 'Inter', sans-serif;
+      transition: var(--tr);
+    }
+
+    .reset-btn:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .rrow {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rrow:last-child {
+      border-bottom: none;
+    }
+
+    .rk {
+      color: var(--text-mid);
+    }
+
+    .rv {
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+    }
+
+    .rv.pos {
+      color: var(--gold);
+    }
+
+    .rv.neg {
+      color: var(--crimson-b);
+    }
+
+    .rv.neu {
+      color: var(--text);
+    }
+
+    .calc-guide {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .calc-guide h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .grow {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .grow:last-child {
+      border-bottom: none;
+    }
+
+    .gt {
+      color: var(--text-mid);
+    }
+
+    .gp {
+      font-family: 'Cinzel', serif;
+      color: var(--gold);
+    }
+
+    .calc-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+
+    .calc-box h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .calc-result {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .crl {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .crv {
+      font-family: 'Cinzel', serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gold);
+    }
+
+    .cra {
+      margin-top: 10px;
+      display: flex;
+      gap: 7px;
+    }
+
+    .cra-btn {
+      flex: 1;
+      padding: 9px;
+      border-radius: 8px;
+      border: 1px solid;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: 'Cinzel', serif;
+      cursor: pointer;
+      transition: var(--tr);
+    }
+
+    .cra-btn.ch {
+      border-color: var(--gold-dim);
+      background: var(--gold-glow);
+      color: var(--gold);
+    }
+
+    .cra-btn.cd {
+      border-color: var(--crimson);
+      background: var(--crimson-glow);
+      color: var(--crimson-b);
+    }
+
+    .cfg-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 11px 13px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .cfg-name {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .cfg-badge {
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .cfg-badge.pos {
+      background: var(--gold-glow);
+      color: var(--gold);
+    }
+
+    .cfg-badge.neg {
+      background: var(--crimson-glow);
+      color: var(--crimson-b);
+    }
+
+    .cfg-input {
+      width: 54px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      padding: 5px 7px;
+      text-align: center;
+      outline: none;
+      transition: var(--tr);
+    }
+
+    .cfg-input:focus {
+      border-color: var(--gold-dim);
+    }
+
+    .frow {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 7px;
+    }
+
+    .finput {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      padding: 9px 12px;
+      outline: none;
+      transition: var(--tr);
+    }
+
+    .finput:focus {
+      border-color: var(--gold-dim);
+    }
+
+    .fselect {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      padding: 9px 10px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .fbtn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 8px;
+      border: 1px solid var(--gold-dim);
+      background: var(--gold-glow);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: var(--tr);
+    }
+
+    .fbtn:hover {
+      background: rgba(201, 168, 76, .22);
+    }
+
+    .fsec {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 12px 2px 7px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 88px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 9px 18px;
+      font-size: 12px;
+      color: var(--text);
+      opacity: 0;
+      transition: all .25s;
+      z-index: 200;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.pos {
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    .toast.neg {
+      border-color: var(--crimson);
+      color: var(--crimson-b);
+    }
+
+    .empty {
+      text-align: center;
+      padding: 36px 20px;
+      color: var(--text-dim);
+      font-size: 12px;
+    }
+
+    .empty svg {
+      width: 26px;
+      height: 26px;
+      opacity: .25;
+      margin-bottom: 10px;
+      display: block;
+      margin-inline: auto;
+    }
+
+    .bnav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(13, 13, 15, .97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+      z-index: 100;
+    }
+
+    .nb {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: var(--tr);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .nb svg {
+      width: 17px;
+      height: 17px;
+      color: var(--text-dim);
+      transition: var(--tr);
+    }
+
+    .nb span {
+      font-size: 9px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: var(--tr);
+    }
+
+    .nb.on-h svg,
+    .nb.on-h span {
+      color: var(--gold);
+    }
+
+    .nb.on-d svg,
+    .nb.on-d span {
+      color: var(--crimson-b);
+    }
+
+    .nb.on-o svg,
+    .nb.on-o span {
+      color: var(--text);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="heyebrow">Per Actus Metiris Animam</div>
+      <div class="htitle">FORTIS ANIMA</div>
+      <div class="hsub">By deeds, the soul is measured</div>
+    </div>
+    <div class="score-row">
+      <div class="score-card h">
+        <div class="slabel">Honos</div>
+        <div class="sval" id="honosScore">0</div>
+        <div class="sdelta" id="honosDelta">+0 today</div>
+      </div>
+      <div class="net-sc">
+        <div class="netlabel">Net</div>
+        <div class="netval zer" id="netScore">0</div>
+      </div>
+      <div class="score-card d">
+        <div class="slabel">Dedecus</div>
+        <div class="sval" id="dedecusScore">0</div>
+        <div class="sdelta" id="dedecusDelta">-0 today</div>
+      </div>
+    </div>
+    <div class="bbar-wrap">
+      <div class="bbar">
+        <div class="bbar-h" id="hbar" style="width:50%"></div>
+        <div class="bbar-d" id="dbar" style="width:50%"></div>
+      </div>
+      <div class="bbar-labels"><span>Honor</span><span>Shame</span></div>
+    </div>
+    <div class="tab-bar">
+      <button class="tb on-h" id="tb-honos" onclick="go('honos')"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
+        </svg>Honos</button>
+      <button class="tb" id="tb-dedecus" onclick="go('dedecus')"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M6 20v-2a6 6 0 0112 0v2" />
+          <line x1="12" y1="12" x2="12" y2="20" />
+        </svg>Dedecus</button>
+      <button class="tb" id="tb-tasks" onclick="go('tasks')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>Schedule</button>
+      <button class="tb" id="tb-log" onclick="go('log')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
+        </svg>Ledger</button>
+      <button class="tb" id="tb-calc" onclick="go('calc')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <rect x="4" y="2" width="16" height="20" rx="2" />
+          <line x1="8" y1="6" x2="16" y2="6" />
+          <line x1="8" y1="10" x2="10" y2="10" />
+          <line x1="14" y1="10" x2="16" y2="10" />
+          <line x1="8" y1="14" x2="10" y2="14" />
+          <line x1="14" y1="14" x2="16" y2="14" />
+          <line x1="8" y1="18" x2="16" y2="18" />
+        </svg>Valuate</button>
+      <button class="tb" id="tb-stats" onclick="go('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>Stats</button>
+      <button class="tb" id="tb-config" onclick="go('config')"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+        </svg>Config</button>
+    </div>
+    <div class="panel active" id="panel-honos">
+      <div id="honos-cats"></div>
+    </div>
+    <div class="panel" id="panel-dedecus">
+      <div id="dedecus-cats"></div>
+    </div>
+    <div class="panel" id="panel-tasks">
+      <div class="day-strip" id="day-strip"></div>
+      <div class="task-filters">
+        <button class="tf-btn active" onclick="setFilter('all',this)">All</button>
+        <button class="tf-btn" onclick="setFilter('todo',this)">To Do</button>
+        <button class="tf-btn" onclick="setFilter('done',this)">Done</button>
+        <button class="tf-btn" onclick="setFilter('missed',this)">Missed</button>
+      </div>
+      <div id="task-list"></div>
+      <div class="task-add">
+        <div class="task-add-title">Add Task</div>
+        <div class="pts-hint">Honor pts = earned on completion. Shame pts = charged at midnight if unchecked.</div>
+        <div class="frow"><input class="finput" id="tn" placeholder="Task name..."></div>
+        <div class="frow">
+          <input class="finput" id="tt" placeholder="Time e.g. 06:00" style="flex:1">
+          <select class="fselect" id="td">
+            <option>Daily</option>
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+            <option>Sunday</option>
+          </select>
+        </div>
+        <div class="frow">
+          <input class="finput" id="t-hp" type="number" min="0" placeholder="Honor if done">
+          <input class="finput" id="t-sp" type="number" min="0" placeholder="Shame if missed">
+        </div>
+        <div class="frow"><input class="finput" id="t-loc" placeholder="Location (optional)"></div>
+        <button class="fbtn" onclick="addTask()">Add to Schedule</button>
+      </div>
+    </div>
+    <div class="panel" id="panel-log">
+      <div class="week-report">
+        <h3>Weekly Report <button class="reset-btn" onclick="resetWeek()">New Week</button></h3>
+        <div class="rrow"><span class="rk">Total Honos</span><span class="rv pos" id="rep-h">+0</span></div>
+        <div class="rrow"><span class="rk">Total Dedecus</span><span class="rv neg" id="rep-d">-0</span></div>
+        <div class="rrow"><span class="rk">Net Score</span><span class="rv neu" id="rep-n">0</span></div>
+        <div class="rrow"><span class="rk">Entries</span><span class="rv neu" id="rep-e">0</span></div>
+        <div class="rrow"><span class="rk">Verdict</span><span class="rv neu" id="rep-v">&#8212;</span></div>
+      </div>
+      <input class="finput" id="logSearch" placeholder="Search ledger..." oninput="renderLog()"
+        style="margin-bottom:10px">
+      <div id="log-list"></div>
+    </div>
+    <div class="panel" id="panel-calc">
+      <div class="calc-guide">
+        <h3>Point Valuation Guide</h3>
+        <div class="grow"><span class="gt">Tier I &mdash; Minor deed</span><span class="gp">&#177;3&ndash;6</span></div>
+        <div class="grow"><span class="gt">Tier II &mdash; Moderate deed</span><span class="gp">&#177;7&ndash;12</span>
+        </div>
+        <div class="grow"><span class="gt">Tier III &mdash; Major deed</span><span class="gp">&#177;13&ndash;20</span>
+        </div>
+        <div class="grow"><span class="gt">Tier IV &mdash; Religious / Core</span><span
+            class="gp">&#177;20&ndash;35</span></div>
+        <div class="grow"><span class="gt">Pillar failure (missed Salah)</span><span class="gp">-30</span></div>
+        <div class="grow"><span class="gt">Per 30 min duration</span><span class="gp">+5&ndash;10</span></div>
+        <div class="grow"><span class="gt">Streak bonus (3+ days)</span><span class="gp">&#215;1.1&ndash;1.25</span>
+        </div>
+      </div>
+      <div class="calc-box">
+        <h3>One-Off Entry</h3>
+        <div class="frow"><input class="finput" id="cn" placeholder="Deed name..." style="flex:2"><input class="finput"
+            id="cp" type="number" placeholder="Pts" style="width:70px;flex:none"></div>
+        <div id="cres" style="display:none" class="calc-result">
+          <div class="crl">Entry Ready</div>
+          <div class="crv" id="crv">0</div>
+          <div class="cra"><button class="cra-btn ch" onclick="addCalc(1)">+ Honos</button><button class="cra-btn cd"
+              onclick="addCalc(-1)">&minus; Dedecus</button></div>
+        </div>
+        <button class="fbtn" style="margin-top:8px" onclick="previewCalc()">Preview</button>
+      </div>
+    </div>
+    <div class="panel" id="panel-stats">
+      <div class="calc-guide">
+        <h3>Progress Charts</h3>
+        <canvas id="statsChart" width="300" height="200"></canvas>
+      </div>
+    </div>
+    <div class="panel" id="panel-config">
+      <div class="fsec">Add Custom Deed</div>
+      <div
+        style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:6px">
+        <div class="frow"><input class="finput" id="nd-name" placeholder="Deed name..."></div>
+        <div class="frow">
+          <input class="finput" id="nd-pts" type="number" placeholder="Points" style="width:80px;flex:none">
+          <select class="fselect" id="nd-type">
+            <option value="honos">+ Honos</option>
+            <option value="dedecus">&minus; Dedecus</option>
+          </select>
+          <select class="fselect" id="nd-cat">
+            <option value="faith">Faith</option>
+            <option value="discipline">Discipline</option>
+            <option value="body">Body</option>
+            <option value="work">Work</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="frow"><input class="finput" id="nd-detail" placeholder="Detail / note (optional)"></div>
+        <button class="fbtn" onclick="addDeed()">Add to Codex</button>
+      </div>
+      <div class="fsec">Adjust Deed Point Values</div>
+      <div id="cfg-list"></div>
+      <div class="fsec">Data Management</div>
+      <button class="fbtn" onclick="exportData()">Export Data</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData()">
+      <button class="fbtn" onclick="document.getElementById('importFile').click()">Import Data</button>
+      <button class="fbtn" onclick="enableNotifications()">Enable Notifications</button>
+      <button class="fbtn" onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <nav class="bnav">
+    <button class="nb on-h" id="nb-honos" onclick="go('honos')"><svg viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2">
+        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
+      </svg><span>Honos</span></button>
+    <button class="nb" id="nb-dedecus" onclick="go('dedecus')"><svg viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M6 20v-2a6 6 0 0112 0v2" />
+        <line x1="12" y1="12" x2="12" y2="20" />
+      </svg><span>Dedecus</span></button>
+    <button class="nb" id="nb-tasks" onclick="go('tasks')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2" />
+        <line x1="16" y1="2" x2="16" y2="6" />
+        <line x1="8" y1="2" x2="8" y2="6" />
+        <line x1="3" y1="10" x2="21" y2="10" />
+      </svg><span>Schedule</span></button>
+    <button class="nb" id="nb-log" onclick="go('log')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2">
+        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
+      </svg><span>Ledger</span></button>
+    <button class="nb" id="nb-stats" onclick="go('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2">
+        <line x1="18" y1="20" x2="18" y2="10" />
+        <line x1="12" y1="20" x2="12" y2="4" />
+        <line x1="6" y1="20" x2="6" y2="14" />
+      </svg><span>Stats</span></button>
+    <button class="nb" id="nb-config" onclick="go('config')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2">
+        <circle cx="12" cy="12" r="3" />
+        <path
+          d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+      </svg><span>Config</span></button>
+  </nav>
+  <script>
+    const DD = [{ "id": "h1", "t": "honos", "c": "faith", "n": "All 5 Prayers on Time", "p": 25, "d": "Full salah on time" }, { "id": "h2", "t": "honos", "c": "faith", "n": "Prayed in Jama'ah", "p": 10, "d": "Congregation prayer" }, { "id": "h3", "t": "honos", "c": "faith", "n": "Read Quran", "p": 15, "d": "Per 15 min", "u": true, "ul": "15 min" }, { "id": "h4", "t": "honos", "c": "faith", "n": "Memorised Name of Allah", "p": 20, "d": "One of the 99 names" }, { "id": "h5", "t": "honos", "c": "faith", "n": "Memorised New Ayah", "p": 20, "d": "Quran memorisation" }, { "id": "h6", "t": "honos", "c": "faith", "n": "Morning/Evening Dhikr", "p": 10, "d": "Full adhkar set" }, { "id": "h7", "t": "honos", "c": "faith", "n": "Lowered Gaze (conscious)", "p": 10, "d": "Deliberate restraint" }, { "id": "h8", "t": "honos", "c": "faith", "n": "Voluntary Fast", "p": 20, "d": "Sunnah or Nafl fast" }, { "id": "h9", "t": "honos", "c": "discipline", "n": "Woke up for Fajr on Time", "p": 15, "d": "Before or at adhan" }, { "id": "h10", "t": "honos", "c": "discipline", "n": "Slept Before Midnight", "p": 8, "d": "Asleep by 22:00" }, { "id": "h11", "t": "honos", "c": "discipline", "n": "Stopped Work by 21:15", "p": 8, "d": "Blue light rule observed" }, { "id": "h12", "t": "honos", "c": "discipline", "n": "Cold Shower", "p": 5, "d": "Full cold shower" }, { "id": "h13", "t": "honos", "c": "discipline", "n": "Drank 2L Water", "p": 6, "d": "Daily hydration target" }, { "id": "h14", "t": "honos", "c": "discipline", "n": "Took Supplements", "p": 5, "d": "Daily stack completed" }, { "id": "h15", "t": "honos", "c": "discipline", "n": "Ate Clean", "p": 6, "d": "No junk, clean meals" }, { "id": "h16", "t": "honos", "c": "discipline", "n": "Commute Language Study", "p": 8, "d": "Swedish on the bus" }, { "id": "h17", "t": "honos", "c": "discipline", "n": "Followed Schedule", "p": 10, "d": "Day went as planned" }, { "id": "h18", "t": "honos", "c": "body", "n": "Gym - Nordic Wellness (2h)", "p": 12, "d": "Gamlestads Torg" }, { "id": "h19", "t": "honos", "c": "body", "n": "Wrestling - Nylöse (2h)", "p": 12, "d": "Hjällbo, Mon/Wed 19-21" }, { "id": "h20", "t": "honos", "c": "body", "n": "Boxing - RBK (2h)", "p": 12, "d": "Tue/Thu 19-21" }, { "id": "h21", "t": "honos", "c": "work", "n": "Deep Work Block", "p": 8, "d": "Per hour", "u": true, "ul": "hour" }, { "id": "h22", "t": "honos", "c": "work", "n": "Study Power Hour", "p": 12, "d": "AI + Backend block done" }, { "id": "h23", "t": "honos", "c": "work", "n": "Shipped a Feature", "p": 15, "d": "Deployed working code" }, { "id": "h24", "t": "honos", "c": "work", "n": "Language Study Block", "p": 10, "d": "Dedicated 30-60 min" }, { "id": "h25", "t": "honos", "c": "work", "n": "Chess Study / Play", "p": 6, "d": "Tactics, openings, or game" }, { "id": "d1", "t": "dedecus", "c": "faith", "n": "Missed a Prayer", "p": 30, "d": "Any fard missed" }, { "id": "d2", "t": "dedecus", "c": "faith", "n": "Missed Fajr", "p": 20, "d": "On top of missed salah" }, { "id": "d3", "t": "dedecus", "c": "faith", "n": "Failed to Lower Gaze", "p": 15, "d": "Intentional failure" }, { "id": "d4", "t": "dedecus", "c": "faith", "n": "Listened to Music", "p": 8, "d": "Unnecessary music" }, { "id": "d5", "t": "dedecus", "c": "faith", "n": "Backbiting or Lying", "p": 20, "d": "Ghiba or false speech" }, { "id": "d6", "t": "dedecus", "c": "discipline", "n": "Slept Late (past midnight)", "p": 10, "d": "After 00:00" }, { "id": "d7", "t": "dedecus", "c": "discipline", "n": "Woke Up Late", "p": 12, "d": "Missed morning window" }, { "id": "d8", "t": "dedecus", "c": "discipline", "n": "Skipped Gym (no excuse)", "p": 8, "d": "On a gym day" }, { "id": "d9", "t": "dedecus", "c": "discipline", "n": "Skipped Combat (no excuse)", "p": 8, "d": "Wrestling/boxing missed" }, { "id": "d10", "t": "dedecus", "c": "discipline", "n": "Ate Junk / Skipped Meal", "p": 6, "d": "Off-plan eating" }, { "id": "d11", "t": "dedecus", "c": "discipline", "n": "Forgot Supplements", "p": 4, "d": "Missed daily stack" }, { "id": "d12", "t": "dedecus", "c": "discipline", "n": "Mindless Scrolling", "p": 8, "d": "Per 30 min", "u": true, "ul": "30 min" }, { "id": "d13", "t": "dedecus", "c": "discipline", "n": "Wasted Time", "p": 8, "d": "Per 30 min", "u": true, "ul": "30 min" }, { "id": "d14", "t": "dedecus", "c": "discipline", "n": "Coded Past 21:15", "p": 8, "d": "Broke wind-down rule" }, { "id": "d15", "t": "dedecus", "c": "discipline", "n": "Skipped Study Block", "p": 6, "d": "Block unfinished" }, { "id": "d16", "t": "dedecus", "c": "character", "n": "Broke a Promise", "p": 15, "d": "Any given word broken" }, { "id": "d17", "t": "dedecus", "c": "character", "n": "Lost Temper", "p": 10, "d": "Unnecessary anger" }];
+    const DT = [{ "id": "t_d1", "day": "Daily", "time": "05:00", "n": "Fajr + Quran (15 min) + Dhikr", "honorPts": 25, "shamePts": 20, "loc": "" }, { "id": "t_d2", "day": "Daily", "time": "22:00", "n": "Sleep", "honorPts": 8, "shamePts": 10, "loc": "" }, { "id": "t_d3", "day": "Daily", "time": "21:15", "n": "Stop work / screens off", "honorPts": 8, "shamePts": 8, "loc": "" }, { "id": "t_d4", "day": "Daily", "time": "--", "n": "Drink 2L water", "honorPts": 6, "shamePts": 4, "loc": "" }, { "id": "t_d5", "day": "Daily", "time": "--", "n": "Take supplements", "honorPts": 5, "shamePts": 4, "loc": "" }, { "id": "t_d6", "day": "Daily", "time": "--", "n": "Eat clean (no junk)", "honorPts": 6, "shamePts": 6, "loc": "" }, { "id": "t_m1", "day": "Monday", "time": "05:30", "n": "Commute language study (bus)", "honorPts": 8, "shamePts": 0, "loc": "Bus to Gamlestaden" }, { "id": "t_m2", "day": "Monday", "time": "06:00", "n": "Gym - Nordic Wellness (2h)", "honorPts": 12, "shamePts": 8, "loc": "Nordic Wellness, Gamlestads Torg" }, { "id": "t_m3", "day": "Monday", "time": "08:30", "n": "Deep Work Block 1 (2h)", "honorPts": 16, "shamePts": 8, "loc": "Hjällbo" }, { "id": "t_m4", "day": "Monday", "time": "10:30", "n": "Language Study (1h)", "honorPts": 10, "shamePts": 6, "loc": "" }, { "id": "t_m5", "day": "Monday", "time": "11:30", "n": "Deep Work Block 2 (1.5h)", "honorPts": 12, "shamePts": 6, "loc": "" }, { "id": "t_m6", "day": "Monday", "time": "13:00", "n": "Lunch + rest", "honorPts": 0, "shamePts": 0, "loc": "" }, { "id": "t_m7", "day": "Monday", "time": "14:00", "n": "Deep Work Block 3 (2h)", "honorPts": 16, "shamePts": 6, "loc": "Hjällbo" }, { "id": "t_m8", "day": "Monday", "time": "16:00", "n": "Chess (1h)", "honorPts": 6, "shamePts": 0, "loc": "" }, { "id": "t_m9", "day": "Monday", "time": "17:30", "n": "Commute to Hjällbo + prep", "honorPts": 5, "shamePts": 0, "loc": "" }, { "id": "t_m10", "day": "Monday", "time": "19:00", "n": "Wrestling - Nylöse SportCenter (2h)", "honorPts": 12, "shamePts": 10, "loc": "Nylöse SportCenter, Hjällbo" }, { "id": "t_t1", "day": "Tuesday", "time": "05:30", "n": "Commute language study (bus)", "honorPts": 8, "shamePts": 0, "loc": "Bus to Gamlestaden" }, { "id": "t_t2", "day": "Tuesday", "time": "06:00", "n": "Gym - Nordic Wellness (2h)", "honorPts": 12, "shamePts": 8, "loc": "Nordic Wellness, Gamlestads Torg" }, { "id": "t_t3", "day": "Tuesday", "time": "08:30", "n": "Deep Work Block 1 (2h)", "honorPts": 16, "shamePts": 8, "loc": "" }, { "id": "t_t4", "day": "Tuesday", "time": "10:30", "n": "Language Study (1h)", "honorPts": 10, "shamePts": 6, "loc": "" }, { "id": "t_t5", "day": "Tuesday", "time": "11:30", "n": "Deep Work Block 2 (1.5h)", "honorPts": 12, "shamePts": 6, "loc": "" }, { "id": "t_t6", "day": "Tuesday", "time": "13:00", "n": "Lunch + rest", "honorPts": 0, "shamePts": 0, "loc": "" }, { "id": "t_t7", "day": "Tuesday", "time": "14:00", "n": "Deep Work Block 3 (2h)", "honorPts": 16, "shamePts": 6, "loc": "" }, { "id": "t_t8", "day": "Tuesday", "time": "16:30", "n": "Chess (1h)", "honorPts": 6, "shamePts": 0, "loc": "" }, { "id": "t_t9", "day": "Tuesday", "time": "19:00", "n": "Boxing - RBK Boxningsklubb (2h)", "honorPts": 12, "shamePts": 10, "loc": "RBK Boxningsklubb" }, { "id": "t_w1", "day": "Wednesday", "time": "05:30", "n": "Commute language study (bus)", "honorPts": 8, "shamePts": 0, "loc": "Bus to Gamlestaden" }, { "id": "t_w2", "day": "Wednesday", "time": "06:00", "n": "Gym - Nordic Wellness (2h)", "honorPts": 12, "shamePts": 8, "loc": "Nordic Wellness, Gamlestads Torg" }, { "id": "t_w3", "day": "Wednesday", "time": "08:30", "n": "Deep Work Block 1 (2h)", "honorPts": 16, "shamePts": 8, "loc": "Hjällbo" }, { "id": "t_w4", "day": "Wednesday", "time": "10:30", "n": "Language Study (1h)", "honorPts": 10, "shamePts": 6, "loc": "" }, { "id": "t_w5", "day": "Wednesday", "time": "11:30", "n": "Deep Work Block 2 (1.5h)", "honorPts": 12, "shamePts": 6, "loc": "" }, { "id": "t_w6", "day": "Wednesday", "time": "13:00", "n": "Lunch + rest", "honorPts": 0, "shamePts": 0, "loc": "" }, { "id": "t_w7", "day": "Wednesday", "time": "14:00", "n": "Deep Work Block 3 (2h)", "honorPts": 16, "shamePts": 6, "loc": "Hjällbo" }, { "id": "t_w8", "day": "Wednesday", "time": "16:00", "n": "Chess (1h)", "honorPts": 6, "shamePts": 0, "loc": "" }, { "id": "t_w9", "day": "Wednesday", "time": "17:30", "n": "Commute to Hjällbo + prep", "honorPts": 5, "shamePts": 0, "loc": "" }, { "id": "t_w10", "day": "Wednesday", "time": "19:00", "n": "Wrestling - Nylöse SportCenter (2h)", "honorPts": 12, "shamePts": 10, "loc": "Nylöse SportCenter, Hjällbo" }, { "id": "t_th1", "day": "Thursday", "time": "05:00", "n": "Slow morning - Quran extended", "honorPts": 15, "shamePts": 8, "loc": "" }, { "id": "t_th2", "day": "Thursday", "time": "06:30", "n": "Deep Work Block 1 (2.5h)", "honorPts": 20, "shamePts": 10, "loc": "" }, { "id": "t_th3", "day": "Thursday", "time": "09:00", "n": "Language Study (1h)", "honorPts": 10, "shamePts": 6, "loc": "" }, { "id": "t_th4", "day": "Thursday", "time": "10:00", "n": "Deep Work Block 2 (2h)", "honorPts": 16, "shamePts": 8, "loc": "" }, { "id": "t_th5", "day": "Thursday", "time": "12:00", "n": "Lunch + rest (gym recovery)", "honorPts": 0, "shamePts": 0, "loc": "" }, { "id": "t_th6", "day": "Thursday", "time": "13:00", "n": "Deep Work Block 3 (2h)", "honorPts": 16, "shamePts": 6, "loc": "" }, { "id": "t_th7", "day": "Thursday", "time": "15:00", "n": "Chess (1h)", "honorPts": 6, "shamePts": 0, "loc": "" }, { "id": "t_th8", "day": "Thursday", "time": "19:00", "n": "Boxing - RBK Boxningsklubb (2h)", "honorPts": 12, "shamePts": 10, "loc": "RBK Boxningsklubb" }, { "id": "t_f1", "day": "Friday", "time": "05:00", "n": "Fajr extended + Quran Jumuah prep", "honorPts": 20, "shamePts": 15, "loc": "" }, { "id": "t_f2", "day": "Friday", "time": "07:00", "n": "Deep Work Block 1 (2.5h)", "honorPts": 20, "shamePts": 10, "loc": "" }, { "id": "t_f3", "day": "Friday", "time": "09:30", "n": "Language Study (1h)", "honorPts": 10, "shamePts": 6, "loc": "" }, { "id": "t_f4", "day": "Friday", "time": "10:30", "n": "Deep Work Block 2 (2h)", "honorPts": 16, "shamePts": 8, "loc": "" }, { "id": "t_f5", "day": "Friday", "time": "13:00", "n": "Jumuah prayer", "honorPts": 20, "shamePts": 30, "loc": "Mosque" }, { "id": "t_f6", "day": "Friday", "time": "14:30", "n": "Deep Work Block 3 (2.5h)", "honorPts": 20, "shamePts": 8, "loc": "" }, { "id": "t_f7", "day": "Friday", "time": "17:00", "n": "Chess (1h)", "honorPts": 6, "shamePts": 0, "loc": "" }, { "id": "t_f8", "day": "Friday", "time": "18:00", "n": "Review week / plan Saturday", "honorPts": 8, "shamePts": 4, "loc": "" }, { "id": "t_s1", "day": "Saturday", "time": "05:00", "n": "Quran + Language Study (2h)", "honorPts": 18, "shamePts": 10, "loc": "" }, { "id": "t_s2", "day": "Saturday", "time": "07:30", "n": "Gym - Nordic Wellness (optional)", "honorPts": 12, "shamePts": 0, "loc": "Nordic Wellness, Gamlestads Torg" }, { "id": "t_s3", "day": "Saturday", "time": "10:00", "n": "Deep Work / App Dev Marathon (3h)", "honorPts": 24, "shamePts": 8, "loc": "" }, { "id": "t_s4", "day": "Saturday", "time": "13:00", "n": "Lunch", "honorPts": 0, "shamePts": 0, "loc": "" }, { "id": "t_s5", "day": "Saturday", "time": "14:00", "n": "Chess study (1.5h)", "honorPts": 8, "shamePts": 0, "loc": "" }, { "id": "t_s6", "day": "Saturday", "time": "16:00", "n": "Language Study (1h)", "honorPts": 10, "shamePts": 0, "loc": "" }, { "id": "t_s7", "day": "Saturday", "time": "20:00", "n": "Quran review + wind down", "honorPts": 10, "shamePts": 5, "loc": "" }, { "id": "t_su1", "day": "Sunday", "time": "05:00", "n": "Fajr + extended Quran", "honorPts": 20, "shamePts": 15, "loc": "" }, { "id": "t_su2", "day": "Sunday", "time": "08:00", "n": "Family time / full rest", "honorPts": 5, "shamePts": 0, "loc": "" }, { "id": "t_su3", "day": "Sunday", "time": "12:00", "n": "Light chess / reading", "honorPts": 5, "shamePts": 0, "loc": "" }, { "id": "t_su4", "day": "Sunday", "time": "20:00", "n": "Plan upcoming week", "honorPts": 8, "shamePts": 4, "loc": "" }];
+
+    const CAT_NAMES = { faith: 'Faith & Devotion', discipline: 'Discipline', body: 'Body & Combat', work: 'Mind & Work', character: 'Character', custom: 'Custom' };
+    const DAY_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const DAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const IC = {
+      chk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+      x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+      edt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+      del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>',
+      chv: '<svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>',
+    };
+    let S = { ht: 0, dt: 0, hd: 0, dd: 0, log: [], counts: {}, deeds: JSON.parse(JSON.stringify(DD)), tasks: JSON.parse(JSON.stringify(DT)), lastDate: new Date().toDateString() };
+    function load() {
+      const sv = localStorage.getItem('fortis_v1');
+      if (sv) { try { const p = JSON.parse(sv); S = { ...S, ...p }; const ei = new Set(S.deeds.map(d => d.id)); DD.forEach(d => { if (!ei.has(d.id)) S.deeds.push(d); }); const et = new Set(S.tasks.map(t => t.id)); DT.forEach(t => { if (!et.has(t.id)) { S.tasks.push(t); } else { const ex = S.tasks.find(x => x.id === t.id); if (ex) { if (ex.honorPts === undefined) ex.honorPts = t.honorPts || 0; if (ex.shamePts === undefined) ex.shamePts = t.shamePts || 0; if (ex.loc === undefined) ex.loc = t.loc || ''; } } }); } catch (e) { } }
+      const ts = new Date().toDateString(); if (S.lastDate !== ts) { runMidnightPenalty(S.lastDate); S.hd = 0; S.dd = 0; S.lastDate = ts; save(); }
+    }
+    function save() { localStorage.setItem('fortis_v1', JSON.stringify(S)); }
+    function runMidnightPenalty(dateStr) {
+      const d = new Date(dateStr); const df = DAY_FULL[d.getDay()]; let hit = false;
+      S.tasks.forEach(t => { const ok = t.day === 'Daily' || t.day === df; if (!ok || t.scoredDate === dateStr) return; if (t.s === 'todo' && (t.shamePts || 0) > 0) { t.s = 'missed'; t.scoredDate = dateStr; S.dt += t.shamePts; addLog('[AUTO-MISSED] ' + t.n, -t.shamePts, 'dedecus', 'custom'); hit = true; } if (t.day === 'Daily') { t.s = 'todo'; t.scoredDate = ''; } });
+      if (hit) toast('Shame applied for missed tasks', 'neg');
+    }
+    function scheduleMidnightCheck() { const now = new Date(); const ms = (23 - now.getHours()) * 3600000 + (59 - now.getMinutes()) * 60000 + (60 - now.getSeconds()) * 1000; setTimeout(() => { const ts = new Date().toDateString(); if (S.lastDate !== ts) { runMidnightPenalty(S.lastDate); S.hd = 0; S.dd = 0; S.lastDate = ts; save(); render(); } scheduleMidnightCheck(); }, ms); }
+    function renderScores() {
+      document.getElementById('honosScore').textContent = S.ht; document.getElementById('dedecusScore').textContent = S.dt;
+      document.getElementById('honosDelta').textContent = '+' + S.hd + ' today'; document.getElementById('dedecusDelta').textContent = '-' + S.dd + ' today';
+      const net = S.ht - S.dt; const el = document.getElementById('netScore'); el.textContent = net > 0 ? '+' + net : net; el.className = 'netval ' + (net > 0 ? 'pos' : net < 0 ? 'neg' : 'zer');
+      const tot = S.ht + S.dt; document.getElementById('hbar').style.width = (tot > 0 ? Math.round(S.ht / tot * 100) : 50) + '%'; document.getElementById('dbar').style.width = (tot > 0 ? Math.round(S.dt / tot * 100) : 50) + '%';
+    }
+    function renderDeeds() { renderSide('honos', 'honos-cats'); renderSide('dedecus', 'dedecus-cats'); }
+    function renderSide(type, cid) {
+      const el = document.getElementById(cid); const cats = {}; S.deeds.filter(d => d.t === type).forEach(d => { if (!cats[d.c]) cats[d.c] = []; cats[d.c].push(d); });
+      el.innerHTML = Object.entries(cats).map(([cat, deeds]) => { const cnt = deeds.reduce((a, d) => a + (S.counts[d.id] || 0), 0); const op = cat === 'faith'; return '<div class="acc-block' + (op ? ' open' : '') + '" id="ab-' + type + '-' + cat + '"><div class="acc-head" onclick="tog(\'' + type + '\',\'' + cat + '\')"><div class="acc-left"><span class="acc-title">' + (CAT_NAMES[cat] || cat) + '</span>' + (cnt > 0 ? '<span class="acc-count">' + cnt + 'x</span>' : '') + '</div>' + IC.chv + '</div><div class="acc-body">' + deeds.map(deedHTML).join('') + '</div></div>'; }).join('');
+    }
+    function tog(type, cat) { const b = document.getElementById('ab-' + type + '-' + cat); if (b) b.classList.toggle('open'); }
+    function deedHTML(d) { const cnt = S.counts[d.id] || 0, neg = d.t === 'dedecus', pl = neg ? '-' + d.p : '+' + d.p; return '<div class="deed ' + (neg ? 'di' : 'hi') + '"><div class="deed-info"><div class="deed-name">' + d.n + '</div>' + (d.d ? '<div class="deed-detail">' + d.d + (d.u ? ' / ' + d.ul : '') + '</div>' : '') + '</div><div class="deed-pts ' + (neg ? 'neg' : 'pos') + '">' + (d.u ? pl + '/u' : pl) + '</div><div class="stepper"><button class="sbtn" onclick="adj(\'' + d.id + '\',-1)">&minus;</button><span class="scount">' + cnt + '</span><button class="sbtn" onclick="adj(\'' + d.id + '\',1)">+</button></div></div>'; }
+    function adj(id, delta) { const deed = S.deeds.find(d => d.id === id); if (!deed) return; const prev = S.counts[id] || 0, next = Math.max(0, prev + delta), diff = next - prev; if (!diff) return; S.counts[id] = next; if (deed.t === 'honos') { S.ht = Math.max(0, S.ht + deed.p * diff); S.hd = Math.max(0, S.hd + deed.p * diff); if (diff > 0) { addLog(deed.n, deed.p, 'honos', deed.c); toast('+' + deed.p + ' Honor: ' + deed.n, 'pos'); } } else { S.dt = Math.max(0, S.dt + deed.p * diff); S.dd = Math.max(0, S.dd + deed.p * diff); if (diff > 0) { addLog(deed.n, -deed.p, 'dedecus', deed.c); toast('-' + deed.p + ' Shame: ' + deed.n, 'neg'); } } save(); render(); }
+    function addLog(name, pts, type, cat) { const now = new Date(); S.log.unshift({ name, pts, type, cat: cat || 'custom', time: now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), date: now.toDateString(), id: Date.now() + Math.random() }); if (S.log.length > 300) S.log.pop(); }
+    function renderLog() {
+      document.getElementById('rep-h').textContent = '+' + S.ht; document.getElementById('rep-d').textContent = '-' + S.dt; const net = S.ht - S.dt; document.getElementById('rep-n').textContent = net > 0 ? '+' + net : net; document.getElementById('rep-e').textContent = S.log.length;
+      const tot = S.ht + S.dt, pct = tot > 0 ? Math.round(S.ht / tot * 100) : 50; let v = 'None'; if (pct >= 80) v = 'Exemplary'; else if (pct >= 65) v = 'Honorable'; else if (pct >= 50) v = 'Balanced'; else if (pct >= 35) v = 'Struggling'; else v = 'In Disgrace'; document.getElementById('rep-v').textContent = v;
+      const search = document.getElementById('logSearch').value.toLowerCase();
+      const filteredLog = S.log.filter(l => l.name.toLowerCase().includes(search) || l.cat.toLowerCase().includes(search));
+      const el = document.getElementById('log-list'); if (!filteredLog.length) { el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>No entries found.</div>'; return; }
+      const byCat = {}; filteredLog.forEach(l => { const k = l.cat || 'custom'; if (!byCat[k]) byCat[k] = []; byCat[k].push(l); });
+      el.innerHTML = Object.entries(byCat).map(([cat, entries]) => '<div class="log-cat-label">' + (CAT_NAMES[cat] || cat) + '</div>' + entries.slice(0, 50).map(l => '<div class="log-item"><div class="ldot ' + (l.pts > 0 ? 'pos' : 'neg') + '"></div><div class="lname">' + l.name + '</div><div class="ltime">' + l.time + '</div><div class="lpts ' + (l.pts > 0 ? 'pos' : 'neg') + '">' + (l.pts > 0 ? '+' : '') + l.pts + '</div><button class="ldel" onclick="delLog(' + l.id + ')">' + IC.x + '</button></div>').join('')).join('');
+    }
+    function delLog(id) { const i = S.log.findIndex(l => l.id === id); if (i === -1) return; const l = S.log[i]; if (l.pts > 0) S.ht = Math.max(0, S.ht - l.pts); else S.dt = Math.max(0, S.dt - Math.abs(l.pts)); S.log.splice(i, 1); save(); render(); }
+    let tFilter = 'all', selectedDay = null, editId = null;
+    function renderDayStrip() {
+      const strip = document.getElementById('day-strip'); const today = new Date(); const tf = DAY_FULL[today.getDay()]; if (selectedDay === null) selectedDay = tf;
+      const mon = new Date(today); mon.setDate(today.getDate() - ((today.getDay() + 6) % 7)); const days = []; for (let i = 0; i < 7; i++) { const d = new Date(mon); d.setDate(mon.getDate() + i); days.push(d); }
+      const pills = [{ label: 'Daily', num: 'inf', full: 'Daily', isToday: false }, ...days.map(d => ({ label: DAY_SHORT[d.getDay()], num: d.getDate(), full: DAY_FULL[d.getDay()], isToday: d.toDateString() === today.toDateString() }))];
+      strip.innerHTML = pills.map(p => { const tasks = S.tasks.filter(t => t.day === p.full); const missed = tasks.some(t => t.s === 'missed'); const allDone = tasks.length > 0 && tasks.every(t => t.s === 'done'); const hasTodo = tasks.some(t => t.s === 'todo'); const dotCls = missed ? 'has-missed' : allDone ? 'all-done' : hasTodo ? 'has-todo' : ''; const sel = p.full === selectedDay; return '<div class="day-pill' + (p.isToday ? ' today' : '') + (sel ? ' selected' : '') + '" onclick="selectDay(\'' + p.full + '\')"><span class="dp-name">' + p.label + '</span><span class="dp-num">' + (p.num === 'inf' ? '&infin;' : p.num) + '</span><div class="dp-dot ' + dotCls + '"></div></div>'; }).join('');
+    }
+    function selectDay(day) { selectedDay = day; renderTasks(); }
+    function setFilter(f, btn) { tFilter = f; document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderTasks(); }
+    function renderTasks() {
+      renderDayStrip(); const el = document.getElementById('task-list'); const todayF = DAY_FULL[new Date().getDay()]; const isToday = selectedDay === todayF;
+      let tasks = S.tasks.filter(t => selectedDay === 'Daily' ? t.day === 'Daily' : (t.day === selectedDay || t.day === 'Daily'));
+      if (tFilter !== 'all') tasks = tasks.filter(t => t.s === tFilter);
+      tasks.sort((a, b) => { const ta = a.time === '--' ? '99:99' : a.time; const tb = b.time === '--' ? '99:99' : b.time; return ta.localeCompare(tb); });
+      if (!tasks.length) { el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Nothing here.</div>'; return; }
+      el.innerHTML = tasks.map(t => {
+        if (editId === t.id) return '<div class="task-item"><div style="flex:1"><input class="edit-inline" id="ei-n-' + t.id + '" value="' + t.n.replace(/"/g, "&quot;") + '" style="margin-bottom:6px"><div class="frow" style="margin-bottom:6px"><input class="edit-inline" id="ei-t-' + t.id + '" value="' + t.time + '" placeholder="Time" style="width:80px;flex:none"><input class="edit-inline" id="ei-l-' + t.id + '" value="' + (t.loc || '').replace(/"/g, "&quot;") + '" placeholder="Location" style="flex:1"></div><div class="frow" style="margin-bottom:6px"><input class="edit-inline" id="ei-h-' + t.id + '" type="number" min="0" value="' + (t.honorPts || 0) + '" placeholder="Honor pts" style="flex:1"><input class="edit-inline" id="ei-s-' + t.id + '" type="number" min="0" value="' + (t.shamePts || 0) + '" placeholder="Shame pts" style="flex:1"></div><div style="display:flex;gap:6px"><button class="fbtn" style="padding:7px 12px;width:auto;font-size:11px" onclick="saveEdit(\'' + t.id + '\')">Save</button><button class="fbtn" style="padding:7px 10px;width:auto;font-size:11px;border-color:var(--border);background:none;color:var(--text-mid)" onclick="cancelEdit()">Cancel</button></div></div></div>';
+        const hp = t.honorPts || 0, sp = t.shamePts || 0; const ic = t.s === 'done' ? IC.chk : t.s === 'missed' ? IC.x : '';
+        return '<div class="task-item' + (isToday && t.s === 'todo' ? ' is-today' : t.s === 'missed' ? ' is-missed' : t.s === 'done' ? ' is-done' : '') + '"><div class="tchk ' + t.s + '" onclick="cycleTask(\'' + t.id + '\')">' + ic + '</div><div class="tbody"><div class="tname ' + t.s + '">' + t.n + '</div><div class="tmeta">' + (t.time !== '--' ? '<span>' + t.time + '</span>' : '') + '<span style="font-size:9px;color:var(--text-dim)">' + t.day + '</span>' + (hp ? '<span class="tpts pos">+' + hp + '</span>' : '') + (sp ? '<span class="tpts neg">-' + sp + '</span>' : '') + (t.loc ? '<span class="tloc">' + t.loc + '</span>' : '') + '</div></div><div class="tactions"><button class="ta-btn" onclick="editTask(\'' + t.id + '\')">' + IC.edt + '</button><button class="ta-btn del" onclick="delTask(\'' + t.id + '\')">' + IC.del + '</button></div></div>';
+      }).join('');
+    }
+    function cycleTask(id) { const t = S.tasks.find(x => x.id === id); if (!t) return; const ts = new Date().toDateString(); const scored = t.scoredDate === ts; if (t.s === 'todo') { t.s = 'done'; if (!scored && (t.honorPts || 0) > 0) { S.ht += t.honorPts; S.hd += t.honorPts; addLog(t.n, t.honorPts, 'honos', 'custom'); toast('+' + t.honorPts + ' Honor: ' + t.n, 'pos'); t.scoredDate = ts; } } else if (t.s === 'done') { if (scored && (t.honorPts || 0) > 0) { S.ht = Math.max(0, S.ht - t.honorPts); S.hd = Math.max(0, S.hd - t.honorPts); } t.s = 'missed'; if ((t.shamePts || 0) > 0) { S.dt += t.shamePts; S.dd += t.shamePts; addLog('[MISSED] ' + t.n, -t.shamePts, 'dedecus', 'custom'); toast('-' + t.shamePts + ' Shame: ' + t.n, 'neg'); } t.scoredDate = ts; } else { if (scored && (t.shamePts || 0) > 0) { S.dt = Math.max(0, S.dt - t.shamePts); S.dd = Math.max(0, S.dd - t.shamePts); } t.s = 'todo'; t.scoredDate = ''; } save(); render(); }
+    function editTask(id) { editId = id; renderTasks(); } function cancelEdit() { editId = null; renderTasks(); }
+    function saveEdit(id) { const t = S.tasks.find(x => x.id === id); if (!t) return; const nv = document.getElementById('ei-n-' + id); const tv = document.getElementById('ei-t-' + id); const lv = document.getElementById('ei-l-' + id); const hv = document.getElementById('ei-h-' + id); const sv = document.getElementById('ei-s-' + id); if (nv) t.n = nv.value.trim() || t.n; if (tv) t.time = tv.value.trim() || t.time; if (lv) t.loc = lv.value.trim(); if (hv) t.honorPts = Math.max(0, parseInt(hv.value) || 0); if (sv) t.shamePts = Math.max(0, parseInt(sv.value) || 0); editId = null; save(); renderTasks(); }
+    function delTask(id) { S.tasks = S.tasks.filter(t => t.id !== id); save(); renderTasks(); }
+    function addTask() { const n = document.getElementById('tn').value.trim(); if (!n) { toast('Enter a task name', 'neg'); return; } const tm = document.getElementById('tt').value.trim() || '--'; const day = document.getElementById('td').value; const hp = Math.max(0, parseInt(document.getElementById('t-hp').value) || 0); const sp = Math.max(0, parseInt(document.getElementById('t-sp').value) || 0); const loc = document.getElementById('t-loc').value.trim(); S.tasks.push({ id: 'u_' + Date.now(), day, time: tm, n, s: 'todo', honorPts: hp, shamePts: sp, loc, scoredDate: '' });['tn', 'tt', 't-hp', 't-sp', 't-loc'].forEach(i => document.getElementById(i).value = ''); save(); renderTasks(); toast('Task added', 'pos'); }
+    let cVal = 0, cName = '';
+    function previewCalc() { const n = document.getElementById('cn').value.trim(); const p = parseInt(document.getElementById('cp').value) || 0; if (!n || !p) { toast('Enter a name and points', 'neg'); return; } cVal = p; cName = n; document.getElementById('crv').textContent = p > 0 ? '+' + p : p; document.getElementById('cres').style.display = 'block'; }
+    function addCalc(sign) { if (!cName) return; const pts = Math.abs(cVal) * sign; if (sign === 1) { S.ht += pts; S.hd += pts; addLog(cName, pts, 'honos', 'custom'); toast('+' + pts + ': ' + cName, 'pos'); } else { S.dt += Math.abs(pts); S.dd += Math.abs(pts); addLog(cName, -Math.abs(pts), 'dedecus', 'custom'); toast('-' + Math.abs(pts) + ': ' + cName, 'neg'); } document.getElementById('cres').style.display = 'none'; document.getElementById('cn').value = ''; document.getElementById('cp').value = ''; save(); render(); }
+    function renderConfig() { document.getElementById('cfg-list').innerHTML = S.deeds.map(d => '<div class="cfg-item"><div class="cfg-name">' + d.n + (d.u ? '<span style="font-size:10px;color:var(--text-dim)"> /' + d.ul + '</span>' : '') + '</div><span class="cfg-badge ' + (d.t === 'honos' ? 'pos' : 'neg') + '">' + (d.t === 'honos' ? 'H' : 'D') + '</span><input class="cfg-input" type="number" value="' + d.p + '" onchange="updPts(\'' + d.id + '\',this.value)" min="0"></div>').join(''); }
+    function updPts(id, val) { const d = S.deeds.find(d => d.id === id); if (d) { d.p = Math.max(0, parseInt(val) || 0); save(); } }
+    function addDeed() { const n = document.getElementById('nd-name').value.trim(); const p = parseInt(document.getElementById('nd-pts').value) || 0; const t = document.getElementById('nd-type').value; const c = document.getElementById('nd-cat').value; const dv = document.getElementById('nd-detail').value.trim(); if (!n || p <= 0) { toast('Enter a name and points', 'neg'); return; } S.deeds.push({ id: 'c_' + Date.now(), t, c, n, p, d: dv });['nd-name', 'nd-pts', 'nd-detail'].forEach(i => document.getElementById(i).value = ''); save(); render(); toast('Deed added', 'pos'); }
+    function resetWeek() { if (!confirm('Reset all scores and start a new week?')) return; S.ht = 0; S.dt = 0; S.hd = 0; S.dd = 0; S.log = []; S.counts = {}; S.tasks.forEach(t => { t.s = 'todo'; t.scoredDate = ''; }); save(); render(); toast('New week. Prove yourself.', 'pos'); }
+    function go(tab) { document.querySelectorAll('.panel').forEach(p => p.classList.remove('active')); document.getElementById('panel-' + tab).classList.add('active'); const cls = tab === 'honos' ? 'on-h' : tab === 'dedecus' ? 'on-d' : 'on-o';['tb-honos', 'tb-dedecus', 'tb-tasks', 'tb-log', 'tb-calc', 'tb-stats', 'tb-config'].forEach(id => { const el = document.getElementById(id); if (el) el.className = 'tb'; });['nb-honos', 'nb-dedecus', 'nb-tasks', 'nb-log', 'nb-stats', 'nb-config'].forEach(id => { const el = document.getElementById(id); if (el) el.className = 'nb'; }); const tb = document.getElementById('tb-' + tab); if (tb) tb.className = 'tb ' + cls; const nb = document.getElementById('nb-' + tab); if (nb) nb.className = 'nb ' + cls; if (tab === 'stats') renderStats(); }
+    let tTimer; function toast(msg, type) { const el = document.getElementById('toast'); el.textContent = msg; el.className = 'toast ' + (type || '') + ' show'; clearTimeout(tTimer); tTimer = setTimeout(() => el.classList.remove('show'), 2500); }
+    function renderStats() {
+      try {
+        const ctx = document.getElementById('statsChart').getContext('2d');
+        if (window.myChart) window.myChart.destroy();
+        window.myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Honos', 'Dedecus'],
+            datasets: [{
+              label: 'Points',
+              data: [S.ht, S.dt],
+              backgroundColor: ['#C9A84C', '#8B1A1A'],
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: { beginAtZero: true }
+            }
+          }
+        });
+      } catch (e) {
+        console.error('Chart error:', e);
+      }
+    }
+      });
+    }
+    function exportData() {
+      const data = JSON.stringify(S, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'fortis-data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('Data exported', 'pos');
+    }
+    function importData() {
+      const file = document.getElementById('importFile').files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          S = { ...S, ...data };
+          save();
+          render();
+          toast('Data imported', 'pos');
+        } catch (err) {
+          toast('Invalid file', 'neg');
+        }
+      };
+      reader.readAsText(file);
+    }
+    function enableNotifications() {
+      if ('Notification' in window) {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            toast('Notifications enabled', 'pos');
+          } else {
+            toast('Notifications denied', 'neg');
+          }
+        });
+      } else {
+        toast('Notifications not supported', 'neg');
+      }
+    }
+    function toggleTheme() {
+      const root = document.documentElement;
+      const currentBg = getComputedStyle(root).getPropertyValue('--bg');
+      if (currentBg === '#0d0d0f') {
+        root.style.setProperty('--bg', '#f5f5f5');
+        root.style.setProperty('--surface', '#ffffff');
+        root.style.setProperty('--text', '#333333');
+        toast('Light theme', 'pos');
+      } else {
+        root.style.setProperty('--bg', '#0d0d0f');
+        root.style.setProperty('--surface', '#141417');
+        root.style.setProperty('--text', '#e8e3d8');
+        toast('Dark theme', 'pos');
+      }
+    }
+    function render() { renderScores(); renderDeeds(); renderTasks(); renderLog(); renderConfig(); }
+    load(); render(); go('honos'); scheduleMidnightCheck();
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+  </script>
+</body>
+
+</html>
