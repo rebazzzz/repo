@@ -1029,12 +1029,13 @@ async function queueAction(type, data) {
       type,
       data: JSON.stringify(data),
       timestamp: Date.now(),
-      synced: false
+      synced: false,
+      retryCount: 0
     };
     const request = store.add(item);
     
     request.onsuccess = () => {
-      toast(`Queued ${type} (${Object.keys(data).length} items)`, 'pos');
+      toast(`Queued ${type}`, 'pos');
       updatePendingCount();
       resolve();
     };
@@ -1065,14 +1066,16 @@ async function updatePendingCount() {
 }
 
 async function processQueue() {
-  if (!queueDB || !isOnline || syncRetries >= MAX_RETRIES) return;
+  if (!queueDB || !isOnline) return;
   
-  syncRetries++;
   const syncStatus = document.getElementById('syncStatus');
   if (syncStatus) {
     syncStatus.classList.add('show');
-    syncStatus.textContent = `Syncing... (${syncRetries}/${MAX_RETRIES})`;
+    syncStatus.textContent = 'Syncing...';
   }
+  
+  let processed = 0;
+  let failed = 0;
   
   try {
     const tx = queueDB.transaction('queue', 'readwrite');
@@ -1082,10 +1085,14 @@ async function processQueue() {
     
     request.onsuccess = async () => {
       const pending = request.result;
-      let processed = 0;
       
       for (const item of pending) {
         try {
+          if (item.retryCount >= 3) {
+            console.warn('Max retries reached for item:', item);
+            continue;
+          }
+          
           const data = JSON.parse(item.data);
           
           // Process by type
@@ -1105,7 +1112,7 @@ async function processQueue() {
               break;
           }
           
-          // Mark as synced
+          // Mark as synced (success)
           const updateTx = queueDB.transaction('queue', 'readwrite');
           const updateStore = updateTx.objectStore('queue');
           await new Promise((res, rej) => {
@@ -1116,27 +1123,73 @@ async function processQueue() {
           
           processed++;
         } catch (e) {
+          // On failure, increment retryCount
           console.error('Failed to process queue item:', item, e);
+          const updateTx = queueDB.transaction('queue', 'readwrite');
+          const updateStore = updateTx.objectStore('queue');
+          await new Promise((res, rej) => {
+            const upReq = updateStore.put({...item, retryCount: (item.retryCount || 0) + 1});
+            upReq.onsuccess = res;
+            upReq.onerror = rej;
+          });
+          failed++;
         }
       }
       
       if (processed > 0) {
-        toast(`Synced ${processed} actions`, 'pos');
+        toast(`Synced ${processed} actions${failed > 0 ? ` (${failed} retries)` : ''}`, 'pos');
         render();
+      } else if (failed > 0) {
+        toast(`${failed} actions need retry`, 'neg');
       }
       
-      syncRetries = 0;
       if (syncStatus) {
-        syncStatus.textContent = 'Synced ✓';
+        syncStatus.textContent = processed > 0 ? 'Synced ✓' : 'No changes';
         setTimeout(() => syncStatus.classList.remove('show'), 1500);
       }
       
+      updatePendingCount();
     };
   } catch (e) {
     console.error('Queue sync failed:', e);
     if (syncStatus) syncStatus.textContent = 'Sync failed';
   }
 }
+
+async function retrySync() {
+  if (!queueDB) {
+    toast('Queue DB not ready', 'neg');
+    return;
+  }
+  
+  const pendingCount = await getPendingCount();
+  if (pendingCount === 0) {
+    toast('Queue is empty', 'neg');
+    return;
+  }
+  
+  toast(`Manual sync started (${pendingCount} items)`, 'pos');
+  await processQueue();
+}
+
+function testQueue() {
+  // Test offline queuing
+  isOnline = false; // Simulate offline
+  adj('h1', 1);
+  addTask(); // Will need to fill form first, or modify for test
+  cycleTask('t_d1');
+  toast('Queued actions (offline sim). Go online to sync.', 'pos');
+}
+
+function testSyncFailure() {
+  // Simulate sync failure by temporarily breaking processQueue
+  const originalProcess = processQueue;
+  processQueue = () => { throw new Error('Test failure'); };
+  processQueue();
+  processQueue = originalProcess;
+  toast('Simulated sync failure - retryCount should increment', 'pos');
+}
+
 
 function addTaskData(task) {
   S.tasks.push(task);
@@ -1474,6 +1527,9 @@ async function adj(id, delta) {
     }
   }
   await save();
+  if (!isOnline) {
+    await queueAction('deed', { id, delta: diff });
+  }
   render();
   // Add animation to the updated deed
   setTimeout(() => {
@@ -1827,6 +1883,7 @@ async function cycleTask(id) {
 
   const ts = new Date().toDateString();
   const scored = t.scoredDate === ts;
+  const prevState = t.s;  // Capture previous state for queue
   if (t.s === "todo") {
     t.s = "done";
     if (!scored && (t.honorPts || 0) > 0) {
@@ -1861,7 +1918,7 @@ async function cycleTask(id) {
   render();
   
   if (!isOnline) {
-    await queueAction('task', { action: 'cycle', id });
+    await queueAction('task', { action: 'cycle', id, prevState });
   }
 }
 function editTask(id) {

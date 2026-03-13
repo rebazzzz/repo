@@ -266,7 +266,14 @@
   </div>
   <div class="toast" id="toast"></div>
   <div class="offline-indicator" id="offlineIndicator">Offline</div>
-  <div class="sync-status" id="syncStatus">Syncing...</div>
+<div class="sync-status" id="syncStatus">Syncing...</div>
+
+    <div class="queue-controls">
+      <span class="queue-badge" id="queueBadge" style="display: none;">0</span>
+      <button class="retry-sync-btn" onclick="retrySync()" id="retrySyncBtn" style="display: none;">🔄 Retry Sync</button>
+      <button class="test-btn" onclick="testQueue()" style="font-size: 11px; padding: 4px 8px;">Test Queue</button>
+      <button class="test-btn" onclick="testSyncFailure()" style="font-size: 11px; padding: 4px 8px;">Test Fail</button>
+    </div>
 
   <script src="script.js"></script>
   <script>

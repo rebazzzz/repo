@@ -1517,3 +1517,65 @@ body::before {
   border-color: var(--gold-dim);
   color: var(--gold);
 }
+
+.queue-controls {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1001;
+}
+
+.queue-badge {
+  background: var(--crimson);
+  color: white;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(139, 26, 26, 0.4);
+}
+
+.retry-sync-btn {
+  background: var(--gold-glow);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  transition: var(--tr);
+  white-space: nowrap;
+}
+
+.retry-sync-btn:hover {
+  background: rgba(201, 168, 76, 0.22);
+  border-color: var(--gold);
+}
+
+.test-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-mid);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: var(--tr);
+}
+
+.test-btn:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+/* Adjust offline-indicator position */
+.offline-indicator {
+  top: 60px;
+}
