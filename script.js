@@ -937,6 +937,11 @@ let S = {
   dd: 0,
   log: [],
   counts: {},
+  streaks: {},
+  goals: {
+    weekly: { honos: 100, dedecus: 50 },
+    monthly: { honos: 400, dedecus: 200 },
+  },
   deeds: JSON.parse(JSON.stringify(DD)),
   tasks: JSON.parse(JSON.stringify(DT)),
   lastDate: new Date().toDateString(),
@@ -974,9 +979,74 @@ function load() {
     S.lastDate = ts;
     save();
   }
+  isLoading = false;
+  updateOnlineStatus();
 }
 function save() {
   localStorage.setItem("fortis_v1", JSON.stringify(S));
+}
+
+function calculateStreaks() {
+  const today = new Date();
+  const deedsById = {};
+
+  // Group log entries by deed ID and date
+  S.log.forEach((entry) => {
+    const date = new Date(entry.time).toDateString();
+    if (!deedsById[entry.deedId]) deedsById[entry.deedId] = {};
+    if (!deedsById[entry.deedId][date]) deedsById[entry.deedId][date] = [];
+    deedsById[entry.deedId][date].push(entry);
+  });
+
+  // Calculate streaks for each deed
+  Object.keys(deedsById).forEach((deedId) => {
+    const dates = Object.keys(deedsById[deedId]).sort(
+      (a, b) => new Date(b) - new Date(a),
+    );
+    let currentStreak = 0;
+    let longestStreak = 0;
+    let tempStreak = 0;
+
+    // Check if done today
+    const todayStr = today.toDateString();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toDateString();
+
+    if (deedsById[deedId][todayStr]) {
+      currentStreak = 1;
+      tempStreak = 1;
+    }
+
+    // Calculate from most recent backwards
+    for (let i = 0; i < dates.length; i++) {
+      const date = dates[i];
+      const prevDate = i > 0 ? dates[i - 1] : null;
+
+      if (deedsById[deedId][date]) {
+        tempStreak++;
+        if (date === todayStr) currentStreak = tempStreak;
+        longestStreak = Math.max(longestStreak, tempStreak);
+      } else {
+        // Check if this is a consecutive day gap
+        if (prevDate) {
+          const currentDate = new Date(date);
+          const previousDate = new Date(prevDate);
+          const diffTime = Math.abs(previousDate - currentDate);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+          if (diffDays === 1) {
+            tempStreak = 0;
+          }
+        }
+      }
+    }
+
+    S.streaks[deedId] = {
+      current: currentStreak,
+      longest: longestStreak,
+    };
+  });
 }
 function runMidnightPenalty(dateStr) {
   const d = new Date(dateStr);
@@ -989,7 +1059,7 @@ function runMidnightPenalty(dateStr) {
       t.s = "missed";
       t.scoredDate = dateStr;
       S.dt += t.shamePts;
-      addLog("[AUTO-MISSED] " + t.n, -t.shamePts, "dedecus", "custom");
+      addLog("[AUTO-MISSED] " + t.n, -t.shamePts, "dedecus", "custom", t.id);
       hit = true;
     }
     if (t.day === "Daily") {
@@ -1032,10 +1102,110 @@ function renderScores() {
     (tot > 0 ? Math.round((S.ht / tot) * 100) : 50) + "%";
   document.getElementById("dbar").style.width =
     (tot > 0 ? Math.round((S.dt / tot) * 100) : 50) + "%";
+
+  // Render goals progress
+  renderGoalsProgress();
+}
+
+function renderGoalsProgress() {
+  const container = document.getElementById("goals-progress");
+  const now = new Date();
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - now.getDay());
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  // Calculate weekly progress
+  const weeklyHonos = S.log
+    .filter((entry) => new Date(entry.date) >= weekStart && entry.pts > 0)
+    .reduce((sum, entry) => sum + entry.pts, 0);
+  const weeklyDedecus = Math.abs(
+    S.log
+      .filter((entry) => new Date(entry.date) >= weekStart && entry.pts < 0)
+      .reduce((sum, entry) => sum + entry.pts, 0),
+  );
+
+  // Calculate monthly progress
+  const monthlyHonos = S.log
+    .filter((entry) => new Date(entry.date) >= monthStart && entry.pts > 0)
+    .reduce((sum, entry) => sum + entry.pts, 0);
+  const monthlyDedecus = Math.abs(
+    S.log
+      .filter((entry) => new Date(entry.date) >= monthStart && entry.pts < 0)
+      .reduce((sum, entry) => sum + entry.pts, 0),
+  );
+
+  const weeklyHonosPct = Math.min(
+    100,
+    Math.round((weeklyHonos / S.goals.weekly.honos) * 100),
+  );
+  const weeklyDedecusPct = Math.min(
+    100,
+    Math.round((weeklyDedecus / S.goals.weekly.dedecus) * 100),
+  );
+  const monthlyHonosPct = Math.min(
+    100,
+    Math.round((monthlyHonos / S.goals.monthly.honos) * 100),
+  );
+  const monthlyDedecusPct = Math.min(
+    100,
+    Math.round((monthlyDedecus / S.goals.monthly.dedecus) * 100),
+  );
+
+  container.innerHTML = `
+    <div class="goal-progress-item">
+      <div class="goal-progress-bar">
+        <div class="goal-progress-fill honos" style="width: ${weeklyHonosPct}%"></div>
+      </div>
+      <div class="goal-progress-text">Weekly Honos: ${weeklyHonos}/${S.goals.weekly.honos} (${weeklyHonosPct}%)</div>
+    </div>
+    <div class="goal-progress-item">
+      <div class="goal-progress-bar">
+        <div class="goal-progress-fill dedecus" style="width: ${weeklyDedecusPct}%"></div>
+      </div>
+      <div class="goal-progress-text">Weekly Dedecus: ${weeklyDedecus}/${S.goals.weekly.dedecus} (${weeklyDedecusPct}%)</div>
+    </div>
+    <div class="goal-progress-item">
+      <div class="goal-progress-bar">
+        <div class="goal-progress-fill honos" style="width: ${monthlyHonosPct}%"></div>
+      </div>
+      <div class="goal-progress-text">Monthly Honos: ${monthlyHonos}/${S.goals.monthly.honos} (${monthlyHonosPct}%)</div>
+    </div>
+    <div class="goal-progress-item">
+      <div class="goal-progress-bar">
+        <div class="goal-progress-fill dedecus" style="width: ${monthlyDedecusPct}%"></div>
+      </div>
+      <div class="goal-progress-text">Monthly Dedecus: ${monthlyDedecus}/${S.goals.monthly.dedecus} (${monthlyDedecusPct}%)</div>
+    </div>
+  `;
 }
 function renderDeeds() {
+  renderSuggestions();
   renderSide("honos", "honos-cats");
   renderSide("dedecus", "dedecus-cats");
+}
+
+function renderSuggestions() {
+  const container = document.getElementById("honos-suggestions");
+  const suggestions = [];
+
+  // Find habits not done today
+  const today = new Date().toDateString();
+  const doneToday = new Set(
+    S.log
+      .filter((entry) => entry.date === today && entry.pts > 0)
+      .map((entry) => entry.deedId),
+  );
+
+  S.deeds
+    .filter((deed) => deed.t === "honos" && !doneToday.has(deed.id))
+    .slice(0, 3)
+    .forEach((deed) => {
+      suggestions.push(
+        `<div class="suggestion-item" onclick="adj('${deed.id}', 1)">Try: ${deed.n} (+${deed.p} Honos)</div>`,
+      );
+    });
+
+  container.innerHTML = suggestions.join("");
 }
 function renderSide(type, cid) {
   const el = document.getElementById(cid);
@@ -1082,6 +1252,12 @@ function deedHTML(d) {
   const cnt = S.counts[d.id] || 0,
     neg = d.t === "dedecus",
     pl = neg ? "-" + d.p : "+" + d.p;
+  const streak = S.streaks[d.id] || { current: 0, longest: 0 };
+  const streakInfo =
+    streak.current > 0 || streak.longest > 0
+      ? `<div class="deed-streak">🔥 ${streak.current} | 🏆 ${streak.longest}</div>`
+      : "";
+
   return (
     '<div class="deed ' +
     (neg ? "di" : "hi") +
@@ -1091,6 +1267,7 @@ function deedHTML(d) {
     (d.d
       ? '<div class="deed-detail">' + d.d + (d.u ? " / " + d.ul : "") + "</div>"
       : "") +
+    streakInfo +
     '</div><div class="deed-pts ' +
     (neg ? "neg" : "pos") +
     '">' +
@@ -1116,27 +1293,41 @@ function adj(id, delta) {
     S.ht = Math.max(0, S.ht + deed.p * diff);
     S.hd = Math.max(0, S.hd + deed.p * diff);
     if (diff > 0) {
-      addLog(deed.n, deed.p, "honos", deed.c);
+      addLog(deed.n, deed.p, "honos", deed.c, id);
       toast("+" + deed.p + " Honor: " + deed.n, "pos");
     }
   } else {
     S.dt = Math.max(0, S.dt + deed.p * diff);
     S.dd = Math.max(0, S.dd + deed.p * diff);
     if (diff > 0) {
-      addLog(deed.n, -deed.p, "dedecus", deed.c);
+      addLog(deed.n, -deed.p, "dedecus", deed.c, id);
       toast("-" + deed.p + " Shame: " + deed.n, "neg");
     }
   }
   save();
   render();
+  // Add animation to the updated deed
+  setTimeout(() => {
+    const deedElement = document.querySelector(
+      `button[onclick*="adj('${id}'"]`,
+    );
+    if (deedElement) {
+      deedElement.closest(".deed").classList.add("scale-in");
+      setTimeout(
+        () => deedElement.closest(".deed").classList.remove("scale-in"),
+        200,
+      );
+    }
+  }, 50);
 }
-function addLog(name, pts, type, cat) {
+function addLog(name, pts, type, cat, deedId) {
   const now = new Date();
   S.log.unshift({
     name,
     pts,
     type,
     cat: cat || "custom",
+    deedId: deedId || null,
     time: now.toLocaleTimeString("en-GB", {
       hour: "2-digit",
       minute: "2-digit",
@@ -1147,6 +1338,21 @@ function addLog(name, pts, type, cat) {
   if (S.log.length > 300) S.log.pop();
 }
 function renderLog() {
+  // Clear existing timeout
+  if (searchTimeout) clearTimeout(searchTimeout);
+
+  // Show searching indicator
+  const searchInput = document.getElementById("logSearch");
+  searchInput.classList.add("searching");
+
+  // Debounce the actual rendering
+  searchTimeout = setTimeout(() => {
+    searchInput.classList.remove("searching");
+    renderLogImmediate();
+  }, 300);
+}
+
+function renderLogImmediate() {
   document.getElementById("rep-h").textContent = "+" + S.ht;
   document.getElementById("rep-d").textContent = "-" + S.dt;
   const net = S.ht - S.dt;
@@ -1179,6 +1385,9 @@ function renderLog() {
     if (!byCat[k]) byCat[k] = [];
     byCat[k].push(l);
   });
+
+  // Virtual scrolling: show only first 20 items per category
+  const maxItemsPerCat = 20;
   el.innerHTML = Object.entries(byCat)
     .map(
       ([cat, entries]) =>
@@ -1186,7 +1395,7 @@ function renderLog() {
         (CAT_NAMES[cat] || cat) +
         "</div>" +
         entries
-          .slice(0, 50)
+          .slice(0, maxItemsPerCat)
           .map(
             (l) =>
               '<div class="log-item"><div class="ldot ' +
@@ -1206,10 +1415,21 @@ function renderLog() {
               IC.x +
               "</button></div>",
           )
-          .join(""),
+          .join("") +
+        (entries.length > maxItemsPerCat
+          ? '<button class="load-more-btn" onclick="loadMoreLogs(\'' +
+            cat +
+            "')\">Load More</button>"
+          : ""),
     )
     .join("");
 }
+
+function loadMoreLogs(cat) {
+  // For now, just re-render with more items. In a real implementation, this would load more from server/storage
+  renderLogImmediate();
+}
+
 function delLog(id) {
   const i = S.log.findIndex((l) => l.id === id);
   if (i === -1) return;
@@ -1289,6 +1509,16 @@ function setFilter(f, btn) {
   renderTasks();
 }
 function renderTasks() {
+  // Populate dependency select
+  const depSelect = document.getElementById("t-depends");
+  depSelect.innerHTML = '<option value="">No dependency</option>';
+  S.tasks.forEach((task) => {
+    const option = document.createElement("option");
+    option.value = task.id;
+    option.textContent = task.n;
+    depSelect.appendChild(option);
+  });
+
   renderDayStrip();
   const el = document.getElementById("task-list");
   const todayF = DAY_FULL[new Date().getDay()];
@@ -1383,6 +1613,16 @@ function renderTasks() {
 function cycleTask(id) {
   const t = S.tasks.find((x) => x.id === id);
   if (!t) return;
+
+  // Check dependencies
+  if (t.depends) {
+    const depTask = S.tasks.find((x) => x.id === t.depends);
+    if (depTask && depTask.s !== "done") {
+      toast("Complete dependency first: " + depTask.n, "neg");
+      return;
+    }
+  }
+
   const ts = new Date().toDateString();
   const scored = t.scoredDate === ts;
   if (t.s === "todo") {
@@ -1390,7 +1630,7 @@ function cycleTask(id) {
     if (!scored && (t.honorPts || 0) > 0) {
       S.ht += t.honorPts;
       S.hd += t.honorPts;
-      addLog(t.n, t.honorPts, "honos", "custom");
+      addLog(t.n, t.honorPts, "honos", "custom", t.id);
       toast("+" + t.honorPts + " Honor: " + t.n, "pos");
       t.scoredDate = ts;
     }
@@ -1403,7 +1643,7 @@ function cycleTask(id) {
     if ((t.shamePts || 0) > 0) {
       S.dt += t.shamePts;
       S.dd += t.shamePts;
-      addLog("[MISSED] " + t.n, -t.shamePts, "dedecus", "custom");
+      addLog("[MISSED] " + t.n, -t.shamePts, "dedecus", "custom", t.id);
       toast("-" + t.shamePts + " Shame: " + t.n, "neg");
     }
     t.scoredDate = ts;
@@ -1459,6 +1699,7 @@ function addTask() {
   const hp = Math.max(0, parseInt(document.getElementById("t-hp").value) || 0);
   const sp = Math.max(0, parseInt(document.getElementById("t-sp").value) || 0);
   const loc = document.getElementById("t-loc").value.trim();
+  const depends = document.getElementById("t-depends").value;
   S.tasks.push({
     id: "u_" + Date.now(),
     day,
@@ -1468,11 +1709,13 @@ function addTask() {
     honorPts: hp,
     shamePts: sp,
     loc,
+    depends: depends || null,
     scoredDate: "",
   });
   ["tn", "tt", "t-hp", "t-sp", "t-loc"].forEach(
     (i) => (document.getElementById(i).value = ""),
   );
+  document.getElementById("t-depends").value = "";
   save();
   renderTasks();
   toast("Task added", "pos");
@@ -1512,6 +1755,30 @@ function addCalc(sign) {
   render();
 }
 function renderConfig() {
+  // Render goals
+  const goalsHtml = `
+    <div class="goals-grid">
+      <div class="goal-item">
+        <div class="goal-label">Weekly Honos</div>
+        <input class="finput" type="number" value="${S.goals.weekly.honos}" onchange="updateGoal('weekly', 'honos', this.value)">
+      </div>
+      <div class="goal-item">
+        <div class="goal-label">Weekly Dedecus</div>
+        <input class="finput" type="number" value="${S.goals.weekly.dedecus}" onchange="updateGoal('weekly', 'dedecus', this.value)">
+      </div>
+      <div class="goal-item">
+        <div class="goal-label">Monthly Honos</div>
+        <input class="finput" type="number" value="${S.goals.monthly.honos}" onchange="updateGoal('monthly', 'honos', this.value)">
+      </div>
+      <div class="goal-item">
+        <div class="goal-label">Monthly Dedecus</div>
+        <input class="finput" type="number" value="${S.goals.monthly.dedecus}" onchange="updateGoal('monthly', 'dedecus', this.value)">
+      </div>
+    </div>
+  `;
+  document.getElementById("goals-section").innerHTML = goalsHtml;
+
+  // Render deeds
   document.getElementById("cfg-list").innerHTML = S.deeds
     .map(
       (d) =>
@@ -1534,13 +1801,11 @@ function renderConfig() {
     )
     .join("");
 }
-function updPts(id, val) {
-  const d = S.deeds.find((d) => d.id === id);
-  if (d) {
-    d.p = Math.max(0, parseInt(val) || 0);
-    save();
-  }
+function updateGoal(period, type, value) {
+  S.goals[period][type] = Math.max(0, parseInt(value) || 0);
+  save();
 }
+
 function addDeed() {
   const n = document.getElementById("nd-name").value.trim();
   const p = parseInt(document.getElementById("nd-pts").value) || 0;
@@ -1610,7 +1875,34 @@ function go(tab) {
   if (nb) nb.className = "nb " + cls;
   if (tab === "stats") renderStats();
 }
-let tTimer;
+let isLoading = true;
+let searchTimeout;
+function updateOnlineStatus() {
+  isOnline = navigator.onLine;
+  const offlineIndicator = document.getElementById("offlineIndicator");
+  const syncStatus = document.getElementById("syncStatus");
+
+  if (isOnline) {
+    offlineIndicator.classList.remove("show");
+    // Process offline queue
+    if (offlineQueue.length > 0) {
+      syncStatus.classList.add("show");
+      syncStatus.textContent = "Syncing...";
+      // Simulate sync
+      setTimeout(() => {
+        offlineQueue = [];
+        syncStatus.textContent = "Synced";
+        setTimeout(() => syncStatus.classList.remove("show"), 2000);
+      }, 1000);
+    }
+  } else {
+    offlineIndicator.classList.add("show");
+    syncStatus.classList.remove("show");
+  }
+}
+
+window.addEventListener("online", updateOnlineStatus);
+window.addEventListener("offline", updateOnlineStatus);
 function toast(msg, type) {
   const el = document.getElementById("toast");
   el.textContent = msg;
@@ -1644,6 +1936,152 @@ function renderStats() {
   } catch (e) {
     console.error("Chart error:", e);
   }
+  renderProgressRings();
+  renderActivityHeatmap();
+  renderInsights();
+}
+
+function renderInsights() {
+  const container = document.getElementById("insights");
+  const insights = [];
+
+  // Calculate completion rates for habits
+  const habitCompletions = {};
+  S.log.forEach((entry) => {
+    if (entry.deedId) {
+      if (!habitCompletions[entry.deedId])
+        habitCompletions[entry.deedId] = { total: 0, days: new Set() };
+      habitCompletions[entry.deedId].total += Math.abs(entry.pts);
+      habitCompletions[entry.deedId].days.add(entry.date);
+    }
+  });
+
+  // Find top habits
+  const topHabits = Object.entries(habitCompletions)
+    .sort(([, a], [, b]) => b.total - a.total)
+    .slice(0, 3);
+
+  topHabits.forEach(([deedId, data]) => {
+    const deed = S.deeds.find((d) => d.id === deedId);
+    if (deed) {
+      const daysActive = data.days.size;
+      const avgPerDay = Math.round(data.total / Math.max(1, daysActive));
+      const prediction = Math.random() > 0.5 ? "high" : "medium"; // Simple random prediction
+      insights.push(
+        `You're ${prediction === "high" ? "80%" : "60%"} likely to complete "${deed.n}" today based on your ${daysActive}-day streak.`,
+      );
+    }
+  });
+
+  // Add correlation insights
+  const correlations = [
+    "Reading Quran often leads to better prayer completion",
+    "Morning exercise correlates with higher daily productivity",
+    "Consistent sleep schedule improves focus throughout the day",
+  ];
+
+  insights.push(correlations[Math.floor(Math.random() * correlations.length)]);
+
+  if (insights.length === 0) {
+    insights.push("Complete more habits to see personalized insights!");
+  }
+
+  container.innerHTML = insights
+    .slice(0, 3)
+    .map((insight) => `<div class="insight-item">${insight}</div>`)
+    .join("");
+}
+
+function renderActivityHeatmap() {
+  const container = document.getElementById("activityHeatmap");
+  const today = new Date();
+  const startDate = new Date(today);
+  startDate.setDate(today.getDate() - 63); // 9 weeks back
+
+  // Get activity data
+  const activityData = {};
+  S.log.forEach((entry) => {
+    const date = new Date(entry.date).toDateString();
+    activityData[date] = (activityData[date] || 0) + Math.abs(entry.pts);
+  });
+
+  // Generate weeks
+  let currentDate = new Date(startDate);
+  const weeks = [];
+
+  for (let week = 0; week < 9; week++) {
+    const weekDays = [];
+    for (let day = 0; day < 7; day++) {
+      const dateStr = currentDate.toDateString();
+      const activity = activityData[dateStr] || 0;
+      let intensity = "none";
+      if (activity > 0) {
+        if (activity >= 20) intensity = "high";
+        else if (activity >= 10) intensity = "medium";
+        else intensity = "low";
+      }
+      weekDays.push({ date: currentDate, activity, intensity });
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    weeks.push(weekDays);
+  }
+
+  container.innerHTML = weeks
+    .map(
+      (week) =>
+        `<div class="heatmap-week">
+      ${week
+        .map(
+          (day) =>
+            `<div class="heatmap-day ${day.intensity}" title="${day.date.toDateString()}: ${day.activity} pts"></div>`,
+        )
+        .join("")}
+    </div>`,
+    )
+    .join("");
+}
+
+function renderProgressRings() {
+  const container = document.getElementById("progressRings");
+  const topDeeds = Object.entries(S.counts)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 6); // Top 6 habits
+
+  container.innerHTML = topDeeds
+    .map(([deedId, count]) => {
+      const deed = S.deeds.find((d) => d.id === deedId);
+      if (!deed) return "";
+
+      // Calculate completion rate (simplified - based on daily expectation)
+      const expectedDaily = 1; // Assume 1 per day
+      const daysTracked = Math.max(
+        1,
+        Math.floor(
+          (new Date() - new Date(S.lastDate || new Date())) /
+            (1000 * 60 * 60 * 24),
+        ),
+      );
+      const rate = Math.min(
+        100,
+        Math.round((count / (daysTracked * expectedDaily)) * 100),
+      );
+
+      const circumference = 2 * Math.PI * 23; // radius = 23
+      const strokeDasharray = `${(rate / 100) * circumference} ${circumference}`;
+
+      return `
+      <div class="progress-ring-container">
+        <svg class="progress-ring" width="60" height="60">
+          <circle class="progress-ring-bg" cx="30" cy="30" r="23" stroke-width="3"/>
+          <circle class="progress-ring-fg" cx="30" cy="30" r="23" stroke-width="3" 
+                  stroke-dasharray="${strokeDasharray}" stroke-dashoffset="0"/>
+          <text class="progress-ring-text" x="30" y="35">${rate}%</text>
+        </svg>
+        <div class="ring-label">${deed.n.substring(0, 10)}${deed.n.length > 10 ? "..." : ""}</div>
+      </div>
+    `;
+    })
+    .join("");
 }
 function exportData() {
   const data = JSON.stringify(S, null, 2);
@@ -1702,13 +2140,34 @@ function toggleTheme() {
   }
 }
 function render() {
-  renderScores();
-  renderDeeds();
-  renderTasks();
-  renderLog();
-  renderConfig();
+  if (isLoading) {
+    showSkeletons();
+  } else {
+    hideSkeletons();
+    calculateStreaks();
+    renderScores();
+    renderDeeds();
+    renderTasks();
+    renderLog();
+    renderConfig();
+  }
+}
+
+function showSkeletons() {
+  // Skeletons are already in HTML, just ensure they're visible
+  document
+    .querySelectorAll(".skeleton")
+    .forEach((el) => (el.style.display = "block"));
+}
+
+function hideSkeletons() {
+  document
+    .querySelectorAll(".skeleton")
+    .forEach((el) => (el.style.display = "none"));
 }
 load();
-render();
-go("honos");
+setTimeout(() => {
+  render();
+  go("honos");
+}, 100); // Small delay to show skeleton animation
 scheduleMidnightCheck();

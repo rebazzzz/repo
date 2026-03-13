@@ -28,27 +28,28 @@
     </div>
     <div class="score-row">
       <div class="score-card h">
-        <div class="slabel">Honos</div>
-        <div class="sval" id="honosScore">0</div>
-        <div class="sdelta" id="honosDelta">+0 today</div>
+        <div class="slabel skeleton skeleton-text"></div>
+        <div class="sval skeleton skeleton-text" style="height: 30px;"></div>
+        <div class="sdelta skeleton skeleton-text" style="height: 10px;"></div>
       </div>
       <div class="net-sc">
-        <div class="netlabel">Net</div>
-        <div class="netval zer" id="netScore">0</div>
+        <div class="netlabel skeleton skeleton-text" style="height: 8px;"></div>
+        <div class="netval zer skeleton skeleton-text" style="height: 20px;"></div>
       </div>
       <div class="score-card d">
-        <div class="slabel">Dedecus</div>
-        <div class="sval" id="dedecusScore">0</div>
-        <div class="sdelta" id="dedecusDelta">-0 today</div>
+        <div class="slabel skeleton skeleton-text"></div>
+        <div class="sval skeleton skeleton-text" style="height: 30px;"></div>
+        <div class="sdelta skeleton skeleton-text" style="height: 10px;"></div>
       </div>
     </div>
     <div class="bbar-wrap">
       <div class="bbar">
-        <div class="bbar-h" id="hbar" style="width:50%"></div>
-        <div class="bbar-d" id="dbar" style="width:50%"></div>
+        <div class="bbar-h skeleton" style="width:50%; height: 3px;"></div>
+        <div class="bbar-d skeleton" style="width:50%; height: 3px;"></div>
       </div>
       <div class="bbar-labels"><span>Honor</span><span>Shame</span></div>
     </div>
+    <div class="goals-progress" id="goals-progress"></div>
     <div class="tab-bar">
       <button class="tb on-h" id="tb-honos" onclick="go('honos')"><svg viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2">
@@ -95,10 +96,20 @@
         </svg>Config</button>
     </div>
     <div class="panel active" id="panel-honos">
-      <div id="honos-cats"></div>
+      <div class="suggestions" id="honos-suggestions"></div>
+      <div id="honos-cats">
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+      </div>
     </div>
     <div class="panel" id="panel-dedecus">
-      <div id="dedecus-cats"></div>
+      <div id="dedecus-cats">
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+      </div>
     </div>
     <div class="panel" id="panel-tasks">
       <div class="day-strip" id="day-strip"></div>
@@ -130,7 +141,15 @@
           <input class="finput" id="t-hp" type="number" min="0" placeholder="Honor if done">
           <input class="finput" id="t-sp" type="number" min="0" placeholder="Shame if missed">
         </div>
-        <div class="frow"><input class="finput" id="t-loc" placeholder="Location (optional)"></div>
+        <div class="frow">
+          <input class="finput" id="t-loc" placeholder="Location (optional)">
+        </div>
+        <div class="frow">
+          <select class="fselect" id="t-depends">
+            <option value="">No dependency</option>
+          </select>
+          <span style="font-size: 11px; color: var(--text-dim); align-self: center;">Complete before this task</span>
+        </div>
         <button class="fbtn" onclick="addTask()">Add to Schedule</button>
       </div>
     </div>
@@ -143,9 +162,15 @@
         <div class="rrow"><span class="rk">Entries</span><span class="rv neu" id="rep-e">0</span></div>
         <div class="rrow"><span class="rk">Verdict</span><span class="rv neu" id="rep-v">&#8212;</span></div>
       </div>
-      <input class="finput" id="logSearch" placeholder="Search ledger..." oninput="renderLog()"
+      <input class="finput search-input" id="logSearch" placeholder="Search ledger..." oninput="renderLog()"
         style="margin-bottom:10px">
-      <div id="log-list"></div>
+      <div id="log-list" class="virtual-list">
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+      </div>
     </div>
     <div class="panel" id="panel-calc">
       <div class="calc-guide">
@@ -179,9 +204,23 @@
       <div class="calc-guide">
         <h3>Progress Charts</h3>
         <canvas id="statsChart" width="300" height="200"></canvas>
+        <div class="progress-rings">
+          <h4>Habit Completion Rates</h4>
+          <div id="progressRings"></div>
+        </div>
+        <div class="heatmap-container">
+          <h4>Activity Heatmap</h4>
+          <div id="activityHeatmap"></div>
+        </div>
+        <div class="insights-container">
+          <h4>Predictive Insights</h4>
+          <div id="insights"></div>
+        </div>
       </div>
     </div>
     <div class="panel" id="panel-config">
+      <div class="fsec">Weekly/Monthly Goals</div>
+      <div id="goals-section"></div>
       <div class="fsec">Add Custom Deed</div>
       <div
         style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:6px">
@@ -214,6 +253,8 @@
     </div>
   </div>
   <div class="toast" id="toast"></div>
+  <div class="offline-indicator" id="offlineIndicator">Offline</div>
+  <div class="sync-status" id="syncStatus">Syncing...</div>
   <nav class="bnav">
     <button class="nb on-h" id="nb-honos" onclick="go('honos')"><svg viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2">

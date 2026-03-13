@@ -229,6 +229,42 @@ body::before {
   color: var(--text-dim);
 }
 
+.goals-progress {
+  padding: 10px 14px 0;
+}
+
+.goal-progress-item {
+  margin-bottom: 8px;
+}
+
+.goal-progress-bar {
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.goal-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.goal-progress-fill.honos {
+  background: var(--gold);
+}
+
+.goal-progress-fill.dedecus {
+  background: var(--crimson);
+}
+
+.goal-progress-text {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
 .tab-bar {
   display: flex;
   padding: 12px 14px 0;
@@ -394,6 +430,13 @@ body::before {
   font-size: 10px;
   color: var(--text-dim);
   margin-top: 1px;
+}
+
+.deed-streak {
+  font-size: 9px;
+  color: var(--gold);
+  margin-top: 1px;
+  font-weight: 600;
 }
 
 .deed-pts {
@@ -986,15 +1029,26 @@ body::before {
   color: var(--crimson-b);
 }
 
-.cfg-item {
+.goals-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.goal-item {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 11px 13px;
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-  gap: 9px;
+  padding: 12px;
+}
+
+.goal-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .cfg-name {
@@ -1142,13 +1196,25 @@ body::before {
   font-size: 12px;
 }
 
-.empty svg {
-  width: 26px;
-  height: 26px;
-  opacity: 0.25;
-  margin-bottom: 10px;
-  display: block;
-  margin-inline: auto;
+.suggestions {
+  margin-bottom: 15px;
+}
+
+.suggestion-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  transition: var(--tr);
+}
+
+.suggestion-item:hover {
+  border-color: var(--gold-dim);
+  background: var(--gold-glow);
 }
 
 .bnav {
@@ -1208,4 +1274,276 @@ body::before {
 .nb.on-o svg,
 .nb.on-o span {
   color: var(--text);
+}
+
+/* Skeleton Loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface2) 25%,
+    var(--border) 50%,
+    var(--surface2) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.skeleton-text:last-child {
+  margin-bottom: 0;
+}
+
+.skeleton-card {
+  height: 60px;
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+}
+
+.skeleton-button {
+  height: 32px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+.skeleton-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* Virtual Scrolling */
+.virtual-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.virtual-item {
+  transition: opacity 0.2s ease;
+}
+
+/* Debounced Search */
+.search-input {
+  transition: border-color 0.2s ease;
+}
+
+.search-input.searching {
+  border-color: var(--gold);
+}
+
+/* Micro-animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+/* Progress Rings */
+.progress-ring {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.progress-ring circle {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.progress-ring-bg {
+  stroke: var(--border);
+  fill: none;
+  stroke-width: 3;
+}
+
+.progress-ring-fg {
+  stroke: var(--gold);
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.3s ease;
+}
+
+.progress-rings h4 {
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 20px 0 10px 0;
+}
+
+#progressRings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.progress-ring-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.heatmap-container h4 {
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 20px 0 10px 0;
+}
+
+#activityHeatmap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.insights-container h4 {
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 20px 0 10px 0;
+}
+
+#insights {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.insight-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* Heatmap */
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  max-width: 200px;
+}
+
+.heatmap-day {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--surface2);
+  transition: background-color 0.2s ease;
+}
+
+.heatmap-day.active {
+  background: var(--gold);
+}
+
+.heatmap-day.active.low {
+  background: rgba(201, 168, 76, 0.3);
+}
+
+.heatmap-day.active.medium {
+  background: rgba(201, 168, 76, 0.6);
+}
+
+.heatmap-day.active.high {
+  background: var(--gold);
+}
+
+/* Offline Indicators */
+.offline-indicator {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: var(--crimson);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.offline-indicator.show {
+  opacity: 1;
+}
+
+.sync-status {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: var(--gold);
+  color: var(--bg);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.load-more-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-mid);
+  padding: 8px 16px;
+  font-size: 12px;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: var(--tr);
+}
+
+.load-more-btn:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
 }
