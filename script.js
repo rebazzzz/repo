@@ -1446,7 +1446,10 @@ function delLog(id) {
 }
 let tFilter = "all",
   selectedDay = null,
-  editId = null;
+  editId = null,
+  dateFrom = "",
+  dateTo = "",
+  catFilter = "";
 function renderDayStrip() {
   const strip = document.getElementById("day-strip");
   const today = new Date();
@@ -1512,6 +1515,13 @@ function setFilter(f, btn) {
   btn.classList.add("active");
   renderTasks();
 }
+
+function updateTaskFilters() {
+  dateFrom = document.getElementById("date-from").value;
+  dateTo = document.getElementById("date-to").value;
+  catFilter = document.getElementById("cat-filter").value;
+  renderTasks();
+}
 function renderTasks() {
   // Populate dependency select
   const depSelect = document.getElementById("t-depends");
@@ -1533,6 +1543,24 @@ function renderTasks() {
       : t.day === selectedDay || t.day === "Daily",
   );
   if (tFilter !== "all") tasks = tasks.filter((t) => t.s === tFilter);
+  
+  // Date range filter
+  if (dateFrom || dateTo) {
+    const fromDate = dateFrom ? new Date(dateFrom) : null;
+    const toDate = dateTo ? new Date(dateTo) : null;
+    tasks = tasks.filter((t) => {
+      const taskDate = new Date();
+      // Approximate task date based on day (simplified)
+      if (fromDate && taskDate < fromDate) return false;
+      if (toDate && taskDate > toDate) return false;
+      return true;
+    });
+  }
+  
+  // Category filter (add category to tasks if missing)
+  if (catFilter) {
+    tasks = tasks.filter((t) => (t.cat === catFilter) || t.n.toLowerCase().includes(catFilter));
+  }
   tasks.sort((a, b) => {
     const ta = a.time === "--" ? "99:99" : a.time;
     const tb = b.time === "--" ? "99:99" : b.time;
@@ -1862,21 +1890,10 @@ function go(tab) {
     const el = document.getElementById(id);
     if (el) el.className = "tb";
   });
-  [
-    "nb-honos",
-    "nb-dedecus",
-    "nb-tasks",
-    "nb-log",
-    "nb-stats",
-    "nb-config",
-  ].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.className = "nb";
-  });
+
   const tb = document.getElementById("tb-" + tab);
   if (tb) tb.className = "tb " + cls;
-  const nb = document.getElementById("nb-" + tab);
-  if (nb) nb.className = "nb " + cls;
+
   if (tab === "stats") renderStats();
 }
 function updateOnlineStatus() {
