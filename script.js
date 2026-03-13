@@ -930,6 +930,10 @@ const IC = {
   del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>',
   chv: '<svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>',
 };
+let isLoading = true;
+let searchTimeout;
+let offlineQueue = [];
+let isOnline = navigator.onLine;
 let S = {
   ht: 0,
   dt: 0,
@@ -1875,8 +1879,6 @@ function go(tab) {
   if (nb) nb.className = "nb " + cls;
   if (tab === "stats") renderStats();
 }
-let isLoading = true;
-let searchTimeout;
 function updateOnlineStatus() {
   isOnline = navigator.onLine;
   const offlineIndicator = document.getElementById("offlineIndicator");
