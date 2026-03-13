@@ -404,6 +404,23 @@ const DT = [
   { id: "t_su4", day: "Sunday", time: "16:00", n: "Full rest / Chess", honorPts: 5, shamePts: 0, loc: "" },
   { id: "t_su5", day: "Sunday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
 ];
+const CAT_NAMES = {
+  faith: "Faith & Devotion",
+  discipline: "Discipline",
+  body: "Body & Combat",
+  work: "Mind & Work",
+  character: "Character",
+  custom: "Custom",
+};
+const DAY_FULL = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 const DAY_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const IC = {
   chk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>',

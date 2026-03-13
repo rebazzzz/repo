@@ -646,8 +646,8 @@ body::before {
 }
 
 .tchk {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   border-radius: 6px;
   border: 1px solid var(--border);
   flex-shrink: 0;
@@ -661,8 +661,9 @@ body::before {
 }
 
 .tchk svg {
-  width: 9px;
-  height: 9px;
+  width: 7px;
+  height: 7px;
+  stroke-width: 1.25;
 }
 
 .tchk.done {
