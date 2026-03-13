@@ -940,7 +940,7 @@ const MAX_RETRIES = 3;
 
 async function initDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('fortisQueue', 2);
+indexedDB.open('fortisQueue', 3);
     
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
@@ -955,8 +955,10 @@ async function initDB() {
         queueStore.createIndex('synced', 'synced', { unique: false });
         queueStore.createIndex('timestamp', 'timestamp', { unique: false });
       }
-      if (!db.objectStoreNames.contains('stats')) {
-        db.createObjectStore('stats', { keyPath: 'key' });
+if (!db.objectStoreNames.contains('stats')) {
+        const statsStore = db.createObjectStore('stats', { keyPath: 'key' });
+        statsStore.createIndex('date', 'date', { unique: false });
+        statsStore.createIndex('type', 'type', { unique: false });
       }
     };
   });
@@ -1015,8 +1017,117 @@ async function load() {
     save();
   }
   await updatePendingCount();
+  await loadStatsCache(); // Load cached stats
   isLoading = false;
   updateOnlineStatus();
+}
+
+async function computeStats() {
+  if (!queueDB) return;
+  
+  try {
+    // Daily aggregates from log
+    const daily = {};
+    S.log.forEach(entry => {
+      const date = entry.date;
+      if (!daily[date]) daily[date] = { honos: 0, dedecus: 0, count: 0 };
+      if (entry.pts > 0) daily[date].honos += entry.pts;
+      else daily[date].dedecus += Math.abs(entry.pts);
+      daily[date].count++;
+    });
+
+    // Calculate streaks (existing logic, cached)
+    calculateStreaks();
+
+    // Goals progress
+    const now = new Date();
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - now.getDay());
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    const weeklyHonos = Object.values(daily)
+      .filter(day => new Date(day.date) >= weekStart)
+      .reduce((sum, day) => sum + day.honos, 0);
+    const weeklyDedecus = Object.values(daily)
+      .filter(day => new Date(day.date) >= weekStart)
+      .reduce((sum, day) => sum + day.dedecus, 0);
+    const monthlyHonos = Object.values(daily)
+      .filter(day => new Date(day.date) >= monthStart)
+      .reduce((sum, day) => sum + day.honos, 0);
+    const monthlyDedecus = Object.values(daily)
+      .filter(day => new Date(day.date) >= monthStart)
+      .reduce((sum, day) => sum + day.dedecus, 0);
+
+    // Cache to statsDB
+    const tx = queueDB.transaction('stats', 'readwrite');
+    const store = tx.objectStore('stats');
+    
+    // Cache daily aggregates
+    Object.entries(daily).forEach(([date, data]) => {
+      store.put({
+        key: `daily_${date}`,
+        date,
+        type: 'daily',
+        ...data
+      });
+    });
+
+    // Cache goals
+    store.put({
+      key: 'goals_weekly',
+      type: 'goals',
+      period: 'weekly',
+      honos: weeklyHonos,
+      dedecus: weeklyDedecus
+    });
+    store.put({
+      key: 'goals_monthly', 
+      type: 'goals',
+      period: 'monthly',
+      honos: monthlyHonos,
+      dedecus: monthlyDedecus
+    });
+
+    // Cache streaks
+    store.put({
+      key: 'streaks',
+      type: 'streaks',
+      data: S.streaks
+    });
+
+    console.log('Stats cached');
+  } catch (e) {
+    console.error('Failed to compute/cache stats:', e);
+  }
+}
+
+async function loadStatsCache() {
+  if (!queueDB) return null;
+  
+  try {
+    const tx = queueDB.transaction('stats', 'readonly');
+    const store = tx.objectStore('stats');
+    
+    const dailyReq = store.index('type').getAll('daily');
+    const goalsReq = store.get('goals_weekly');
+    const streaksReq = store.get('streaks');
+    
+    const [daily, weeklyGoals, streaks] = await Promise.all([
+      dailyReq,
+      goalsReq,
+      streaksReq
+    ]);
+    
+    // Update S with cached data
+    S.cachedDaily = daily.map(d => d.date);
+    S.cachedGoals = { weekly: weeklyGoals, monthly: await store.get('goals_monthly') };
+    S.cachedStreaks = streaks ? streaks.data : {};
+    
+    return { daily, weeklyGoals, streaks };
+  } catch (e) {
+    console.error('Failed to load stats cache:', e);
+    return null;
+  }
 }
 
 async function queueAction(type, data) {
@@ -1504,33 +1615,39 @@ function deedHTML(d) {
   );
 }
 async function adj(id, delta) {
-  const deed = S.deeds.find((d) => d.id === id);
-  if (!deed) return;
-  const prev = S.counts[id] || 0,
-    next = Math.max(0, prev + delta),
-    diff = next - prev;
-  if (!diff) return;
-  S.counts[id] = next;
-  if (deed.t === "honos") {
-    S.ht = Math.max(0, S.ht + deed.p * diff);
-    S.hd = Math.max(0, S.hd + deed.p * diff);
-    if (diff > 0) {
-      addLog(deed.n, deed.p, "honos", deed.c, id);
-      toast("+" + deed.p + " Honor: " + deed.n, "pos");
+  try {
+    const deed = S.deeds.find((d) => d.id === id);
+    if (!deed) return;
+    const prev = S.counts[id] || 0,
+      next = Math.max(0, prev + delta),
+      diff = next - prev;
+    if (!diff) return;
+    S.counts[id] = next;
+    if (deed.t === "honos") {
+      S.ht = Math.max(0, S.ht + deed.p * diff);
+      S.hd = Math.max(0, S.hd + deed.p * diff);
+      if (diff > 0) {
+        addLog(deed.n, deed.p, "honos", deed.c, id);
+        toast("+" + deed.p + " Honor: " + deed.n, "pos");
+      }
+    } else {
+      S.dt = Math.max(0, S.dt + deed.p * diff);
+      S.dd = Math.max(0, S.dd + deed.p * diff);
+      if (diff > 0) {
+        addLog(deed.n, -deed.p, "dedecus", deed.c, id);
+        toast("-" + deed.p + " Shame: " + deed.n, "neg");
+      }
     }
-  } else {
-    S.dt = Math.max(0, S.dt + deed.p * diff);
-    S.dd = Math.max(0, S.dd + deed.p * diff);
-    if (diff > 0) {
-      addLog(deed.n, -deed.p, "dedecus", deed.c, id);
-      toast("-" + deed.p + " Shame: " + deed.n, "neg");
+    await save();
+    await computeStats(); // Cache updated stats
+    
+    if (!isOnline) {
+      await queueAction('deed', { id, delta: diff });
     }
+    render();
+  } catch (e) {
+    toast('Error updating deed: ' + e.message, 'neg');
   }
-  await save();
-  if (!isOnline) {
-    await queueAction('deed', { id, delta: diff });
-  }
-  render();
   // Add animation to the updated deed
   setTimeout(() => {
     const deedElement = document.querySelector(
