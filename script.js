@@ -437,6 +437,10 @@ let queueDB;
 let syncRetries = 0;
 let tTimer;
 const MAX_RETRIES = 3;
+const openAccordions = {
+  honos: { faith: true },
+  dedecus: { faith: true },
+};
 
 async function initDB() {
   return new Promise((resolve, reject) => {
@@ -1041,7 +1045,10 @@ function renderSide(type, cid) {
   el.innerHTML = Object.entries(cats)
     .map(([cat, deeds]) => {
       const cnt = deeds.reduce((a, d) => a + (S.counts[d.id] || 0), 0);
-      const op = cat === "faith";
+      const op =
+        openAccordions[type] && typeof openAccordions[type][cat] === "boolean"
+          ? openAccordions[type][cat]
+          : cat === "faith";
       return (
         '<div class="acc-block' +
         (op ? " open" : "") +
@@ -1068,17 +1075,20 @@ function renderSide(type, cid) {
 }
 function tog(type, cat) {
   const b = document.getElementById("ab-" + type + "-" + cat);
-  if (b) b.classList.toggle("open");
+  if (!b) return;
+  b.classList.toggle("open");
+  if (!openAccordions[type]) openAccordions[type] = {};
+  openAccordions[type][cat] = b.classList.contains("open");
 }
 function deedHTML(d) {
   const cnt = S.counts[d.id] || 0,
     neg = d.t === "dedecus",
     pl = neg ? "-" + d.p : "+" + d.p;
   const streak = S.streaks[d.id] || { current: 0, longest: 0 };
-  const streakInfo =
-    streak.current > 0 || streak.longest > 0
-      ? `<div class="deed-streak">🔥 ${streak.current} | 🏆 ${streak.longest}</div>`
-      : "";
+  const showStreak = d.t === "honos" && (streak.current > 0 || streak.longest > 0);
+  const streakInfo = showStreak
+    ? `<div class="deed-streak">🔥 ${streak.current} | 🏆 ${streak.longest}</div>`
+    : "";
 
   return (
     '<div class="deed ' +
