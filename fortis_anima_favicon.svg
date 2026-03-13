@@ -1,0 +1,93 @@
+<svg width="100%" viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg">
+<style>
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #0d0d0f; }
+    .ring-outer { stroke: #8a6f30; }
+    .ring-inner { stroke: #2a2a32; }
+    .blade { fill: #C9A84C; }
+    .blade-shadow { fill: #8a6f30; }
+    .crossguard { fill: #C9A84C; }
+    .grip { fill: #1c1c21; stroke: #C9A84C; }
+    .pommel { fill: #C9A84C; }
+    .glow-ring { stroke: #C9A84C; }
+    .label { fill: #C9A84C; font-family: Georgia, serif; }
+    .sublabel { fill: #8a6f30; font-family: Georgia, serif; }
+  }
+  @media (prefers-color-scheme: light) {
+    .bg { fill: #0d0d0f; }
+    .ring-outer { stroke: #8a6f30; }
+    .ring-inner { stroke: #2a2a32; }
+    .blade { fill: #C9A84C; }
+    .blade-shadow { fill: #8a6f30; }
+    .crossguard { fill: #C9A84C; }
+    .grip { fill: #1c1c21; stroke: #C9A84C; }
+    .pommel { fill: #C9A84C; }
+    .glow-ring { stroke: #C9A84C; }
+    .label { fill: #C9A84C; font-family: Georgia, serif; }
+    .sublabel { fill: #8a6f30; font-family: Georgia, serif; }
+  }
+</style>
+
+<!-- Background -->
+<rect width="680" height="680" class="bg"/>
+
+<!-- Outer decorative ring -->
+<circle cx="340" cy="340" r="300" fill="none" class="ring-outer" stroke-width="1.5"/>
+<circle cx="340" cy="340" r="290" fill="none" class="ring-inner" stroke-width="0.5"/>
+
+<!-- Corner tick marks at cardinal positions -->
+<line x1="340" y1="38" x2="340" y2="58" class="ring-outer" stroke-width="2"/>
+<line x1="340" y1="622" x2="340" y2="642" class="ring-outer" stroke-width="2"/>
+<line x1="38" y1="340" x2="58" y2="340" class="ring-outer" stroke-width="2"/>
+<line x1="622" y1="340" x2="642" y2="340" class="ring-outer" stroke-width="2"/>
+
+<!-- Diagonal ticks -->
+<line x1="128" y1="128" x2="142" y2="142" class="ring-outer" stroke-width="1.5"/>
+<line x1="552" y1="128" x2="538" y2="142" class="ring-outer" stroke-width="1.5"/>
+<line x1="128" y1="552" x2="142" y2="538" class="ring-outer" stroke-width="1.5"/>
+<line x1="552" y1="552" x2="538" y2="538" class="ring-outer" stroke-width="1.5"/>
+
+<!-- SWORD — pointing upward, centered -->
+<!-- Blade tip to crossguard: y 120 to y 390 -->
+<polygon points="340,120 325,390 355,390" class="blade"/>
+<!-- Blade shadow / edge line -->
+<polygon points="340,120 340,390 355,390" class="blade-shadow"/>
+
+<!-- Crossguard -->
+<rect x="270" y="388" width="140" height="16" rx="4" class="crossguard"/>
+<!-- Crossguard end caps -->
+<ellipse cx="270" cy="396" rx="10" ry="8" class="crossguard"/>
+<ellipse cx="410" cy="396" rx="10" ry="8" class="crossguard"/>
+
+<!-- Grip -->
+<rect x="330" y="404" width="20" height="90" rx="4" class="grip" stroke-width="1"/>
+<!-- Grip wrapping lines -->
+<line x1="330" y1="420" x2="350" y2="420" stroke="#C9A84C" stroke-width="0.8" opacity="0.5"/>
+<line x1="330" y1="433" x2="350" y2="433" stroke="#C9A84C" stroke-width="0.8" opacity="0.5"/>
+<line x1="330" y1="446" x2="350" y2="446" stroke="#C9A84C" stroke-width="0.8" opacity="0.5"/>
+<line x1="330" y1="459" x2="350" y2="459" stroke="#C9A84C" stroke-width="0.8" opacity="0.5"/>
+<line x1="330" y1="472" x2="350" y2="472" stroke="#C9A84C" stroke-width="0.8" opacity="0.5"/>
+<line x1="330" y1="485" x2="350" y2="485" stroke="#C9A84C" stroke-width="0.8" opacity="0.5"/>
+
+<!-- Pommel -->
+<ellipse cx="340" cy="506" rx="20" ry="14" class="pommel"/>
+<ellipse cx="340" cy="506" rx="10" ry="7" fill="#0d0d0f"/>
+<ellipse cx="340" cy="506" rx="4" ry="3" class="pommel"/>
+
+<!-- FORTIS ANIMA text arc — top -->
+<path id="top-arc" d="M 100,340 A 240,240 0 0,1 580,340" fill="none"/>
+<text font-size="28" font-weight="500" letter-spacing="8" class="label">
+  <textPath href="#top-arc" startOffset="50%" text-anchor="middle">FORTIS ANIMA</textPath>
+</text>
+
+<!-- Sub text arc — bottom -->
+<path id="bot-arc" d="M 130,380 A 210,210 0 0,0 550,380" fill="none"/>
+<text font-size="14" letter-spacing="5" class="sublabel">
+  <textPath href="#bot-arc" startOffset="50%" text-anchor="middle">STRONG SOUL</textPath>
+</text>
+
+<!-- Small diamond ornaments flanking the sword at crossguard level -->
+<polygon points="290,396 280,388 270,396 280,404" class="blade" opacity="0.6"/>
+<polygon points="390,396 400,388 410,396 400,404" class="blade" opacity="0.6"/>
+
+</svg>

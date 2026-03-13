@@ -127,7 +127,6 @@
         <div class="frow">
           <input class="finput" id="tt" placeholder="Time e.g. 06:00" style="flex:1">
           <select class="fselect" id="td">
-            <option>Daily</option>
             <option>Monday</option>
             <option>Tuesday</option>
             <option>Wednesday</option>
@@ -220,44 +219,80 @@
       </div>
     </div>
     <div class="panel" id="panel-config">
-      <div class="config-section">
-        <div class="fsec">Weekly/Monthly Goals</div>
-        <div id="goals-section"></div>
-      </div>
-      <div class="config-section">
-        <div class="fsec">Add Custom Deed</div>
-        <div
-          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:6px">
-          <div class="frow"><input class="finput" id="nd-name" placeholder="Deed name..."></div>
-          <div class="frow">
-            <input class="finput" id="nd-pts" type="number" placeholder="Points" style="width:80px;flex:none">
-            <select class="fselect" id="nd-type">
-              <option value="honos">+ Honos</option>
-              <option value="dedecus">&minus; Dedecus</option>
-            </select>
-            <select class="fselect" id="nd-cat">
-              <option value="faith">Faith</option>
-              <option value="discipline">Discipline</option>
-              <option value="body">Body</option>
-              <option value="work">Work</option>
-              <option value="custom">Custom</option>
-            </select>
+      <div class="acc-block open" id="cfg-goals">
+        <div class="acc-head" onclick="togCfgSection('cfg-goals')">
+          <div class="acc-left"><span class="acc-title">Weekly/Monthly Goals</span></div>
+          <svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+        <div class="acc-body">
+          <div class="config-section">
+            <div id="goals-section"></div>
           </div>
-          <div class="frow"><input class="finput" id="nd-detail" placeholder="Detail / note (optional)"></div>
-          <button class="fbtn" onclick="addDeed()">Add to Codex</button>
         </div>
       </div>
-      <div class="config-section config-span">
-        <div class="fsec">Adjust Deed Point Values</div>
-        <div id="cfg-list"></div>
+      <div class="acc-block open" id="cfg-add-deed">
+        <div class="acc-head" onclick="togCfgSection('cfg-add-deed')">
+          <div class="acc-left"><span class="acc-title">Add Custom Deed</span></div>
+          <svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+        <div class="acc-body">
+          <div class="config-section">
+            <div
+              style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:6px">
+              <div class="frow"><input class="finput" id="nd-name" placeholder="Deed name..."></div>
+              <div class="frow">
+                <input class="finput" id="nd-pts" type="number" placeholder="Points" style="width:80px;flex:none">
+                <select class="fselect" id="nd-type">
+                  <option value="honos">+ Honos</option>
+                  <option value="dedecus">&minus; Dedecus</option>
+                </select>
+                <select class="fselect" id="nd-cat">
+                  <option value="faith">Faith</option>
+                  <option value="discipline">Discipline</option>
+                  <option value="body">Body</option>
+                  <option value="work">Work</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+              <div class="frow"><input class="finput" id="nd-detail" placeholder="Detail / note (optional)"></div>
+              <button class="fbtn" onclick="addDeed()">Add to Codex</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="config-section config-span">
-        <div class="fsec">Data Management</div>
-        <button class="fbtn" onclick="exportData()">Export Data</button>
-        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData()">
-        <button class="fbtn" onclick="document.getElementById('importFile').click()">Import Data</button>
-        <button class="fbtn" onclick="enableNotifications()">Enable Notifications</button>
-        <button class="fbtn" onclick="toggleTheme()">Toggle Theme</button>
+      <div class="acc-block open" id="cfg-adjust">
+        <div class="acc-head" onclick="togCfgSection('cfg-adjust')">
+          <div class="acc-left"><span class="acc-title">Adjust Deed Point Values</span></div>
+          <svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+        <div class="acc-body">
+          <div class="config-section config-span">
+            <div id="cfg-list"></div>
+          </div>
+        </div>
+      </div>
+      <div class="acc-block open" id="cfg-data">
+        <div class="acc-head" onclick="togCfgSection('cfg-data')">
+          <div class="acc-left"><span class="acc-title">Data Management</span></div>
+          <svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+        <div class="acc-body">
+          <div class="config-section config-span">
+            <button class="fbtn" onclick="exportData()">Export Data</button>
+            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData()">
+            <button class="fbtn" onclick="document.getElementById('importFile').click()">Import Data</button>
+            <button class="fbtn" onclick="enableNotifications()">Enable Notifications</button>
+            <button class="fbtn" onclick="toggleTheme()">Toggle Theme</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

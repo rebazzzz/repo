@@ -488,6 +488,18 @@ function normalizeTasks() {
     S.tasks = [];
     changed = true;
   }
+  const byId = new Map();
+  S.tasks.forEach((t) => {
+    if (!t || !t.id) return;
+    if (!byId.has(t.id)) byId.set(t.id, t);
+  });
+  if (byId.size !== S.tasks.length) {
+    S.tasks = Array.from(byId.values());
+    changed = true;
+  }
+  const before = S.tasks.length;
+  S.tasks = S.tasks.filter((t) => t.day !== "Daily");
+  if (S.tasks.length !== before) changed = true;
   S.tasks.forEach((t) => {
     if (!t.s) {
       t.s = "todo";
@@ -514,6 +526,35 @@ function normalizeTasks() {
       changed = true;
     }
   });
+  return changed;
+}
+
+function normalizeLog() {
+  if (!Array.isArray(S.log)) {
+    S.log = [];
+    return true;
+  }
+  const seen = new Set();
+  const out = [];
+  for (const l of S.log) {
+    if (!l) continue;
+    const idKey = l.id ? "id:" + l.id : null;
+    const key =
+      idKey ||
+      [
+        l.name || "",
+        l.pts || 0,
+        l.type || "",
+        l.cat || "",
+        l.time || "",
+        l.date || "",
+      ].join("|");
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(l);
+  }
+  const changed = out.length !== S.log.length;
+  if (changed) S.log = out;
   return changed;
 }
 
@@ -545,7 +586,8 @@ async function load() {
     } catch (e) {}
   }
   const tasksChanged = normalizeTasks();
-  if (tasksChanged) save();
+  const logChanged = normalizeLog();
+  if (tasksChanged || logChanged) save();
   const ts = new Date().toDateString();
   if (S.lastDate !== ts) {
     runMidnightPenalty(S.lastDate);
@@ -1247,15 +1289,12 @@ function renderDayStrip() {
     d.setDate(mon.getDate() + i);
     days.push(d);
   }
-  const pills = [
-    { label: "Daily", num: "inf", full: "Daily", isToday: false },
-    ...days.map((d) => ({
-      label: DAY_SHORT[d.getDay()],
-      num: d.getDate(),
-      full: DAY_FULL[d.getDay()],
-      isToday: d.toDateString() === today.toDateString(),
-    })),
-  ];
+  const pills = days.map((d) => ({
+    label: DAY_SHORT[d.getDay()],
+    num: d.getDate(),
+    full: DAY_FULL[d.getDay()],
+    isToday: d.toDateString() === today.toDateString(),
+  }));
   strip.innerHTML = pills
     .map((p) => {
       const tasks = S.tasks.filter((t) => t.day === p.full);
@@ -1279,7 +1318,7 @@ function renderDayStrip() {
         '\')"><span class="dp-name">' +
         p.label +
         '</span><span class="dp-num">' +
-        (p.num === "inf" ? "&infin;" : p.num) +
+        p.num +
         '</span><div class="dp-dot ' +
         dotCls +
         '"></div></div>'
@@ -1310,7 +1349,10 @@ function renderTasks() {
   // Populate dependency select
   const depSelect = document.getElementById("t-depends");
   depSelect.innerHTML = '<option value="">No dependency</option>';
+  const seen = new Set();
   S.tasks.forEach((task) => {
+    if (seen.has(task.id)) return;
+    seen.add(task.id);
     const option = document.createElement("option");
     option.value = task.id;
     option.textContent = task.n;
@@ -1321,11 +1363,7 @@ function renderTasks() {
   const el = document.getElementById("task-list");
   const todayF = DAY_FULL[new Date().getDay()];
   const isToday = selectedDay === todayF;
-  let tasks = S.tasks.filter((t) =>
-    selectedDay === "Daily"
-      ? t.day === "Daily"
-      : t.day === selectedDay || t.day === "Daily",
-  );
+  let tasks = S.tasks.filter((t) => t.day === selectedDay);
   if (tFilter !== "all") tasks = tasks.filter((t) => t.s === tFilter);
 
   // Date range filter
@@ -1680,6 +1718,11 @@ function renderConfigDeeds() {
 
 function togCfg(type, cat) {
   const b = document.getElementById("cfg-" + type + "-" + cat);
+  if (b) b.classList.toggle("open");
+}
+
+function togCfgSection(id) {
+  const b = document.getElementById(id);
   if (b) b.classList.toggle("open");
 }
 function updateGoal(period, type, value) {
