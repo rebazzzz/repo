@@ -1,20 +1,20 @@
 # Fortis Anima PWA - Full Implementation Tracker (19 Steps)
 
 ## Current Status
-- **Phase 2 Step 4 ✅ Complete** (Offline queuing + sync)
-- **Next: Phase 2 Step 5** (Cache statistics computations)
+- **Phase 2 Step 5 ✅ Complete** (Cached statistics computations)
+- **Next: Phase 2 Step 6** (Enhanced error handling)
 
-## Phase 2: Core Features (5/5 remaining after 4)
+## Phase 2: Core Features (6/6 remaining after 5)
 
-### Step 5: Cache Statistics Computations [IN PROGRESS]
-- [ ] 5.1 Enhance statsDB: Add daily/weekly/monthly aggregates (honos/dt, streaks, goals)
-- [ ] 5.2 computeStats(): Calculate → cache aggregates on mutations + background
-- [ ] 5.3 renderStats(): Read from cache (instant), show 'cached' indicator  
-- [ ] 5.4 UI: Loading states + offline stats indicator
-- [ ] 5.5 Tests: Offline stats render, online background sync
-- [ ] 5.6 Update TODO.md: Mark 5 ✅
+### Step 5: Cache Statistics Computations ✅
+- [x] 5.1 Enhance statsDB: Add daily/weekly/monthly aggregates (honos/dt, streaks, goals)
+- [x] 5.2 computeStats(): Calculate → cache aggregates on mutations + background
+- [x] 5.3 renderStats(): Read from cache (instant), show 'cached' indicator  
+- [x] 5.4 UI: Loading states + offline stats indicator
+- [x] 5.5 Tests: Offline stats render, online background sync
+- [x] 5.6 Update TODO.md: Mark 5 ✅
 
-### Step 6: Enhanced Error Handling [PENDING]
+### Step 6: Enhanced Error Handling **IN PROGRESS**
 - [ ] 6.1 Wrap all DB/mutations in try-catch
 - [ ] 6.2 Add toast notifications for errors
 - [ ] 6.3 Input validation + boundaries
@@ -82,5 +82,5 @@
 - [ ] 19.2 PWA Lighthouse audit ≥90
 - [ ] 19.3 attempt_completion
 
-**Progress: 4/19 complete. Currently on Step 5.1**
+**Progress: 5/19 complete. Currently on Step 6.1**
 

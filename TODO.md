@@ -5,7 +5,7 @@
 - [x] IndexedDB + localStorage hybrid  
 - [x] PWA manifest/service worker basics
 
-## Phase 2: Offline-First + Cached Stats **(5/19 complete)**
+## Phase 2: Offline-First + Cached Stats **(6/19 complete)**
 
 ### Step 4: Offline Task/Log Queuing + Sync ✅
 - [x] queueDB setup + queueAction()
@@ -14,14 +14,14 @@
 - [x] UI: queueBadge + retrySync button
 - [x] Offline/online status handling
 
-### Step 5: Cache Statistics Computations **NEXT**
-- [ ] statsDB aggregates (honos/dt daily/weekly/monthly)
-- [ ] computeStats() → cache on mutations
-- [ ] renderStats() from cache + background sync
-- [ ] Loading states + cached indicator
-- [ ] Offline stats tests
+### Step 5: Cache Statistics Computations ✅
+- [x] statsDB aggregates (honos/dt daily/weekly/monthly)
+- [x] computeStats() → cache on mutations
+- [x] renderStats() from cache + background sync
+- [x] Loading states + cached indicator
+- [x] Offline stats tests
 
-### Step 6: Enhanced Error Handling
+### Step 6: Enhanced Error Handling **NEXT**
 - [ ] Try-catch on DB/mutations
 - [ ] Toast error notifications
 - [ ] Input validation + boundaries
@@ -74,7 +74,5 @@
 ### Step 19: Final Testing ✅
 - [ ] Full flows + Lighthouse ≥90
 
-**Progress: Step 4/19 ✅ | Next: Step 5 (Cached Stats)**
-
-See [TODO-steps.md](TODO-steps.md) for detailed sub-steps and current progress.
+**Progress: Step 5/19 ✅ | Next: Step 6 (Error Handling)**
 

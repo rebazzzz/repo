@@ -938,29 +938,59 @@ let queueDB;
 let syncRetries = 0;
 const MAX_RETRIES = 3;
 
+async function validateNumber(val, min = 0, max = Infinity, name = "Value") {
+  const num = parseInt(val);
+  if (isNaN(num) || num < min || num > max) {
+    throw new Error(`${name} must be a number between ${min} and ${max}`);
+  }
+  return num;
+}
+
+async function validateInput(name, val, required = true) {
+  const trimmed = val ? val.trim() : "";
+  if (required && !trimmed) {
+    throw new Error(`${name} is required`);
+  }
+  return trimmed;
+}
+
 async function initDB() {
   return new Promise((resolve, reject) => {
-indexedDB.open('fortisQueue', 3);
-    
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => {
-      queueDB = request.result;
-      resolve();
-    };
-    
-    request.onupgradeneeded = (e) => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains('queue')) {
-        const queueStore = db.createObjectStore('queue', { keyPath: 'id', autoIncrement: true });
-        queueStore.createIndex('synced', 'synced', { unique: false });
-        queueStore.createIndex('timestamp', 'timestamp', { unique: false });
-      }
-if (!db.objectStoreNames.contains('stats')) {
-        const statsStore = db.createObjectStore('stats', { keyPath: 'key' });
-        statsStore.createIndex('date', 'date', { unique: false });
-        statsStore.createIndex('type', 'type', { unique: false });
-      }
-    };
+    try {
+      const request = indexedDB.open("fortisQueue", 3);
+
+      request.onerror = () => {
+        toast(
+          "Database error: " + request.error?.message || "Unknown error",
+          "neg",
+        );
+        reject(request.error);
+      };
+      request.onsuccess = () => {
+        queueDB = request.result;
+        resolve();
+      };
+
+      request.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains("queue")) {
+          const queueStore = db.createObjectStore("queue", {
+            keyPath: "id",
+            autoIncrement: true,
+          });
+          queueStore.createIndex("synced", "synced", { unique: false });
+          queueStore.createIndex("timestamp", "timestamp", { unique: false });
+        }
+        if (!db.objectStoreNames.contains("stats")) {
+          const statsStore = db.createObjectStore("stats", { keyPath: "key" });
+          statsStore.createIndex("date", "date", { unique: false });
+          statsStore.createIndex("type", "type", { unique: false });
+        }
+      };
+    } catch (e) {
+      toast("Failed to initialize database: " + e.message, "neg");
+      reject(e);
+    }
   });
 }
 
@@ -983,7 +1013,7 @@ let S = {
 
 async function load() {
   await initDB();
-  
+
   const sv = localStorage.getItem("fortis_v1");
   if (sv) {
     try {
@@ -1024,11 +1054,11 @@ async function load() {
 
 async function computeStats() {
   if (!queueDB) return;
-  
+
   try {
     // Daily aggregates from log
     const daily = {};
-    S.log.forEach(entry => {
+    S.log.forEach((entry) => {
       const date = entry.date;
       if (!daily[date]) daily[date] = { honos: 0, dedecus: 0, count: 0 };
       if (entry.pts > 0) daily[date].honos += entry.pts;
@@ -1046,107 +1076,110 @@ async function computeStats() {
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const weeklyHonos = Object.values(daily)
-      .filter(day => new Date(day.date) >= weekStart)
+      .filter((day) => new Date(day.date) >= weekStart)
       .reduce((sum, day) => sum + day.honos, 0);
     const weeklyDedecus = Object.values(daily)
-      .filter(day => new Date(day.date) >= weekStart)
+      .filter((day) => new Date(day.date) >= weekStart)
       .reduce((sum, day) => sum + day.dedecus, 0);
     const monthlyHonos = Object.values(daily)
-      .filter(day => new Date(day.date) >= monthStart)
+      .filter((day) => new Date(day.date) >= monthStart)
       .reduce((sum, day) => sum + day.honos, 0);
     const monthlyDedecus = Object.values(daily)
-      .filter(day => new Date(day.date) >= monthStart)
+      .filter((day) => new Date(day.date) >= monthStart)
       .reduce((sum, day) => sum + day.dedecus, 0);
 
     // Cache to statsDB
-    const tx = queueDB.transaction('stats', 'readwrite');
-    const store = tx.objectStore('stats');
-    
+    const tx = queueDB.transaction("stats", "readwrite");
+    const store = tx.objectStore("stats");
+
     // Cache daily aggregates
     Object.entries(daily).forEach(([date, data]) => {
       store.put({
         key: `daily_${date}`,
         date,
-        type: 'daily',
-        ...data
+        type: "daily",
+        ...data,
       });
     });
 
     // Cache goals
     store.put({
-      key: 'goals_weekly',
-      type: 'goals',
-      period: 'weekly',
+      key: "goals_weekly",
+      type: "goals",
+      period: "weekly",
       honos: weeklyHonos,
-      dedecus: weeklyDedecus
+      dedecus: weeklyDedecus,
     });
     store.put({
-      key: 'goals_monthly', 
-      type: 'goals',
-      period: 'monthly',
+      key: "goals_monthly",
+      type: "goals",
+      period: "monthly",
       honos: monthlyHonos,
-      dedecus: monthlyDedecus
+      dedecus: monthlyDedecus,
     });
 
     // Cache streaks
     store.put({
-      key: 'streaks',
-      type: 'streaks',
-      data: S.streaks
+      key: "streaks",
+      type: "streaks",
+      data: S.streaks,
     });
 
-    console.log('Stats cached');
+    console.log("Stats cached");
   } catch (e) {
-    console.error('Failed to compute/cache stats:', e);
+    console.error("Failed to compute/cache stats:", e);
   }
 }
 
 async function loadStatsCache() {
   if (!queueDB) return null;
-  
+
   try {
-    const tx = queueDB.transaction('stats', 'readonly');
-    const store = tx.objectStore('stats');
-    
-    const dailyReq = store.index('type').getAll('daily');
-    const goalsReq = store.get('goals_weekly');
-    const streaksReq = store.get('streaks');
-    
+    const tx = queueDB.transaction("stats", "readonly");
+    const store = tx.objectStore("stats");
+
+    const dailyReq = store.index("type").getAll("daily");
+    const goalsReq = store.get("goals_weekly");
+    const streaksReq = store.get("streaks");
+
     const [daily, weeklyGoals, streaks] = await Promise.all([
       dailyReq,
       goalsReq,
-      streaksReq
+      streaksReq,
     ]);
-    
+
     // Update S with cached data
-    S.cachedDaily = daily.map(d => d.date);
-    S.cachedGoals = { weekly: weeklyGoals, monthly: await store.get('goals_monthly') };
+    S.cachedDaily = daily.map((d) => d.date);
+    S.cachedGoals = {
+      weekly: weeklyGoals,
+      monthly: await store.get("goals_monthly"),
+    };
     S.cachedStreaks = streaks ? streaks.data : {};
-    
+
     return { daily, weeklyGoals, streaks };
   } catch (e) {
-    console.error('Failed to load stats cache:', e);
+    console.error("Failed to load stats cache:", e);
     return null;
   }
 }
 
 async function queueAction(type, data) {
   if (!queueDB) return;
-  
+
   return new Promise((resolve, reject) => {
-    const tx = queueDB.transaction('queue', 'readwrite');
-    const store = tx.objectStore('queue');
+    const tx = queueDB.transaction("queue", "readwrite");
+    const store = tx.objectStore("queue");
     const item = {
       type,
       data: JSON.stringify(data),
       timestamp: Date.now(),
       synced: false,
-      retryCount: 0
+      retryCount: 0,
     };
     const request = store.add(item);
-    
+
     request.onsuccess = () => {
-      toast(`Queued ${type}`, 'pos');
+      toast(`Queued ${type}`, "pos");
       updatePendingCount();
       resolve();
     };
@@ -1156,12 +1189,12 @@ async function queueAction(type, data) {
 
 async function getPendingCount() {
   if (!queueDB) return 0;
-  
+
   return new Promise((resolve) => {
-    const tx = queueDB.transaction('queue', 'readonly');
-    const store = tx.objectStore('queue');
-    const request = store.index('synced').count(false);
-    
+    const tx = queueDB.transaction("queue", "readonly");
+    const store = tx.objectStore("queue");
+    const request = store.index("synced").count(false);
+
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => resolve(0);
   });
@@ -1169,138 +1202,145 @@ async function getPendingCount() {
 
 async function updatePendingCount() {
   const count = await getPendingCount();
-  const badge = document.getElementById('queueBadge');
+  const badge = document.getElementById("queueBadge");
   if (badge) {
     badge.textContent = count;
-    badge.style.display = count > 0 ? 'inline' : 'none';
+    badge.style.display = count > 0 ? "inline" : "none";
   }
 }
 
 async function processQueue() {
   if (!queueDB || !isOnline) return;
-  
-  const syncStatus = document.getElementById('syncStatus');
+
+  const syncStatus = document.getElementById("syncStatus");
   if (syncStatus) {
-    syncStatus.classList.add('show');
-    syncStatus.textContent = 'Syncing...';
+    syncStatus.classList.add("show");
+    syncStatus.textContent = "Syncing...";
   }
-  
+
   let processed = 0;
   let failed = 0;
-  
+
   try {
-    const tx = queueDB.transaction('queue', 'readwrite');
-    const store = tx.objectStore('queue');
-    const index = store.index('synced');
+    const tx = queueDB.transaction("queue", "readwrite");
+    const store = tx.objectStore("queue");
+    const index = store.index("synced");
     const request = index.getAll(false);
-    
+
     request.onsuccess = async () => {
       const pending = request.result;
-      
+
       for (const item of pending) {
         try {
           if (item.retryCount >= 3) {
-            console.warn('Max retries reached for item:', item);
+            console.warn("Max retries reached for item:", item);
             continue;
           }
-          
+
           const data = JSON.parse(item.data);
-          
+
           // Process by type
           switch (item.type) {
-            case 'log':
+            case "log":
               addLog(data.name, data.pts, data.type, data.cat, data.deedId);
               break;
-            case 'deed':
+            case "deed":
               adj(data.id, data.delta);
               break;
-            case 'task':
-              if (data.action === 'cycle') cycleTask(data.id);
-              else if (data.action === 'add') addTaskData(data.task);
+            case "task":
+              if (data.action === "cycle") cycleTask(data.id);
+              else if (data.action === "add") addTaskData(data.task);
               break;
-            case 'save':
+            case "save":
               Object.assign(S, data.state);
               break;
           }
-          
+
           // Mark as synced (success)
-          const updateTx = queueDB.transaction('queue', 'readwrite');
-          const updateStore = updateTx.objectStore('queue');
+          const updateTx = queueDB.transaction("queue", "readwrite");
+          const updateStore = updateTx.objectStore("queue");
           await new Promise((res, rej) => {
-            const upReq = updateStore.put({...item, synced: true});
+            const upReq = updateStore.put({ ...item, synced: true });
             upReq.onsuccess = res;
             upReq.onerror = rej;
           });
-          
+
           processed++;
         } catch (e) {
           // On failure, increment retryCount
-          console.error('Failed to process queue item:', item, e);
-          const updateTx = queueDB.transaction('queue', 'readwrite');
-          const updateStore = updateTx.objectStore('queue');
+          console.error("Failed to process queue item:", item, e);
+          const updateTx = queueDB.transaction("queue", "readwrite");
+          const updateStore = updateTx.objectStore("queue");
           await new Promise((res, rej) => {
-            const upReq = updateStore.put({...item, retryCount: (item.retryCount || 0) + 1});
+            const upReq = updateStore.put({
+              ...item,
+              retryCount: (item.retryCount || 0) + 1,
+            });
             upReq.onsuccess = res;
             upReq.onerror = rej;
           });
           failed++;
         }
       }
-      
+
       if (processed > 0) {
-        toast(`Synced ${processed} actions${failed > 0 ? ` (${failed} retries)` : ''}`, 'pos');
+        toast(
+          `Synced ${processed} actions${failed > 0 ? ` (${failed} retries)` : ""}`,
+          "pos",
+        );
         render();
       } else if (failed > 0) {
-        toast(`${failed} actions need retry`, 'neg');
+        toast(`${failed} actions need retry`, "neg");
       }
-      
+
       if (syncStatus) {
-        syncStatus.textContent = processed > 0 ? 'Synced ✓' : 'No changes';
-        setTimeout(() => syncStatus.classList.remove('show'), 1500);
+        syncStatus.textContent = processed > 0 ? "Synced ✓" : "No changes";
+        setTimeout(() => syncStatus.classList.remove("show"), 1500);
       }
-      
+
       updatePendingCount();
     };
   } catch (e) {
-    console.error('Queue sync failed:', e);
-    if (syncStatus) syncStatus.textContent = 'Sync failed';
+    console.error("Queue sync failed:", e);
+    if (syncStatus) syncStatus.textContent = "Sync failed";
   }
 }
 
 async function retrySync() {
   if (!queueDB) {
-    toast('Queue DB not ready', 'neg');
+    toast("Queue DB not ready", "neg");
     return;
   }
-  
+
   const pendingCount = await getPendingCount();
   if (pendingCount === 0) {
-    toast('Queue is empty', 'neg');
+    toast("Queue is empty", "neg");
     return;
   }
-  
-  toast(`Manual sync started (${pendingCount} items)`, 'pos');
+
+  toast(`Manual sync started (${pendingCount} items)`, "pos");
   await processQueue();
 }
 
 function testQueue() {
   // Test offline queuing
   isOnline = false; // Simulate offline
-  adj('h1', 1);
+  adj("h1", 1);
   addTask(); // Will need to fill form first, or modify for test
-  cycleTask('t_d1');
-  toast('Queued actions (offline sim). Go online to sync.', 'pos');
+  cycleTask("t_d1");
+  toast("Queued actions (offline sim). Go online to sync.", "pos");
 }
 
 function testSyncFailure() {
   // Simulate sync failure by temporarily breaking processQueue
   const originalProcess = processQueue;
-  processQueue = () => { throw new Error('Test failure'); };
+  processQueue = () => {
+    throw new Error("Test failure");
+  };
   processQueue();
   processQueue = originalProcess;
-  toast('Simulated sync failure - retryCount should increment', 'pos');
+  toast("Simulated sync failure - retryCount should increment", "pos");
 }
-
 
 function addTaskData(task) {
   S.tasks.push(task);
@@ -1309,12 +1349,12 @@ function addTaskData(task) {
 
 async function save() {
   localStorage.setItem("fortis_v1", JSON.stringify(S));
-  
+
   if (!isOnline) {
     try {
-      await queueAction('save', { state: S });
+      await queueAction("save", { state: S });
     } catch (e) {
-      console.error('Failed to queue save:', e);
+      console.error("Failed to queue save:", e);
     }
   }
 }
@@ -1640,13 +1680,13 @@ async function adj(id, delta) {
     }
     await save();
     await computeStats(); // Cache updated stats
-    
+
     if (!isOnline) {
-      await queueAction('deed', { id, delta: diff });
+      await queueAction("deed", { id, delta: diff });
     }
     render();
   } catch (e) {
-    toast('Error updating deed: ' + e.message, 'neg');
+    toast("Error updating deed: " + e.message, "neg");
   }
   // Add animation to the updated deed
   setTimeout(() => {
@@ -1679,9 +1719,9 @@ async function addLog(name, pts, type, cat, deedId) {
   };
   S.log.unshift(logEntry);
   if (S.log.length > 300) S.log.pop();
-  
+
   if (!isOnline) {
-    await queueAction('log', logEntry);
+    await queueAction("log", logEntry);
   }
 }
 function renderLog() {
@@ -1886,7 +1926,7 @@ function renderTasks() {
       : t.day === selectedDay || t.day === "Daily",
   );
   if (tFilter !== "all") tasks = tasks.filter((t) => t.s === tFilter);
-  
+
   // Date range filter
   if (dateFrom || dateTo) {
     const fromDate = dateFrom ? new Date(dateFrom) : null;
@@ -1899,10 +1939,12 @@ function renderTasks() {
       return true;
     });
   }
-  
+
   // Category filter (add category to tasks if missing)
   if (catFilter) {
-    tasks = tasks.filter((t) => (t.cat === catFilter) || t.n.toLowerCase().includes(catFilter));
+    tasks = tasks.filter(
+      (t) => t.cat === catFilter || t.n.toLowerCase().includes(catFilter),
+    );
   }
   tasks.sort((a, b) => {
     const ta = a.time === "--" ? "99:99" : a.time;
@@ -2000,7 +2042,7 @@ async function cycleTask(id) {
 
   const ts = new Date().toDateString();
   const scored = t.scoredDate === ts;
-  const prevState = t.s;  // Capture previous state for queue
+  const prevState = t.s; // Capture previous state for queue
   if (t.s === "todo") {
     t.s = "done";
     if (!scored && (t.honorPts || 0) > 0) {
@@ -2033,9 +2075,9 @@ async function cycleTask(id) {
   }
   await save();
   render();
-  
+
   if (!isOnline) {
-    await queueAction('task', { action: 'cycle', id, prevState });
+    await queueAction("task", { action: "cycle", id, prevState });
   }
 }
 function editTask(id) {
@@ -2101,9 +2143,9 @@ async function addTask() {
   await save();
   renderTasks();
   toast("Task added", "pos");
-  
+
   if (!isOnline) {
-    await queueAction('task', { action: 'add', task });
+    await queueAction("task", { action: "add", task });
   }
 }
 let cVal = 0,
