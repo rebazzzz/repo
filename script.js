@@ -934,6 +934,34 @@ let isLoading = true;
 let searchTimeout;
 let offlineQueue = [];
 let isOnline = navigator.onLine;
+let queueDB;
+let syncRetries = 0;
+const MAX_RETRIES = 3;
+
+async function initDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('fortisQueue', 2);
+    
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      queueDB = request.result;
+      resolve();
+    };
+    
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('queue')) {
+        const queueStore = db.createObjectStore('queue', { keyPath: 'id', autoIncrement: true });
+        queueStore.createIndex('synced', 'synced', { unique: false });
+        queueStore.createIndex('timestamp', 'timestamp', { unique: false });
+      }
+      if (!db.objectStoreNames.contains('stats')) {
+        db.createObjectStore('stats', { keyPath: 'key' });
+      }
+    };
+  });
+}
+
 let S = {
   ht: 0,
   dt: 0,
@@ -950,7 +978,10 @@ let S = {
   tasks: JSON.parse(JSON.stringify(DT)),
   lastDate: new Date().toDateString(),
 };
-function load() {
+
+async function load() {
+  await initDB();
+  
   const sv = localStorage.getItem("fortis_v1");
   if (sv) {
     try {
@@ -983,11 +1014,145 @@ function load() {
     S.lastDate = ts;
     save();
   }
+  await updatePendingCount();
   isLoading = false;
   updateOnlineStatus();
 }
-function save() {
+
+async function queueAction(type, data) {
+  if (!queueDB) return;
+  
+  return new Promise((resolve, reject) => {
+    const tx = queueDB.transaction('queue', 'readwrite');
+    const store = tx.objectStore('queue');
+    const item = {
+      type,
+      data: JSON.stringify(data),
+      timestamp: Date.now(),
+      synced: false
+    };
+    const request = store.add(item);
+    
+    request.onsuccess = () => {
+      toast(`Queued ${type} (${Object.keys(data).length} items)`, 'pos');
+      updatePendingCount();
+      resolve();
+    };
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function getPendingCount() {
+  if (!queueDB) return 0;
+  
+  return new Promise((resolve) => {
+    const tx = queueDB.transaction('queue', 'readonly');
+    const store = tx.objectStore('queue');
+    const request = store.index('synced').count(false);
+    
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => resolve(0);
+  });
+}
+
+async function updatePendingCount() {
+  const count = await getPendingCount();
+  const badge = document.getElementById('queueBadge');
+  if (badge) {
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'inline' : 'none';
+  }
+}
+
+async function processQueue() {
+  if (!queueDB || !isOnline || syncRetries >= MAX_RETRIES) return;
+  
+  syncRetries++;
+  const syncStatus = document.getElementById('syncStatus');
+  if (syncStatus) {
+    syncStatus.classList.add('show');
+    syncStatus.textContent = `Syncing... (${syncRetries}/${MAX_RETRIES})`;
+  }
+  
+  try {
+    const tx = queueDB.transaction('queue', 'readwrite');
+    const store = tx.objectStore('queue');
+    const index = store.index('synced');
+    const request = index.getAll(false);
+    
+    request.onsuccess = async () => {
+      const pending = request.result;
+      let processed = 0;
+      
+      for (const item of pending) {
+        try {
+          const data = JSON.parse(item.data);
+          
+          // Process by type
+          switch (item.type) {
+            case 'log':
+              addLog(data.name, data.pts, data.type, data.cat, data.deedId);
+              break;
+            case 'deed':
+              adj(data.id, data.delta);
+              break;
+            case 'task':
+              if (data.action === 'cycle') cycleTask(data.id);
+              else if (data.action === 'add') addTaskData(data.task);
+              break;
+            case 'save':
+              Object.assign(S, data.state);
+              break;
+          }
+          
+          // Mark as synced
+          const updateTx = queueDB.transaction('queue', 'readwrite');
+          const updateStore = updateTx.objectStore('queue');
+          await new Promise((res, rej) => {
+            const upReq = updateStore.put({...item, synced: true});
+            upReq.onsuccess = res;
+            upReq.onerror = rej;
+          });
+          
+          processed++;
+        } catch (e) {
+          console.error('Failed to process queue item:', item, e);
+        }
+      }
+      
+      if (processed > 0) {
+        toast(`Synced ${processed} actions`, 'pos');
+        render();
+      }
+      
+      syncRetries = 0;
+      if (syncStatus) {
+        syncStatus.textContent = 'Synced ✓';
+        setTimeout(() => syncStatus.classList.remove('show'), 1500);
+      }
+      
+    };
+  } catch (e) {
+    console.error('Queue sync failed:', e);
+    if (syncStatus) syncStatus.textContent = 'Sync failed';
+  }
+}
+
+function addTaskData(task) {
+  S.tasks.push(task);
+  renderTasks();
+}
+
+async function save() {
   localStorage.setItem("fortis_v1", JSON.stringify(S));
+  
+  if (!isOnline) {
+    try {
+      await queueAction('save', { state: S });
+    } catch (e) {
+      console.error('Failed to queue save:', e);
+    }
+  }
 }
 
 function calculateStreaks() {
@@ -1285,7 +1450,7 @@ function deedHTML(d) {
     "',1)\">+</button></div></div>"
   );
 }
-function adj(id, delta) {
+async function adj(id, delta) {
   const deed = S.deeds.find((d) => d.id === id);
   if (!deed) return;
   const prev = S.counts[id] || 0,
@@ -1308,7 +1473,7 @@ function adj(id, delta) {
       toast("-" + deed.p + " Shame: " + deed.n, "neg");
     }
   }
-  save();
+  await save();
   render();
   // Add animation to the updated deed
   setTimeout(() => {
@@ -1324,9 +1489,9 @@ function adj(id, delta) {
     }
   }, 50);
 }
-function addLog(name, pts, type, cat, deedId) {
+async function addLog(name, pts, type, cat, deedId) {
   const now = new Date();
-  S.log.unshift({
+  const logEntry = {
     name,
     pts,
     type,
@@ -1338,8 +1503,13 @@ function addLog(name, pts, type, cat, deedId) {
     }),
     date: now.toDateString(),
     id: Date.now() + Math.random(),
-  });
+  };
+  S.log.unshift(logEntry);
   if (S.log.length > 300) S.log.pop();
+  
+  if (!isOnline) {
+    await queueAction('log', logEntry);
+  }
 }
 function renderLog() {
   // Clear existing timeout
@@ -1642,7 +1812,7 @@ function renderTasks() {
     })
     .join("");
 }
-function cycleTask(id) {
+async function cycleTask(id) {
   const t = S.tasks.find((x) => x.id === id);
   if (!t) return;
 
@@ -1687,8 +1857,12 @@ function cycleTask(id) {
     t.s = "todo";
     t.scoredDate = "";
   }
-  save();
+  await save();
   render();
+  
+  if (!isOnline) {
+    await queueAction('task', { action: 'cycle', id });
+  }
 }
 function editTask(id) {
   editId = id;
@@ -1720,7 +1894,7 @@ function delTask(id) {
   save();
   renderTasks();
 }
-function addTask() {
+async function addTask() {
   const n = document.getElementById("tn").value.trim();
   if (!n) {
     toast("Enter a task name", "neg");
@@ -1732,8 +1906,9 @@ function addTask() {
   const sp = Math.max(0, parseInt(document.getElementById("t-sp").value) || 0);
   const loc = document.getElementById("t-loc").value.trim();
   const depends = document.getElementById("t-depends").value;
-  S.tasks.push({
-    id: "u_" + Date.now(),
+  const taskId = "u_" + Date.now();
+  const task = {
+    id: taskId,
     day,
     time: tm,
     n,
@@ -1743,14 +1918,19 @@ function addTask() {
     loc,
     depends: depends || null,
     scoredDate: "",
-  });
+  };
+  S.tasks.push(task);
   ["tn", "tt", "t-hp", "t-sp", "t-loc"].forEach(
     (i) => (document.getElementById(i).value = ""),
   );
   document.getElementById("t-depends").value = "";
-  save();
+  await save();
   renderTasks();
   toast("Task added", "pos");
+  
+  if (!isOnline) {
+    await queueAction('task', { action: 'add', task });
+  }
 }
 let cVal = 0,
   cName = "";
@@ -1896,28 +2076,19 @@ function go(tab) {
 
   if (tab === "stats") renderStats();
 }
-function updateOnlineStatus() {
+async function updateOnlineStatus() {
   isOnline = navigator.onLine;
   const offlineIndicator = document.getElementById("offlineIndicator");
   const syncStatus = document.getElementById("syncStatus");
 
   if (isOnline) {
     offlineIndicator.classList.remove("show");
-    // Process offline queue
-    if (offlineQueue.length > 0) {
-      syncStatus.classList.add("show");
-      syncStatus.textContent = "Syncing...";
-      // Simulate sync
-      setTimeout(() => {
-        offlineQueue = [];
-        syncStatus.textContent = "Synced";
-        setTimeout(() => syncStatus.classList.remove("show"), 2000);
-      }, 1000);
-    }
+    await processQueue();
   } else {
     offlineIndicator.classList.add("show");
     syncStatus.classList.remove("show");
   }
+  updatePendingCount();
 }
 
 window.addEventListener("online", updateOnlineStatus);

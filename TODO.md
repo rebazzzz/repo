@@ -1,39 +1,32 @@
-# Fortis Anima Enhancement TODO
+# Fortis Anima PWA - Phase 2 Implementation Plan & Progress
 
-## Status: 3/19 Complete
+## Phase 1: Core Features ✅
+- [x] Scores, deeds, tasks, log, config, stats, themes
+- [x] IndexedDB + localStorage hybrid
+- [x] PWA manifest/service worker basics
 
-### Phase 1: Immediate Fixes (Priority 1) ✅
+## Phase 2: Offline-First + Cached Stats (Current: 5/19 complete)
 
-- [x] 1. Remove bottom nav bar (.bnav) from index.html + cleanup CSS/JS references
-- [x] 2. Update tab navigation logic in script.js (remove .nb toggling)
+### Step 4: Offline Queuing + Sync **(4/7 complete)**
+- [x] 4.1 IndexedDB queueDB setup (id, type, data, timestamp, synced)
+- [ ] 4.2 queueAction(type, data) → store unsynced mutations
+- [ ] 4.3 Hook mutations: addLog/cycleTask/adj/addTask/save → queue if offline
+- [ ] 4.4 updateOnlineStatus() → processQueue() + retry logic (max 3)
+- [ ] 4.5 UI: #queueBadge count + #retrySync button
+- [ ] 4.6 Tests: offline queue→IDB, online sync→clear
+- [ ] 4.7 Mark ✅ complete
 
-### Phase 2: Core Feature Additions
+### Step 5: Cached Stats (Next)
+- [ ] statsDB: IndexedDB for log aggregation (honos/dt daily/weekly/monthly)
+- [ ] computeStats() → cache aggregates, update on mutations
+- [ ] renderStats() from cache (fast), sync background
+- [ ] UI loading states + "cached" indicator
+- [ ] Tests: offline stats work, online syncs
 
-- [x] 3. Add advanced task filtering (date ranges, categories) to script.js
-- [ ] 4. Implement offline task/log queuing + sync in script.js
-- [ ] 5. Cache statistics computations (streaks, goals, insights)
-- [ ] 6. Enhance error handling + boundaries (try-catch, toasts)
-- [ ] 7. Add habit completion rate line charts to stats panel
-- [ ] 8. Extend task form: time-based scheduling, monthly recurring
+### Later Steps (6-19)
+6. Push notifications (PWA)
+7. Data sync (Firebase?)
+8-19. Advanced charts, goals, streaks, export...
 
-### Phase 3: UI/Polish
+**Next Action:** Implement 4.2 queueAction() + hooks in script.js
 
-- [ ] 9. Update CSS: Remove bnav styles, add new components (filters, date pickers)
-- [ ] 10. Add micro-animations for task completion/tab switches
-- [ ] 11. Enhance progress rings + heatmap interactivity (hover details)
-- [ ] 12. Improve skeleton loading + progressive charts
-
-### Phase 4: PWA/Perf
-
-- [ ] 13. Upgrade sw.js: dynamic caching, background sync
-- [ ] 14. Code splitting: Lazy load stats/charts
-- [ ] 15. Add service worker improvements (precache assets)
-
-### Phase 5: Testing/Advanced
-
-- [ ] 16. Create tests.js with unit tests for core functions
-- [ ] 17. Migrate to TypeScript (script.ts + config)
-- [ ] 18. Add smart suggestions based on correlations
-- [ ] 19. Final testing + completion
-
-**Next:** Step 1 - Remove bottom navigation bar.
