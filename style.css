@@ -1329,6 +1329,91 @@ body::before {
   margin-bottom: 10px;
 }
 
+.goal-add,
+.goal-list {
+  margin-top: 10px;
+}
+
+.goal-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  margin-bottom: 10px;
+  background: var(--surface2);
+}
+
+.goal-card.goal-done {
+  border-color: rgba(76, 201, 118, 0.5);
+  background: rgba(76, 201, 118, 0.08);
+}
+
+.goal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.goal-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.goal-title-input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.goal-deadline {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.goal-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.goal-meta {
+  font-size: 11px;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+}
+
+.goal-milestones {
+  display: grid;
+  gap: 6px;
+}
+
+.goal-milestone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.goal-milestone.done {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.goal-add-milestone {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.goal-add-milestone .finput {
+  flex: 1;
+}
+
 .panel#panel-config {
   display: none;
 }

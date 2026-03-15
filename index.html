@@ -179,10 +179,6 @@
           <div class="stats-card">
             <canvas id="statsChart" width="300" height="200"></canvas>
           </div>
-          <div class="stats-card progress-rings">
-            <h4>Habit Completion Rates</h4>
-            <div id="progressRings"></div>
-          </div>
           <div class="stats-card heatmap-container">
             <h4>Activity Heatmap</h4>
             <div id="activityHeatmap"></div>
@@ -216,8 +212,8 @@
         <div id="cres" style="display:none" class="calc-result">
           <div class="crl">Entry Ready</div>
           <div class="crv" id="crv">0</div>
-        <div class="cra"><button class="cra-btn ch" onclick="addCalc(1)">+ Honos</button><button class="cra-btn cd"
-            onclick="addCalc(-1)">&minus; Dedecus</button></div>
+          <div class="cra"><button class="cra-btn ch" onclick="addCalc(1)">+ Honos</button><button class="cra-btn cd"
+              onclick="addCalc(-1)">&minus; Dedecus</button></div>
         </div>
       </div>
     </div>
@@ -233,6 +229,17 @@
           <div class="config-section">
             <div id="goals-section"></div>
           </div>
+        </div>
+      </div>
+      <div class="acc-block open" id="cfg-goals-list">
+        <div class="acc-head" onclick="togCfgSection('cfg-goals-list')">
+          <div class="acc-left"><span class="acc-title">Goals & Milestones</span></div>
+          <svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+        <div class="acc-body">
+          <div class="config-section" id="goals-list-section"></div>
         </div>
       </div>
       <div class="acc-block open" id="cfg-add-deed">

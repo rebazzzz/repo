@@ -345,64 +345,480 @@ const DD = [
   },
 ];
 const DT = [
-  { id: "t_m1", day: "Monday", time: "06:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
-  { id: "t_m2", day: "Monday", time: "08:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
-  { id: "t_m3", day: "Monday", time: "12:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
-  { id: "t_m4", day: "Monday", time: "13:00", n: "Operis", honorPts: 20, shamePts: 10, loc: "" },
-  { id: "t_m5", day: "Monday", time: "19:00", n: "Wrestling ? Nyl?se SportCenter", honorPts: 12, shamePts: 10, loc: "Nyl?se SportCenter" },
-  { id: "t_m6", day: "Monday", time: "21:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
-  { id: "t_m7", day: "Monday", time: "22:00", n: "Chess", honorPts: 6, shamePts: 0, loc: "" },
-  { id: "t_m8", day: "Monday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+  {
+    id: "t_m1",
+    day: "Monday",
+    time: "06:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_m2",
+    day: "Monday",
+    time: "08:30",
+    n: "Operis",
+    honorPts: 16,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_m3",
+    day: "Monday",
+    time: "12:00",
+    n: "Lunch",
+    honorPts: 0,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_m4",
+    day: "Monday",
+    time: "13:00",
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 10,
+    loc: "",
+  },
+  {
+    id: "t_m5",
+    day: "Monday",
+    time: "19:00",
+    n: "Wrestling ? Nyl?se SportCenter",
+    honorPts: 12,
+    shamePts: 10,
+    loc: "Nyl?se SportCenter",
+  },
+  {
+    id: "t_m6",
+    day: "Monday",
+    time: "21:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
+    loc: "",
+  },
+  {
+    id: "t_m7",
+    day: "Monday",
+    time: "22:00",
+    n: "Chess",
+    honorPts: 6,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_m8",
+    day: "Monday",
+    time: "23:00",
+    n: "Sleep",
+    honorPts: 8,
+    shamePts: 10,
+    loc: "",
+  },
 
-  { id: "t_t1", day: "Tuesday", time: "06:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
-  { id: "t_t2", day: "Tuesday", time: "08:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
-  { id: "t_t3", day: "Tuesday", time: "12:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
-  { id: "t_t4", day: "Tuesday", time: "13:00", n: "Operis", honorPts: 20, shamePts: 10, loc: "" },
-  { id: "t_t5", day: "Tuesday", time: "19:00", n: "Boxing ? RBK Boxning Klubb", honorPts: 12, shamePts: 10, loc: "RBK Boxning Klubb" },
-  { id: "t_t6", day: "Tuesday", time: "21:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
-  { id: "t_t7", day: "Tuesday", time: "22:00", n: "Chess", honorPts: 6, shamePts: 0, loc: "" },
-  { id: "t_t8", day: "Tuesday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+  {
+    id: "t_t1",
+    day: "Tuesday",
+    time: "06:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_t2",
+    day: "Tuesday",
+    time: "08:30",
+    n: "Operis",
+    honorPts: 16,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_t3",
+    day: "Tuesday",
+    time: "12:00",
+    n: "Lunch",
+    honorPts: 0,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_t4",
+    day: "Tuesday",
+    time: "13:00",
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 10,
+    loc: "",
+  },
+  {
+    id: "t_t5",
+    day: "Tuesday",
+    time: "19:00",
+    n: "Boxing ? RBK Boxning Klubb",
+    honorPts: 12,
+    shamePts: 10,
+    loc: "RBK Boxning Klubb",
+  },
+  {
+    id: "t_t6",
+    day: "Tuesday",
+    time: "21:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
+    loc: "",
+  },
+  {
+    id: "t_t7",
+    day: "Tuesday",
+    time: "22:00",
+    n: "Chess",
+    honorPts: 6,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_t8",
+    day: "Tuesday",
+    time: "23:00",
+    n: "Sleep",
+    honorPts: 8,
+    shamePts: 10,
+    loc: "",
+  },
 
-  { id: "t_w1", day: "Wednesday", time: "06:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
-  { id: "t_w2", day: "Wednesday", time: "08:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
-  { id: "t_w3", day: "Wednesday", time: "12:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
-  { id: "t_w4", day: "Wednesday", time: "13:00", n: "Operis", honorPts: 20, shamePts: 10, loc: "" },
-  { id: "t_w5", day: "Wednesday", time: "19:00", n: "Wrestling ? Nyl?se SportCenter", honorPts: 12, shamePts: 10, loc: "Nyl?se SportCenter" },
-  { id: "t_w6", day: "Wednesday", time: "21:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
-  { id: "t_w7", day: "Wednesday", time: "22:00", n: "Chess", honorPts: 6, shamePts: 0, loc: "" },
-  { id: "t_w8", day: "Wednesday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+  {
+    id: "t_w1",
+    day: "Wednesday",
+    time: "06:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_w2",
+    day: "Wednesday",
+    time: "08:30",
+    n: "Operis",
+    honorPts: 16,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_w3",
+    day: "Wednesday",
+    time: "12:00",
+    n: "Lunch",
+    honorPts: 0,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_w4",
+    day: "Wednesday",
+    time: "13:00",
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 10,
+    loc: "",
+  },
+  {
+    id: "t_w5",
+    day: "Wednesday",
+    time: "19:00",
+    n: "Wrestling ? Nyl?se SportCenter",
+    honorPts: 12,
+    shamePts: 10,
+    loc: "Nyl?se SportCenter",
+  },
+  {
+    id: "t_w6",
+    day: "Wednesday",
+    time: "21:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
+    loc: "",
+  },
+  {
+    id: "t_w7",
+    day: "Wednesday",
+    time: "22:00",
+    n: "Chess",
+    honorPts: 6,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_w8",
+    day: "Wednesday",
+    time: "23:00",
+    n: "Sleep",
+    honorPts: 8,
+    shamePts: 10,
+    loc: "",
+  },
 
-  { id: "t_th1", day: "Thursday", time: "06:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
-  { id: "t_th2", day: "Thursday", time: "08:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
-  { id: "t_th3", day: "Thursday", time: "12:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
-  { id: "t_th4", day: "Thursday", time: "13:00", n: "Operis", honorPts: 20, shamePts: 10, loc: "" },
-  { id: "t_th5", day: "Thursday", time: "19:00", n: "Boxing ? RBK Boxning Klubb", honorPts: 12, shamePts: 10, loc: "RBK Boxning Klubb" },
-  { id: "t_th6", day: "Thursday", time: "21:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
-  { id: "t_th7", day: "Thursday", time: "22:00", n: "Chess", honorPts: 6, shamePts: 0, loc: "" },
-  { id: "t_th8", day: "Thursday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+  {
+    id: "t_th1",
+    day: "Thursday",
+    time: "06:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_th2",
+    day: "Thursday",
+    time: "08:30",
+    n: "Operis",
+    honorPts: 16,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_th3",
+    day: "Thursday",
+    time: "12:00",
+    n: "Lunch",
+    honorPts: 0,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_th4",
+    day: "Thursday",
+    time: "13:00",
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 10,
+    loc: "",
+  },
+  {
+    id: "t_th5",
+    day: "Thursday",
+    time: "19:00",
+    n: "Boxing ? RBK Boxning Klubb",
+    honorPts: 12,
+    shamePts: 10,
+    loc: "RBK Boxning Klubb",
+  },
+  {
+    id: "t_th6",
+    day: "Thursday",
+    time: "21:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
+    loc: "",
+  },
+  {
+    id: "t_th7",
+    day: "Thursday",
+    time: "22:00",
+    n: "Chess",
+    honorPts: 6,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_th8",
+    day: "Thursday",
+    time: "23:00",
+    n: "Sleep",
+    honorPts: 8,
+    shamePts: 10,
+    loc: "",
+  },
 
-  { id: "t_f1", day: "Friday", time: "06:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
-  { id: "t_f2", day: "Friday", time: "08:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
-  { id: "t_f3", day: "Friday", time: "12:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
-  { id: "t_f4", day: "Friday", time: "13:00", n: "Operis", honorPts: 20, shamePts: 8, loc: "" },
-  { id: "t_f5", day: "Friday", time: "18:00", n: "Wresfit", honorPts: 12, shamePts: 8, loc: "" },
-  { id: "t_f6", day: "Friday", time: "20:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
-  { id: "t_f7", day: "Friday", time: "21:00", n: "Chess", honorPts: 6, shamePts: 0, loc: "" },
-  { id: "t_f8", day: "Friday", time: "22:30", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+  {
+    id: "t_f1",
+    day: "Friday",
+    time: "06:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_f2",
+    day: "Friday",
+    time: "08:30",
+    n: "Operis",
+    honorPts: 16,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_f3",
+    day: "Friday",
+    time: "12:00",
+    n: "Lunch",
+    honorPts: 0,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_f4",
+    day: "Friday",
+    time: "13:00",
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_f5",
+    day: "Friday",
+    time: "18:00",
+    n: "Wresfit",
+    honorPts: 12,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_f6",
+    day: "Friday",
+    time: "20:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
+    loc: "",
+  },
+  {
+    id: "t_f7",
+    day: "Friday",
+    time: "21:00",
+    n: "Chess",
+    honorPts: 6,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_f8",
+    day: "Friday",
+    time: "22:30",
+    n: "Sleep",
+    honorPts: 8,
+    shamePts: 10,
+    loc: "",
+  },
 
-  { id: "t_s1", day: "Saturday", time: "08:00", n: "Gym / Rest", honorPts: 12, shamePts: 8, loc: "" },
-  { id: "t_s2", day: "Saturday", time: "10:30", n: "Operis", honorPts: 16, shamePts: 8, loc: "" },
-  { id: "t_s3", day: "Saturday", time: "13:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
-  { id: "t_s4", day: "Saturday", time: "14:00", n: "Operis", honorPts: 20, shamePts: 8, loc: "" },
-  { id: "t_s5", day: "Saturday", time: "19:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
-  { id: "t_s6", day: "Saturday", time: "20:00", n: "Chess", honorPts: 8, shamePts: 0, loc: "" },
-  { id: "t_s7", day: "Saturday", time: "22:30", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+  {
+    id: "t_s1",
+    day: "Saturday",
+    time: "08:00",
+    n: "Gym / Rest",
+    honorPts: 12,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_s2",
+    day: "Saturday",
+    time: "10:30",
+    n: "Operis",
+    honorPts: 16,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_s3",
+    day: "Saturday",
+    time: "13:00",
+    n: "Lunch",
+    honorPts: 0,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_s4",
+    day: "Saturday",
+    time: "14:00",
+    n: "Operis",
+    honorPts: 20,
+    shamePts: 8,
+    loc: "",
+  },
+  {
+    id: "t_s5",
+    day: "Saturday",
+    time: "19:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
+    loc: "",
+  },
+  {
+    id: "t_s6",
+    day: "Saturday",
+    time: "20:00",
+    n: "Chess",
+    honorPts: 8,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_s7",
+    day: "Saturday",
+    time: "22:30",
+    n: "Sleep",
+    honorPts: 8,
+    shamePts: 10,
+    loc: "",
+  },
 
-  { id: "t_su1", day: "Sunday", time: "10:00", n: "Operis (optional)", honorPts: 16, shamePts: 0, loc: "" },
-  { id: "t_su2", day: "Sunday", time: "14:00", n: "Lunch", honorPts: 0, shamePts: 0, loc: "" },
-  { id: "t_su3", day: "Sunday", time: "15:00", n: "Language study", honorPts: 10, shamePts: 6, loc: "" },
-  { id: "t_su4", day: "Sunday", time: "16:00", n: "Full rest / Chess", honorPts: 5, shamePts: 0, loc: "" },
-  { id: "t_su5", day: "Sunday", time: "23:00", n: "Sleep", honorPts: 8, shamePts: 10, loc: "" },
+  {
+    id: "t_su1",
+    day: "Sunday",
+    time: "10:00",
+    n: "Operis (optional)",
+    honorPts: 16,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_su2",
+    day: "Sunday",
+    time: "14:00",
+    n: "Lunch",
+    honorPts: 0,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_su3",
+    day: "Sunday",
+    time: "15:00",
+    n: "Language study",
+    honorPts: 10,
+    shamePts: 6,
+    loc: "",
+  },
+  {
+    id: "t_su4",
+    day: "Sunday",
+    time: "16:00",
+    n: "Full rest / Chess",
+    honorPts: 5,
+    shamePts: 0,
+    loc: "",
+  },
+  {
+    id: "t_su5",
+    day: "Sunday",
+    time: "23:00",
+    n: "Sleep",
+    honorPts: 8,
+    shamePts: 10,
+    loc: "",
+  },
 ];
 const CAT_NAMES = {
   faith: "Faith & Devotion",
@@ -481,6 +897,7 @@ let S = {
     weekly: { honos: 100, dedecus: 50 },
     monthly: { honos: 400, dedecus: 200 },
   },
+  goalsList: [],
   deeds: JSON.parse(JSON.stringify(DD)),
   tasks: JSON.parse(JSON.stringify(DT)),
   lastDate: new Date().toDateString(),
@@ -815,46 +1232,42 @@ function calculateStreaks() {
 
   // Calculate streaks for each deed
   Object.keys(deedsById).forEach((deedId) => {
-    const dates = Object.keys(deedsById[deedId]).sort(
-      (a, b) => new Date(b) - new Date(a),
-    );
-    let currentStreak = 0;
-    let longestStreak = 0;
-    let tempStreak = 0;
-
-    // Check if done today
+    const dateSet = new Set(Object.keys(deedsById[deedId]));
     const todayStr = today.toDateString();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toDateString();
 
-    if (deedsById[deedId][todayStr]) {
-      currentStreak = 1;
-      tempStreak = 1;
+    // Current streak: count consecutive days backward from today
+    let currentStreak = 0;
+    let cursor = new Date(today);
+    while (true) {
+      const cs = cursor.toDateString();
+      if (dateSet.has(cs)) {
+        currentStreak += 1;
+        cursor.setDate(cursor.getDate() - 1);
+      } else {
+        break;
+      }
     }
 
-    // Calculate from most recent backwards
-    for (let i = 0; i < dates.length; i++) {
-      const date = dates[i];
-      const prevDate = i > 0 ? dates[i - 1] : null;
-
-      if (deedsById[deedId][date]) {
-        tempStreak++;
-        if (date === todayStr) currentStreak = tempStreak;
-        longestStreak = Math.max(longestStreak, tempStreak);
+    // Longest streak: find longest consecutive run in the past
+    let longestStreak = 0;
+    let run = 0;
+    const sortedDates = Array.from(dateSet)
+      .map((d) => new Date(d))
+      .sort((a, b) => a - b);
+    let prev = null;
+    for (const d of sortedDates) {
+      if (!prev) {
+        run = 1;
       } else {
-        // Check if this is a consecutive day gap
-        if (prevDate) {
-          const currentDate = new Date(date);
-          const previousDate = new Date(prevDate);
-          const diffTime = Math.abs(previousDate - currentDate);
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-          if (diffDays === 1) {
-            tempStreak = 0;
-          }
+        const diffDays = Math.round((d - prev) / (1000 * 60 * 60 * 24));
+        if (diffDays === 1) {
+          run += 1;
+        } else {
+          run = 1;
         }
       }
+      longestStreak = Math.max(longestStreak, run);
+      prev = d;
     }
 
     S.streaks[deedId] = {
@@ -866,6 +1279,9 @@ function calculateStreaks() {
 function runMidnightPenalty(dateStr) {
   const d = new Date(dateStr);
   const df = DAY_FULL[d.getDay()];
+  // Reset per-day deed counters so that each new day starts fresh
+  S.counts = {};
+
   let hit = false;
   S.tasks.forEach((t) => {
     const ok = t.day === "Daily" || t.day === df;
@@ -1027,12 +1443,38 @@ function renderSuggestions() {
     .slice(0, 1)
     .forEach((deed) => {
       suggestions.push(
-        `<div class="suggestion-item compact" onclick="adj('${deed.id}', 1)">Try one: ${deed.n} (+${deed.p})</div>`,
+        `<div class="suggestion-item compact" onclick="confirmSuggestion('${deed.id}')">Try one: ${deed.n} (+${deed.p})</div>`,
       );
     });
 
   container.innerHTML = suggestions.join("");
 }
+
+function confirmSuggestion(deedId) {
+  const container = document.getElementById("honos-suggestions");
+  const deed = S.deeds.find((d) => d.id === deedId);
+  if (!deed) return;
+
+  container.innerHTML = `
+    <div class="suggestion-item compact" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+      <div style="flex:1;line-height:1.25">Add honor for <strong>${deed.n}</strong>?</div>
+      <div style="display:flex;gap:8px">
+        <button class="sbtn" style="padding:6px 10px" onclick="applySuggestion('${deedId}')">${IC.chk}</button>
+        <button class="sbtn" style="padding:6px 10px" onclick="cancelSuggestion()">${IC.x}</button>
+      </div>
+    </div>
+  `;
+}
+
+function applySuggestion(deedId) {
+  adj(deedId, 1);
+  renderSuggestions();
+}
+
+function cancelSuggestion() {
+  renderSuggestions();
+}
+
 function renderSide(type, cid) {
   const el = document.getElementById(cid);
   const cats = {};
@@ -1085,7 +1527,8 @@ function deedHTML(d) {
     neg = d.t === "dedecus",
     pl = neg ? "-" + d.p : "+" + d.p;
   const streak = S.streaks[d.id] || { current: 0, longest: 0 };
-  const showStreak = d.t === "honos" && (streak.current > 0 || streak.longest > 0);
+  const showStreak =
+    d.t === "honos" && (streak.current > 0 || streak.longest > 0);
   const streakInfo = showStreak
     ? `<div class="deed-streak">🔥 ${streak.current} | 🏆 ${streak.longest}</div>`
     : "";
@@ -1136,6 +1579,24 @@ async function adj(id, delta) {
       toast("-" + deed.p + " Shame: " + deed.n, "neg");
     }
   }
+
+  // If user reduced the count, remove the most recent matching log entry for today
+  if (diff < 0) {
+    const today = new Date().toDateString();
+    for (let i = S.log.length - 1; i >= 0; i--) {
+      const l = S.log[i];
+      if (
+        l.deedId === id &&
+        l.date === today &&
+        ((deed.t === "honos" && l.pts === deed.p) ||
+          (deed.t === "dedecus" && l.pts === -deed.p))
+      ) {
+        S.log.splice(i, 1);
+        break;
+      }
+    }
+  }
+
   await save();
   if (!isOnline) {
     await queueAction("deed", { id, delta: diff });
@@ -1656,7 +2117,137 @@ function renderConfig() {
   document.getElementById("goals-section").innerHTML = goalsHtml;
 
   renderConfigDeeds();
+  renderGoalsManager();
 }
+
+function renderGoalsManager() {
+  const container = document.getElementById("goals-list-section");
+  if (!container) return;
+
+  const goalCount = S.goalsList.length;
+  const goalsHtml = S.goalsList
+    .map((goal) => {
+      const deadline = goal.deadline ? `by ${goal.deadline}` : "no deadline";
+      const doneCount = goal.milestones.filter((m) => m.done).length;
+      const totalCount = goal.milestones.length;
+      const progress = totalCount ? Math.round((doneCount / totalCount) * 100) : 0;
+      const progressLabel = totalCount
+        ? `${doneCount}/${totalCount} milestones` 
+        : "No milestones";
+      return `
+        <div class="goal-card${goal.done ? " goal-done" : ""}" id="goal-${goal.id}">
+          <div class="goal-header">
+            <div class="goal-title">
+              <input class="goal-title-input" value="${goal.title}" onblur="updateGoalTitle('${goal.id}', this.value)" />
+              <span class="goal-deadline">${deadline}</span>
+            </div>
+            <div class="goal-actions">
+              <button class="sbtn" title="Mark complete" onclick="toggleGoalDone('${goal.id}')">${goal.done ? IC.chk : IC.x}</button>
+              <button class="sbtn" title="Delete" onclick="deleteGoal('${goal.id}')">${IC.del}</button>
+            </div>
+          </div>
+          <div class="goal-meta">${progressLabel} - ${progress}%</div>
+          <div class="goal-milestones">
+            ${goal.milestones
+              .map(
+                (m) =>
+                  `<div class="goal-milestone${m.done ? " done" : ""}">
+                    <label><input type="checkbox" ${m.done ? "checked" : ""} onchange="toggleMilestone('${goal.id}','${m.id}')" /> ${m.title}</label>
+                  </div>`
+              )
+              .join("")}
+            <div class="goal-add-milestone">
+              <input class="finput" id="milestone-${goal.id}" placeholder="New milestone..." />
+              <button class="fbtn" onclick="addMilestone('${goal.id}')">Add</button>
+            </div>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  container.innerHTML = `
+    <div class="goal-add">
+      <div class="frow">
+        <input class="finput" id="new-goal-title" placeholder="New goal title..." />
+      </div>
+      <div class="frow">
+        <input class="finput" id="new-goal-deadline" type="date" />
+        <button class="fbtn" onclick="addGoal()">Add Goal</button>
+      </div>
+    </div>
+    <div class="goal-list">${goalsHtml || "<div class='empty'>No goals yet.</div>"}</div>
+  `;
+}
+
+function addGoal() {
+  const titleEl = document.getElementById("new-goal-title");
+  const deadlineEl = document.getElementById("new-goal-deadline");
+  const title = titleEl ? titleEl.value.trim() : "";
+  const deadline = deadlineEl ? deadlineEl.value : "";
+  if (!title) {
+    toast("Enter a goal title", "neg");
+    return;
+  }
+  const goal = {
+    id: "g_" + Date.now(),
+    title,
+    deadline,
+    done: false,
+    milestones: [],
+  };
+  S.goalsList.push(goal);
+  if (titleEl) titleEl.value = "";
+  if (deadlineEl) deadlineEl.value = "";
+  save();
+  renderGoalsManager();
+  toast("Goal added", "pos");
+}
+
+function updateGoalTitle(goalId, value) {
+  const goal = S.goalsList.find((g) => g.id === goalId);
+  if (!goal) return;
+  goal.title = value.trim() || goal.title;
+  save();
+}
+
+function toggleGoalDone(goalId) {
+  const goal = S.goalsList.find((g) => g.id === goalId);
+  if (!goal) return;
+  goal.done = !goal.done;
+  save();
+  renderGoalsManager();
+}
+
+function deleteGoal(goalId) {
+  S.goalsList = S.goalsList.filter((g) => g.id !== goalId);
+  save();
+  renderGoalsManager();
+}
+
+function addMilestone(goalId) {
+  const input = document.getElementById(`milestone-${goalId}`);
+  if (!input) return;
+  const title = input.value.trim();
+  if (!title) return;
+  const goal = S.goalsList.find((g) => g.id === goalId);
+  if (!goal) return;
+  goal.milestones.push({ id: "m_" + Date.now(), title, done: false });
+  input.value = "";
+  save();
+  renderGoalsManager();
+}
+
+function toggleMilestone(goalId, milestoneId) {
+  const goal = S.goalsList.find((g) => g.id === goalId);
+  if (!goal) return;
+  const milestone = goal.milestones.find((m) => m.id === milestoneId);
+  if (!milestone) return;
+  milestone.done = !milestone.done;
+  save();
+  renderGoalsManager();
+}
+
 
 function renderConfigDeeds() {
   const container = document.getElementById("cfg-list");
@@ -1695,9 +2286,7 @@ function renderConfigDeeds() {
                 (d) =>
                   '<div class="cfg-item"><div class="cfg-name">' +
                   d.n +
-                  (d.u
-                    ? '<span class="cfg-unit"> /' + d.ul + "</span>"
-                    : "") +
+                  (d.u ? '<span class="cfg-unit"> /' + d.ul + "</span>" : "") +
                   '</div><span class="cfg-badge ' +
                   (d.t === "honos" ? "pos" : "neg") +
                   '">' +
@@ -1848,7 +2437,11 @@ function renderStats() {
   } catch (e) {
     console.error("Chart error:", e);
   }
-  renderProgressRings();
+
+  // Hide habit completion rate section (no longer used)
+  const ringsCard = document.querySelector(".stats-card.progress-rings");
+  if (ringsCard) ringsCard.style.display = "none";
+
   renderActivityHeatmap();
   renderInsights();
 }
@@ -1857,45 +2450,83 @@ function renderInsights() {
   const container = document.getElementById("insights");
   const insights = [];
 
-  // Calculate completion rates for habits
-  const habitCompletions = {};
+  // Collect recent activity by deed
+  const deedActivity = {};
+  const today = new Date();
+  const cutoff = new Date(today);
+  cutoff.setDate(cutoff.getDate() - 7);
+
   S.log.forEach((entry) => {
-    if (entry.deedId) {
-      if (!habitCompletions[entry.deedId])
-        habitCompletions[entry.deedId] = { total: 0, days: new Set() };
-      habitCompletions[entry.deedId].total += Math.abs(entry.pts);
-      habitCompletions[entry.deedId].days.add(entry.date);
-    }
+    if (!entry.deedId) return;
+    const entryDate = new Date(entry.date);
+    if (entryDate < cutoff) return; // only look at the last 7 days
+    if (!deedActivity[entry.deedId])
+      deedActivity[entry.deedId] = { days: new Set(), slips: 0, wins: 0 };
+    deedActivity[entry.deedId].days.add(entry.date);
+    if (entry.pts > 0) deedActivity[entry.deedId].wins += 1;
+    else if (entry.pts < 0) deedActivity[entry.deedId].slips += 1;
   });
 
-  // Find top habits
-  const topHabits = Object.entries(habitCompletions)
-    .sort(([, a], [, b]) => b.total - a.total)
+  const deedEntries = Object.entries(deedActivity)
+    .map(([deedId, stats]) => {
+      const deed = S.deeds.find((d) => d.id === deedId);
+      return deed
+        ? {
+            deed,
+            days: stats.days.size,
+            wins: stats.wins,
+            slips: stats.slips,
+          }
+        : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.days - a.days)
     .slice(0, 3);
 
-  topHabits.forEach(([deedId, data]) => {
-    const deed = S.deeds.find((d) => d.id === deedId);
-    if (deed) {
-      const daysActive = data.days.size;
-      const avgPerDay = Math.round(data.total / Math.max(1, daysActive));
-      const prediction = Math.random() > 0.5 ? "high" : "medium"; // Simple random prediction
-      insights.push(
-        `You're ${prediction === "high" ? "80%" : "60%"} likely to complete "${deed.n}" today based on your ${daysActive}-day streak.`,
-      );
+  const honorMessages = {
+    faith: (d, days) =>
+      `Your faith habit "${d.n}" has been done ${days} of the last 7 days — keep that spiritual rhythm.`,
+    discipline: (d, days) =>
+      `"${d.n}" shows discipline: ${days} days this week. Stay consistent.`,
+    body: (d, days) =>
+      `Physical gains are built in repetition. "${d.n}" hit ${days} days this week.`,
+    work: (d, days) =>
+      `"${d.n}" is a work habit; you logged it ${days} times recently. Keep the streak.`,
+    character: (d, days) =>
+      `Character habits like "${d.n}" build over time — ${days} days this week.`,
+    custom: (d, days) =>
+      `"${d.n}" has been done ${days} days this week. Keep it going.`,
+  };
+
+  const shameMessages = {
+    faith: (d, slips) =>
+      `"${d.n}" came up ${slips} time${slips === 1 ? "" : "s"} this week. Reflect and reset.`,
+    discipline: (d, slips) =>
+      `"${d.n}" slipped ${slips} time${slips === 1 ? "" : "s"}. Adjust habits to avoid repeat.`,
+    body: (d, slips) =>
+      `Your body goals hit a snag with "${d.n}" ${slips} time${slips === 1 ? "" : "s"}. Reprioritize recovery.`,
+    work: (d, slips) =>
+      `Work habits like "${d.n}" showed up ${slips} time${slips === 1 ? "" : "s"}. Consider a focus reset.`,
+    character: (d, slips) =>
+      `"${d.n}" happened ${slips} time${slips === 1 ? "" : "s"}. Use it as a clue for change.`,
+    custom: (d, slips) =>
+      `"${d.n}" came up ${slips} time${slips === 1 ? "" : "s"}. Reflect and adjust.`,
+  };
+
+  deedEntries.forEach(({ deed, days, wins, slips }) => {
+    if (deed.t === "honos") {
+      const msg =
+        (honorMessages[deed.c] || honorMessages.custom)(deed, days);
+      insights.push(msg);
+    } else {
+      const msg =
+        (shameMessages[deed.c] || shameMessages.custom)(deed, slips);
+      insights.push(msg);
     }
   });
 
-  // Add correlation insights
-  const correlations = [
-    "Reading Quran often leads to better prayer completion",
-    "Morning exercise correlates with higher daily productivity",
-    "Consistent sleep schedule improves focus throughout the day",
-  ];
-
-  insights.push(correlations[Math.floor(Math.random() * correlations.length)]);
-
   if (insights.length === 0) {
-    insights.push("Complete more habits to see personalized insights!");
+    insights.push("Log a few deeds to unlock more useful insights.");
   }
 
   container.innerHTML = insights
@@ -1916,6 +2547,12 @@ function renderActivityHeatmap() {
     const date = new Date(entry.date).toDateString();
     activityData[date] = (activityData[date] || 0) + Math.abs(entry.pts);
   });
+
+  if (Object.keys(activityData).length === 0) {
+    container.innerHTML =
+      '<div class="empty" style="padding:16px;">No activity yet. Log some honor or shame entries to populate the heatmap.</div>';
+    return;
+  }
 
   // Generate weeks
   let currentDate = new Date(startDate);
@@ -1943,10 +2580,13 @@ function renderActivityHeatmap() {
       (week) =>
         `<div class="heatmap-week">
       ${week
-        .map(
-          (day) =>
-            `<div class="heatmap-day ${day.intensity}" title="${day.date.toDateString()}: ${day.activity} pts"></div>`,
-        )
+        .map((day) => {
+          const cls =
+            day.intensity === "none"
+              ? "heatmap-day"
+              : `heatmap-day active ${day.intensity}`;
+          return `<div class="${cls}" title="${day.date.toDateString()}: ${day.activity} pts"></div>`;
+        })
         .join("")}
     </div>`,
     )
