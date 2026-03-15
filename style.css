@@ -821,7 +821,6 @@ body::before {
   line-height: 1.6;
 }
 
-
 .log-cat-label {
   font-family: "Cinzel", serif;
   font-size: 9px;
@@ -1414,6 +1413,34 @@ body::before {
   flex: 1;
 }
 
+.goal-linked {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.goal-linked-task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.goal-link-add {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.goal-link-add .finput {
+  flex: 1;
+}
+
 .panel#panel-config {
   display: none;
 }
@@ -1647,6 +1674,8 @@ body::before {
   grid-auto-columns: min-content;
   gap: 6px;
   justify-content: center;
+  min-height: 80px;
+  padding: 10px 0;
 }
 
 .heatmap-week {
@@ -1691,8 +1720,11 @@ body::before {
   width: 12px;
   height: 12px;
   border-radius: 2px;
-  background: var(--surface2);
-  transition: background-color 0.2s ease;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 @media (max-width: 420px) {

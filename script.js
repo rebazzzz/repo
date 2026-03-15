@@ -1487,6 +1487,7 @@ function renderSide(type, cid) {
   el.innerHTML = Object.entries(cats)
     .map(([cat, deeds]) => {
       const cnt = deeds.reduce((a, d) => a + (S.counts[d.id] || 0), 0);
+      const cntDisplay = cnt > 0 ? cnt : "";
       const op =
         openAccordions[type] && typeof openAccordions[type][cat] === "boolean"
           ? openAccordions[type][cat]
@@ -1505,7 +1506,9 @@ function renderSide(type, cid) {
         '\')"><div class="acc-left"><span class="acc-title">' +
         (CAT_NAMES[cat] || cat) +
         "</span>" +
-        (cnt > 0 ? '<span class="acc-count">' + cnt + "x</span>" : "") +
+        (cntDisplay
+          ? '<span class="acc-count">' + cntDisplay + "x</span>"
+          : "") +
         "</div>" +
         IC.chv +
         '</div><div class="acc-body">' +
@@ -1524,6 +1527,7 @@ function tog(type, cat) {
 }
 function deedHTML(d) {
   const cnt = S.counts[d.id] || 0,
+    cntDisplay = cnt > 0 ? cnt : "",
     neg = d.t === "dedecus",
     pl = neg ? "-" + d.p : "+" + d.p;
   const streak = S.streaks[d.id] || { current: 0, longest: 0 };
@@ -1550,7 +1554,7 @@ function deedHTML(d) {
     '</div><div class="stepper"><button class="sbtn" onclick="adj(\'' +
     d.id +
     '\',-1)">&minus;</button><span class="scount">' +
-    cnt +
+    cntDisplay +
     '</span><button class="sbtn" onclick="adj(\'' +
     d.id +
     "',1)\">+</button></div></div>"
@@ -2130,10 +2134,26 @@ function renderGoalsManager() {
       const deadline = goal.deadline ? `by ${goal.deadline}` : "no deadline";
       const doneCount = goal.milestones.filter((m) => m.done).length;
       const totalCount = goal.milestones.length;
-      const progress = totalCount ? Math.round((doneCount / totalCount) * 100) : 0;
+      const progress = totalCount
+        ? Math.round((doneCount / totalCount) * 100)
+        : 0;
       const progressLabel = totalCount
-        ? `${doneCount}/${totalCount} milestones` 
+        ? `${doneCount}/${totalCount} milestones`
         : "No milestones";
+
+      const linkedTasks = (goal.linkedTasks || [])
+        .map((taskId) => S.tasks.find((t) => t.id === taskId))
+        .filter(Boolean);
+      const linkedTotal = linkedTasks.length;
+      const linkedDone = linkedTasks.filter((t) => t.s === "done").length;
+      const linkedLabel = linkedTotal
+        ? `${linkedDone}/${linkedTotal} tasks complete`
+        : "No linked tasks";
+
+      const availableTasks = S.tasks.filter(
+        (t) => !goal.linkedTasks.includes(t.id) && t.day !== "Daily",
+      );
+
       return `
         <div class="goal-card${goal.done ? " goal-done" : ""}" id="goal-${goal.id}">
           <div class="goal-header">
@@ -2147,13 +2167,36 @@ function renderGoalsManager() {
             </div>
           </div>
           <div class="goal-meta">${progressLabel} - ${progress}%</div>
+          <div class="goal-meta">${linkedLabel}</div>
+          <div class="goal-linked">
+            ${linkedTasks
+              .map(
+                (t) =>
+                  `<div class="goal-linked-task">
+                    <span>${t.n}</span>
+                    <button class="sbtn" title="Unlink" onclick="unlinkTaskFromGoal('${goal.id}','${t.id}')">${IC.x}</button>
+                  </div>`,
+              )
+              .join("")}
+            <div class="goal-link-add">
+              <select class="finput" id="goal-task-select-${goal.id}">
+                <option value="">Link a task...</option>
+                ${availableTasks
+                  .map((t) =>
+                    `<option value="${t.id}">${t.n} (${t.day})</option>`,
+                  )
+                  .join("")}
+              </select>
+              <button class="fbtn" onclick="linkTaskToGoal('${goal.id}')">Link</button>
+            </div>
+          </div>
           <div class="goal-milestones">
             ${goal.milestones
               .map(
                 (m) =>
                   `<div class="goal-milestone${m.done ? " done" : ""}">
                     <label><input type="checkbox" ${m.done ? "checked" : ""} onchange="toggleMilestone('${goal.id}','${m.id}')" /> ${m.title}</label>
-                  </div>`
+                  </div>`,
               )
               .join("")}
             <div class="goal-add-milestone">
@@ -2195,6 +2238,7 @@ function addGoal() {
     deadline,
     done: false,
     milestones: [],
+    linkedTasks: [],
   };
   S.goalsList.push(goal);
   if (titleEl) titleEl.value = "";
@@ -2248,6 +2292,29 @@ function toggleMilestone(goalId, milestoneId) {
   renderGoalsManager();
 }
 
+function linkTaskToGoal(goalId) {
+  const select = document.getElementById(`goal-task-select-${goalId}`);
+  if (!select) return;
+  const taskId = select.value;
+  if (!taskId) return;
+  const goal = S.goalsList.find((g) => g.id === goalId);
+  if (!goal) return;
+  if (!goal.linkedTasks) goal.linkedTasks = [];
+  if (!goal.linkedTasks.includes(taskId)) {
+    goal.linkedTasks.push(taskId);
+  }
+  select.value = "";
+  save();
+  renderGoalsManager();
+}
+
+function unlinkTaskFromGoal(goalId, taskId) {
+  const goal = S.goalsList.find((g) => g.id === goalId);
+  if (!goal || !goal.linkedTasks) return;
+  goal.linkedTasks = goal.linkedTasks.filter((id) => id !== taskId);
+  save();
+  renderGoalsManager();
+}
 
 function renderConfigDeeds() {
   const container = document.getElementById("cfg-list");
@@ -2515,12 +2582,10 @@ function renderInsights() {
 
   deedEntries.forEach(({ deed, days, wins, slips }) => {
     if (deed.t === "honos") {
-      const msg =
-        (honorMessages[deed.c] || honorMessages.custom)(deed, days);
+      const msg = (honorMessages[deed.c] || honorMessages.custom)(deed, days);
       insights.push(msg);
     } else {
-      const msg =
-        (shameMessages[deed.c] || shameMessages.custom)(deed, slips);
+      const msg = (shameMessages[deed.c] || shameMessages.custom)(deed, slips);
       insights.push(msg);
     }
   });
@@ -2645,6 +2710,31 @@ function enableNotifications() {
     toast("Notifications not supported", "neg");
   }
 }
+
+function checkForUpdate() {
+  if (!("serviceWorker" in navigator)) {
+    toast("Service worker not supported", "neg");
+    return;
+  }
+
+  navigator.serviceWorker.getRegistration().then((reg) => {
+    if (!reg) {
+      toast("No service worker registered", "neg");
+      return;
+    }
+
+    if (reg.waiting) {
+      reg.waiting.postMessage({ type: "SKIP_WAITING" });
+      toast("Updating...", "pos");
+      return;
+    }
+
+    reg.update().then(() => {
+      toast("Checking for updates...", "pos");
+    });
+  });
+}
+
 function toggleTheme() {
   const root = document.documentElement;
   const currentBg = getComputedStyle(root).getPropertyValue("--bg");
