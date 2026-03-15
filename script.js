@@ -2182,8 +2182,8 @@ function renderGoalsManager() {
               <select class="finput" id="goal-task-select-${goal.id}">
                 <option value="">Link a task...</option>
                 ${availableTasks
-                  .map((t) =>
-                    `<option value="${t.id}">${t.n} (${t.day})</option>`,
+                  .map(
+                    (t) => `<option value="${t.id}">${t.n} (${t.day})</option>`,
                   )
                   .join("")}
               </select>
@@ -2479,184 +2479,59 @@ function toast(msg, type) {
   tTimer = setTimeout(() => el.classList.remove("show"), 2500);
 }
 function renderStats() {
-  try {
-    const ctx = document.getElementById("statsChart").getContext("2d");
-    if (window.myChart) window.myChart.destroy();
-    window.myChart = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["Honos", "Dedecus"],
-        datasets: [
-          {
-            label: "Points",
-            data: [S.ht, S.dt],
-            backgroundColor: ["#C9A84C", "#8B1A1A"],
-          },
-        ],
+  renderStatsChart();
+}
+
+function renderStatsChart() {
+  const ctx = document.getElementById("statsChart").getContext("2d");
+  if (window.myChart) window.myChart.destroy();
+
+  const totals = {};
+  S.log.forEach((entry) => {
+    const cat = entry.cat || "custom";
+    if (!totals[cat]) totals[cat] = { honor: 0, shame: 0 };
+    if (entry.pts > 0) totals[cat].honor += entry.pts;
+    else totals[cat].shame += Math.abs(entry.pts);
+  });
+
+  const labels = Object.keys(totals);
+  const honorData = labels.map((l) => totals[l].honor);
+  const shameData = labels.map((l) => totals[l].shame);
+
+  window.myChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Honos",
+          data: honorData,
+          backgroundColor: "#C9A84C",
+        },
+        {
+          label: "Dedecus",
+          data: shameData,
+          backgroundColor: "#8B1A1A",
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { stacked: true },
+        y: { stacked: true, beginAtZero: true },
       },
-      options: {
-        responsive: true,
-        scales: {
-          y: { beginAtZero: true },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: (context) => `${context.dataset.label}: ${context.parsed.y}`,
+          },
         },
       },
-    });
-  } catch (e) {
-    console.error("Chart error:", e);
-  }
-
-  // Hide habit completion rate section (no longer used)
-  const ringsCard = document.querySelector(".stats-card.progress-rings");
-  if (ringsCard) ringsCard.style.display = "none";
-
-  renderActivityHeatmap();
-  renderInsights();
+    },
+  });
 }
 
-function renderInsights() {
-  const container = document.getElementById("insights");
-  const insights = [];
-
-  // Collect recent activity by deed
-  const deedActivity = {};
-  const today = new Date();
-  const cutoff = new Date(today);
-  cutoff.setDate(cutoff.getDate() - 7);
-
-  S.log.forEach((entry) => {
-    if (!entry.deedId) return;
-    const entryDate = new Date(entry.date);
-    if (entryDate < cutoff) return; // only look at the last 7 days
-    if (!deedActivity[entry.deedId])
-      deedActivity[entry.deedId] = { days: new Set(), slips: 0, wins: 0 };
-    deedActivity[entry.deedId].days.add(entry.date);
-    if (entry.pts > 0) deedActivity[entry.deedId].wins += 1;
-    else if (entry.pts < 0) deedActivity[entry.deedId].slips += 1;
-  });
-
-  const deedEntries = Object.entries(deedActivity)
-    .map(([deedId, stats]) => {
-      const deed = S.deeds.find((d) => d.id === deedId);
-      return deed
-        ? {
-            deed,
-            days: stats.days.size,
-            wins: stats.wins,
-            slips: stats.slips,
-          }
-        : null;
-    })
-    .filter(Boolean)
-    .sort((a, b) => b.days - a.days)
-    .slice(0, 3);
-
-  const honorMessages = {
-    faith: (d, days) =>
-      `Your faith habit "${d.n}" has been done ${days} of the last 7 days — keep that spiritual rhythm.`,
-    discipline: (d, days) =>
-      `"${d.n}" shows discipline: ${days} days this week. Stay consistent.`,
-    body: (d, days) =>
-      `Physical gains are built in repetition. "${d.n}" hit ${days} days this week.`,
-    work: (d, days) =>
-      `"${d.n}" is a work habit; you logged it ${days} times recently. Keep the streak.`,
-    character: (d, days) =>
-      `Character habits like "${d.n}" build over time — ${days} days this week.`,
-    custom: (d, days) =>
-      `"${d.n}" has been done ${days} days this week. Keep it going.`,
-  };
-
-  const shameMessages = {
-    faith: (d, slips) =>
-      `"${d.n}" came up ${slips} time${slips === 1 ? "" : "s"} this week. Reflect and reset.`,
-    discipline: (d, slips) =>
-      `"${d.n}" slipped ${slips} time${slips === 1 ? "" : "s"}. Adjust habits to avoid repeat.`,
-    body: (d, slips) =>
-      `Your body goals hit a snag with "${d.n}" ${slips} time${slips === 1 ? "" : "s"}. Reprioritize recovery.`,
-    work: (d, slips) =>
-      `Work habits like "${d.n}" showed up ${slips} time${slips === 1 ? "" : "s"}. Consider a focus reset.`,
-    character: (d, slips) =>
-      `"${d.n}" happened ${slips} time${slips === 1 ? "" : "s"}. Use it as a clue for change.`,
-    custom: (d, slips) =>
-      `"${d.n}" came up ${slips} time${slips === 1 ? "" : "s"}. Reflect and adjust.`,
-  };
-
-  deedEntries.forEach(({ deed, days, wins, slips }) => {
-    if (deed.t === "honos") {
-      const msg = (honorMessages[deed.c] || honorMessages.custom)(deed, days);
-      insights.push(msg);
-    } else {
-      const msg = (shameMessages[deed.c] || shameMessages.custom)(deed, slips);
-      insights.push(msg);
-    }
-  });
-
-  if (insights.length === 0) {
-    insights.push("Log a few deeds to unlock more useful insights.");
-  }
-
-  container.innerHTML = insights
-    .slice(0, 3)
-    .map((insight) => `<div class="insight-item">${insight}</div>`)
-    .join("");
-}
-
-function renderActivityHeatmap() {
-  const container = document.getElementById("activityHeatmap");
-  const today = new Date();
-  const startDate = new Date(today);
-  startDate.setDate(today.getDate() - 63); // 9 weeks back
-
-  // Get activity data
-  const activityData = {};
-  S.log.forEach((entry) => {
-    const date = new Date(entry.date).toDateString();
-    activityData[date] = (activityData[date] || 0) + Math.abs(entry.pts);
-  });
-
-  if (Object.keys(activityData).length === 0) {
-    container.innerHTML =
-      '<div class="empty" style="padding:16px;">No activity yet. Log some honor or shame entries to populate the heatmap.</div>';
-    return;
-  }
-
-  // Generate weeks
-  let currentDate = new Date(startDate);
-  const weeks = [];
-
-  for (let week = 0; week < 9; week++) {
-    const weekDays = [];
-    for (let day = 0; day < 7; day++) {
-      const dateStr = currentDate.toDateString();
-      const activity = activityData[dateStr] || 0;
-      let intensity = "none";
-      if (activity > 0) {
-        if (activity >= 20) intensity = "high";
-        else if (activity >= 10) intensity = "medium";
-        else intensity = "low";
-      }
-      weekDays.push({ date: currentDate, activity, intensity });
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-    weeks.push(weekDays);
-  }
-
-  container.innerHTML = weeks
-    .map(
-      (week) =>
-        `<div class="heatmap-week">
-      ${week
-        .map((day) => {
-          const cls =
-            day.intensity === "none"
-              ? "heatmap-day"
-              : `heatmap-day active ${day.intensity}`;
-          return `<div class="${cls}" title="${day.date.toDateString()}: ${day.activity} pts"></div>`;
-        })
-        .join("")}
-    </div>`,
-    )
-    .join("");
-}
 
 function renderProgressRings() {
   const container = document.getElementById("progressRings");
